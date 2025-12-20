@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing; // NuGet: System.Drawing.Common
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using PcControl.Client.data;
+using System.Windows.Controls;
 
 namespace PcControl.Client
 {
@@ -43,10 +45,16 @@ namespace PcControl.Client
         private bool _esApagadoDeWindows = false;
         
         private string _ipCandidata = "";
+        
+        private List<string> _playlistArchivos = new List<string>(); // Rutas locales de archivos
+        private int _indicePlaylist = 0;
+        private DispatcherTimer? _timerSlideshow;
+        private string _carpetaCache = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CacheMedia");
 
         public MainWindow()
         {
             InitializeComponent();
+            if (!Directory.Exists(_carpetaCache)) Directory.CreateDirectory(_carpetaCache);
             CargarConfiguracion(); 
             ConfigurarSignalR();
             InicializarTimer();
@@ -80,7 +88,190 @@ namespace PcControl.Client
             BloqueoTeclado.Bloquear();
         }
         
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            CargarPlaylistLocal();
+            ReproducirSiguiente();
+        }
         
+        // LÓGICA DE REPRODUCCIÓN MULTIMEDIA (NUEVO)
+
+        
+        private void CargarPlaylistLocal()
+        {
+            try
+            {
+                if (!Directory.Exists(_carpetaCache)) Directory.CreateDirectory(_carpetaCache);
+
+                var extensionesValidas = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ".jpg", ".jpeg", ".png", ".bmp", ".webp",  // Imágenes
+                    ".mp4", ".avi", ".wmv", ".mov", ".mkv", ".gif" // Videos y GIFs
+                };
+
+                _playlistArchivos = Directory.GetFiles(_carpetaCache)
+                    .Where(f => extensionesValidas.Contains(Path.GetExtension(f)))
+                    .OrderBy(f => f)
+                    .ToList();
+            }
+            catch { }
+        }
+
+        private void ReproducirSiguiente()
+        {
+            // Validaciones de seguridad
+            if (_playlistArchivos.Count == 0) return;
+            
+            // Avanzar índice circularmente
+            if (_indicePlaylist >= _playlistArchivos.Count) _indicePlaylist = 0;
+            string archivo = _playlistArchivos[_indicePlaylist];
+            _indicePlaylist++;
+
+            // Verificar que el archivo realmente exista antes de intentar tocarlo
+            if (!File.Exists(archivo)) 
+            {
+                ReproducirSiguiente(); // Si lo borraron, salta al siguiente
+                return;
+            }
+
+            string ext = Path.GetExtension(archivo).ToLower();
+
+            // TRUCO: Los GIFs los mandamos al reproductor de video para que se muevan
+            if (ext == ".mp4" || ext == ".avi" || ext == ".wmv" || ext == ".mov" || ext == ".gif")
+            {
+                ReproducirVideo(archivo);
+            }
+            else
+            {
+                ReproducirImagen(archivo);
+            }
+        }
+
+        private void ReproducirImagen(string ruta)
+        {
+            // 1. Limpiar Video
+            VidFondo.Stop();
+            VidFondo.Source = null;
+            VidFondo.Visibility = Visibility.Collapsed;
+
+            try
+            {
+                // 2. Cargar Imagen SIN BLOQUEAR EL ARCHIVO (CacheOption.OnLoad)
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad; // <--- CLAVE PARA EVITAR ERROR DE ACCESO
+                bitmap.UriSource = new Uri(ruta);
+                bitmap.EndInit();
+                bitmap.Freeze(); // Hacerla inmutable para mejor rendimiento
+
+                ImgFondo.Source = bitmap;
+                ImgFondo.Visibility = Visibility.Visible;
+
+                // 3. Configurar Timer para pasar a la siguiente
+                if (_timerSlideshow != null) _timerSlideshow.Stop();
+                
+                _timerSlideshow = new DispatcherTimer();
+                _timerSlideshow.Interval = TimeSpan.FromSeconds(10); // 10 segundos por foto
+                _timerSlideshow.Tick += (s, e) => 
+                { 
+                    _timerSlideshow.Stop(); 
+                    ReproducirSiguiente(); 
+                };
+                _timerSlideshow.Start();
+            }
+            catch 
+            { 
+                ReproducirSiguiente(); // Si falla, siguiente
+            }
+        }
+
+        private void ReproducirVideo(string ruta)
+        {
+            // 1. Detener Timer de imágenes
+            if (_timerSlideshow != null) _timerSlideshow.Stop();
+            
+            // 2. Limpiar Imagen
+            ImgFondo.Source = null;
+            ImgFondo.Visibility = Visibility.Collapsed;
+
+            // 3. Cargar Video
+            VidFondo.Source = new Uri(ruta);
+            VidFondo.Visibility = Visibility.Visible;
+            VidFondo.Play();
+        }
+
+        // Evento que salta al siguiente cuando el video/gif termina
+        private void VidFondo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            // Pequeño delay para asegurar que el motor de video se liberó
+            VidFondo.Stop(); 
+            ReproducirSiguiente();
+        }
+
+        // MÉTODO PARA DESCARGAR DESDE SIGNALR
+        private async Task DescargarNuevosFondos(List<string> urls)
+        {
+            try
+            {
+                if (!Directory.Exists(_carpetaCache)) Directory.CreateDirectory(_carpetaCache);
+
+                // PASO CRÍTICO: Detener antes de tocar archivos
+                // Esto libera los "candados" sobre las imágenes y videos
+                await Dispatcher.InvokeAsync(() => 
+                {
+                    if (_timerSlideshow != null) _timerSlideshow.Stop();
+                    VidFondo.Stop();
+                    VidFondo.Source = null;
+                    ImgFondo.Source = null;
+                    // Forzar limpieza de memoria para soltar archivos
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                });
+
+                using (HttpClient client = new HttpClient())
+                {
+                    // 1. Descargar nuevos
+                    foreach (var url in urls)
+                    {
+                        var nombreArchivo = Path.GetFileName(url);
+                        var rutaDestino = Path.Combine(_carpetaCache, nombreArchivo);
+
+                        if (!File.Exists(rutaDestino) || new FileInfo(rutaDestino).Length == 0)
+                        {
+                            var datos = await client.GetByteArrayAsync(url);
+                            await File.WriteAllBytesAsync(rutaDestino, datos);
+                        }
+                    }
+
+                    // 2. Borrar viejos
+                    var nombresValidos = urls.Select(u => Path.GetFileName(u)).ToHashSet();
+                    var archivosLocales = Directory.GetFiles(_carpetaCache);
+
+                    foreach (var archivoLocal in archivosLocales)
+                    {
+                        if (!nombresValidos.Contains(Path.GetFileName(archivoLocal)))
+                        {
+                            try { File.Delete(archivoLocal); } catch { /* Ignorar si falla por ahora */ }
+                        }
+                    }
+                }
+                
+                // 3. Reiniciar Playlist
+                await Dispatcher.InvokeAsync(() => 
+                {
+                    CargarPlaylistLocal();
+                    if (_playlistArchivos.Count > 0)
+                    {
+                        _indicePlaylist = 0;
+                        ReproducirSiguiente();
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("error_media.txt", $"{DateTime.Now}: {ex.Message}\n");
+            }
+        }
         
         // --- AQUÍ ESTÁ LA SEGURIDAD ANTI-CIERRE ---
         private void Watchdog_Tick(object? sender, EventArgs e)
@@ -253,89 +444,93 @@ namespace PcControl.Client
         // --- LÓGICA SIGNALR ---
         private async void ConfigurarSignalR()
         {
+            // 1. Lógica de Autodescubrimiento (UDP)
             bool conexionExitosa = await IntentarConectar(_urlServidor);
             
-            // 2. Si falló (porque la IP del servidor cambió o no existe), BUSCAMOS AUTOMÁTICAMENTE
             if (!conexionExitosa)
             {
                 txtEstadoConexion.Text = "Buscando servidor en la red...";
-                await Task.Delay(500); // Dar tiempo a la UI
+                await Task.Delay(500); 
 
-                string nuevaIp = BuscarServidorUdp(); // Escuchamos el "grito" del servidor
+                string nuevaIp = BuscarServidorUdp(); 
 
                 if (!string.IsNullOrEmpty(nuevaIp))
                 {
                     _urlServidor = $"http://{nuevaIp}:5249/ciberhub";
-                    
-                    // Guardamos la nueva IP en el txt para la próxima vez
                     GuardarConfigEnTxt(_nombrePc, _urlServidor);
-                    
-                    // Intentamos conectar de nuevo con la IP fresca
                     await IntentarConectar(_urlServidor);
                 }
                 else
                 {
                     txtEstadoConexion.Text = "No se encontró el servidor ";
+                    return; // Salir si no hay servidor
                 }
             }
             
+            // 2. CREAR LA CONEXIÓN PRINCIPAL (Importante: Crear antes de usar)
             _connection = new HubConnectionBuilder()
                 .WithUrl(_urlServidor)
                 .WithAutomaticReconnect()
                 .Build();
 
+            // 3. REGISTRAR TODOS LOS EVENTOS (Listeners)
+            
+            // Evento: Configuración Admin
             _connection.On<string, string, string>("RecibirConfiguracion", (pass, keyStr, modStr) =>
             {
                 _passwordAdmin = pass;
                 Dispatcher.Invoke(() => { try { if (Enum.TryParse(keyStr, true, out Key k)) _teclaConsola = k; if (Enum.TryParse(modStr, true, out ModifierKeys m)) _modificadorConsola = m; } catch { } });
             });
 
+            // Evento: Comandos (Bloquear, Desbloquear, Apagar...)
             _connection.On<string, int?, string>("RecibirOrden", (accion, tiempo, parametro) =>
             {
                 Dispatcher.Invoke(() => ProcesarOrden(accion, tiempo, parametro));
             });
 
+            // Evento: Mensajes de texto
             _connection.On<string>("RecibirMensaje", (mensaje) =>
             {
                 Dispatcher.Invoke(() => 
                 {
                     var msgWindow = new MensajeWindow(mensaje);
-                    msgWindow.Topmost = true; // <--- ESTO FALTABA PARA QUE SE VEA SIEMPRE
+                    msgWindow.Topmost = true;
                     msgWindow.Show();
                     msgWindow.Activate();
                 });
             });
             
+            // Evento: Cambio de Nombre
             _connection.On<string>("CambiarNombreIdentity", (nuevoNombre) =>
             {
                 Dispatcher.Invoke(async () => 
                 {
-                    // 1. Actualizar memoria
                     _nombrePc = nuevoNombre;
                     this.Title = _nombrePc;
                     txtEstadoConexion.Text = $"Soy: {_nombrePc} (Actualizado)";
-
-                    // 2. Actualizar TXT
                     GuardarConfigEnTxt(_nombrePc, _urlServidor);
 
-                    // 3. REINICIAR CONEXIÓN SIGNALR
-                    // Es vital desconectar y reconectar para unirse al grupo del NUEVO nombre
                     await _connection.StopAsync();
                     await Task.Delay(1000);
-                    
-                    // Al reconectar, llamará a RegistrarPc con el NUEVO nombre
                     await _connection.StartAsync();
                     await _connection.InvokeAsync("RegistrarPc", _nombrePc);
                     
-                    // Mostrar aviso
                     var aviso = new MensajeWindow($"Nombre actualizado a: {_nombrePc}");
                     aviso.Topmost = true;
                     aviso.Show();
                 });
             });
 
+            // Evento: Actualizar Fondos (NUEVO)
+            _connection.On<List<string>>("ActualizarFondos", (urls) =>
+            {
+                Task.Run(() => DescargarNuevosFondos(urls));
+            });
+
+            // Evento: Cierre de conexión
             _connection.Closed += async (error) => await Dispatcher.InvokeAsync(() => ProcesarOrden("Bloquear", 0, "Conexión Perdida"));
 
+            // 4. INICIAR CONEXIÓN
             try
             {
                 await _connection.StartAsync();
@@ -356,7 +551,7 @@ namespace PcControl.Client
                     .WithUrl(url)
                     .WithAutomaticReconnect() // Reintenta si se cae momentáneamente
                     .Build();
-
+                
                 // DEFINIR EVENTOS (Los mismos de siempre)
                 nuevaConexion.On<string, string, string>("RecibirConfiguracion", (pass, keyStr, modStr) =>
                 {
@@ -396,11 +591,12 @@ namespace PcControl.Client
                 });
 
                 nuevaConexion.On<string>("StreamDetenido", (pc) => { /* Cliente no hace nada con esto, pero evita error */ });
-
+                nuevaConexion.On<List<string>>("ActualizarFondos", (urls) => { Task.Run(() => DescargarNuevosFondos(urls)); });
+                
                 // Intentamos iniciar con un timeout corto para no congelar la app si la IP está mal
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)); 
                 await nuevaConexion.StartAsync(cts.Token);
-
+                
                 // ¡ÉXITO!
                 _connection = nuevaConexion;
                 txtEstadoConexion.Text = $"Soy: {_nombrePc} | Conectado ✅";
@@ -475,6 +671,9 @@ namespace PcControl.Client
             switch (accion)
             {
                 case "Desbloquear":
+                    VidFondo.Stop(); 
+                    if (_timerSlideshow != null) _timerSlideshow.Stop();
+                    
                     this.Hide(); // Ocultamos pantalla negra
                     _sesionActiva = true; // MARCAMOS SESIÓN ACTIVA
                     BloqueoTeclado.Desbloquear(); 
@@ -489,6 +688,8 @@ namespace PcControl.Client
                     break;
 
                 case "Bloquear":
+                    ReproducirSiguiente();
+                    
                     _timerLocal.Stop();
                     _sesionActiva = false; // FIN DE SESIÓN
                     if (_infoWindow != null) { _infoWindow.Hide(); }
@@ -540,7 +741,6 @@ namespace PcControl.Client
                     break;
 
                 case "Captura": 
-                    // ... (Igual)
                     break;
 
                 case "EjecutarCliente":

@@ -214,3 +214,4 @@ F:\proyectC#\PcControl\PcControl.server\bin\Debug\net9.0\System.Threading.Channe
 F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\scopedcss\Components\Layout\MobileConnect.razor.rz.scp.css
 F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\compressed\ajdpegiu9w-kylqsday6i.gz
 F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\compressed\pqmou9nifo-kylqsday6i.gz
+F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\PcControl.server.sourcelink.json

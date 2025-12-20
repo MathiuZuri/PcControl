@@ -24,6 +24,66 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4mWsDy3aHl36ZbGt8zByK7Pvd4kRUoNgTYzRnwmPHwg="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1148"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224mWsDy3aHl36ZbGt8zByK7Pvd4kRUoNgTYzRnwmPHwg=\u0022"},{"Name":"Last-Modified","Value":"Mon, 08 Dec 2025 22:26:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/2025-12-16_23-30-23_2.4losbcwwi5.mp4">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\2025-12-16_23-30-23_2.mp4'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"4losbcwwi5"},{"Name":"integrity","Value":"sha256-iPlxFfvSFv2wh64\u002BYVCXymI9K1z1/zeX0iWf78yZ7VE="},{"Name":"label","Value":"_content/PcControl.server/fondos/2025-12-16_23-30-23_2.mp4"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"480265"},{"Name":"Content-Type","Value":"video/mp4"},{"Name":"ETag","Value":"\u0022iPlxFfvSFv2wh64\u002BYVCXymI9K1z1/zeX0iWf78yZ7VE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:54:19 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/2025-12-16_23-30-23_2.mp4">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\2025-12-16_23-30-23_2.mp4'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-iPlxFfvSFv2wh64\u002BYVCXymI9K1z1/zeX0iWf78yZ7VE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"480265"},{"Name":"Content-Type","Value":"video/mp4"},{"Name":"ETag","Value":"\u0022iPlxFfvSFv2wh64\u002BYVCXymI9K1z1/zeX0iWf78yZ7VE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:54:19 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/FB_IMG_1766262365844.igio9n6pj2.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\FB_IMG_1766262365844.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"igio9n6pj2"},{"Name":"integrity","Value":"sha256-jocJXDMzkB\u002BZXX2Xb/r9ENrj2ccadbQn\u002BTrg77iwM00="},{"Name":"label","Value":"_content/PcControl.server/fondos/FB_IMG_1766262365844.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"78901"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022jocJXDMzkB\u002BZXX2Xb/r9ENrj2ccadbQn\u002BTrg77iwM00=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:44:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/FB_IMG_1766262365844.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\FB_IMG_1766262365844.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-jocJXDMzkB\u002BZXX2Xb/r9ENrj2ccadbQn\u002BTrg77iwM00="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"78901"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022jocJXDMzkB\u002BZXX2Xb/r9ENrj2ccadbQn\u002BTrg77iwM00=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:44:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/fondo_juego.js8x5m0127.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\fondo_juego.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"js8x5m0127"},{"Name":"integrity","Value":"sha256-PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw="},{"Name":"label","Value":"_content/PcControl.server/fondos/fondo_juego.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2089170"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:41:33 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/fondo_juego.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\fondo_juego.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"2089170"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:41:33 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/grok_video_2025.2qg75s1ont.mp4">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\grok_video_2025.mp4'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"2qg75s1ont"},{"Name":"integrity","Value":"sha256-anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw="},{"Name":"label","Value":"_content/PcControl.server/fondos/grok_video_2025.mp4"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1488898"},{"Name":"Content-Type","Value":"video/mp4"},{"Name":"ETag","Value":"\u0022anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:54:20 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/grok_video_2025.mp4">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\grok_video_2025.mp4'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1488898"},{"Name":"Content-Type","Value":"video/mp4"},{"Name":"ETag","Value":"\u0022anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:54:20 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"44545"},{"Name":"Content-Type","Value":"image/gif"},{"Name":"ETag","Value":"\u0022ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:42:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PcControl.server/fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.qms257w5zv.gif">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\fondos\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"qms257w5zv"},{"Name":"integrity","Value":"sha256-ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc="},{"Name":"label","Value":"_content/PcControl.server/fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"44545"},{"Name":"Content-Type","Value":"image/gif"},{"Name":"ETag","Value":"\u0022ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 20 Dec 2025 21:42:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/PcControl.server/lib/bootstrap/dist/css/bootstrap-grid.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap-grid.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

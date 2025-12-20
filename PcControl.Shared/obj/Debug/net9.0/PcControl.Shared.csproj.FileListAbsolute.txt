@@ -10,3 +10,4 @@ F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\refint\PcControl.Shared
 F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.pdb
 F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\ref\PcControl.Shared.dll
 F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.csproj.AssemblyReference.cache
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.sourcelink.json

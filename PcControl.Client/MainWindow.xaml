@@ -9,15 +9,38 @@
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         Background="#1a1a1a"
-        KeyDown="Window_KeyDown"> <Grid>
+        KeyDown="Window_KeyDown"
+        Loaded="Window_Loaded"> <Grid>
+        <Grid x:Name="GridMedia">
+            <Image x:Name="ImgFondo" Stretch="UniformToFill" Visibility="Collapsed"/>
+            
+            <MediaElement x:Name="VidFondo" 
+                          Stretch="UniformToFill" 
+                          LoadedBehavior="Manual" 
+                          UnloadedBehavior="Stop"
+                          Visibility="Collapsed"
+                          MediaEnded="VidFondo_MediaEnded"/>
+            
+            <Border Background="#99000000"/> 
+        </Grid>
+
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="COMPUTADORA BLOQUEADA" Foreground="Red" FontSize="48" FontWeight="Bold" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="txtMensaje" Text="Diríjase a caja para activar este equipo" Foreground="White" FontSize="24" Margin="0,20,0,0" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="txtEstadoConexion" Text="Conectando..." Foreground="Gray" FontSize="16" Margin="0,50,0,0" HorizontalAlignment="Center"/>
+            <TextBlock Text="COMPUTADORA BLOQUEADA" Foreground="Red" FontSize="48" FontWeight="Bold" HorizontalAlignment="Center">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            
+            <TextBlock x:Name="txtMensaje" Text="Diríjase a caja para activar este equipo" Foreground="White" FontSize="24" Margin="0,20,0,0" HorizontalAlignment="Center">
+                 <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            
+            <TextBlock x:Name="txtEstadoConexion" Text="Conectando..." Foreground="LightGray" FontSize="16" Margin="0,50,0,0" HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <Grid x:Name="GridAdminConsole" Visibility="Collapsed" Background="#CC000000">
-            <Border Background="#222" BorderBrush="#00FF00" BorderThickness="2" 
+        <Grid x:Name="GridAdminConsole" Visibility="Collapsed" Background="#E6000000"> <Border Background="#222" BorderBrush="#00FF00" BorderThickness="2" 
                     Width="400" Height="200" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel Margin="20" VerticalAlignment="Center">
                     <TextBlock Text="CONSOLA DE ADMINISTRADOR" Foreground="#00FF00" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,0,0,20"/>

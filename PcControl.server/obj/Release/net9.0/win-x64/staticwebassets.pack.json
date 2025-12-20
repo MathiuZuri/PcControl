@@ -2,7 +2,7 @@
   "Files": [
     {
       "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css",
-      "PackagePath": "staticwebassets\\PcControl.server.to7k01fvx0.bundle.scp.css"
+      "PackagePath": "staticwebassets\\PcControl.server.kylqsday6i.bundle.scp.css"
     },
     {
       "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\app.css",
@@ -11,6 +11,26 @@
     {
       "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\2025-12-16_23-30-23_2.mp4",
+      "PackagePath": "staticwebassets\\fondos\\2025-12-16_23-30-23_2.mp4"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\FB_IMG_1766262365844.jpg",
+      "PackagePath": "staticwebassets\\fondos\\FB_IMG_1766262365844.jpg"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\fondo_juego.png",
+      "PackagePath": "staticwebassets\\fondos\\fondo_juego.png"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\grok_video_2025.mp4",
+      "PackagePath": "staticwebassets\\fondos\\grok_video_2025.mp4"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif",
+      "PackagePath": "staticwebassets\\fondos\\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif"
     },
     {
       "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",

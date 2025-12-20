@@ -431,3 +431,4 @@ F:\proyectC#\PcControl\PcControl.Client\obj\Release\net9.0-windows\win-x64\Mensa
 F:\proyectC#\PcControl\PcControl.Client\obj\Release\net9.0-windows\win-x64\MensajeWindow.g.cs
 F:\proyectC#\PcControl\PcControl.Client\bin\Release\net9.0-windows\win-x64\System.Drawing.Common.dll
 F:\proyectC#\PcControl\PcControl.Client\bin\Release\net9.0-windows\win-x64\System.Private.Windows.Core.dll
+F:\proyectC#\PcControl\PcControl.Client\obj\Release\net9.0-windows\win-x64\PcControl.Client.sourcelink.json

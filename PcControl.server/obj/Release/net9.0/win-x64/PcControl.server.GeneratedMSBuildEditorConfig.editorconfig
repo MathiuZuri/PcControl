@@ -76,6 +76,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Monitor.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xNb25pdG9yLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Personalizacion.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQZXJzb25hbGl6YWNpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/proyectC\#/PcControl/PcControl.server/Components/Pages/RedirectToLogin.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWRpcmVjdFRvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -86,10 +94,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Tienda.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUaWVuZGEucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [F:/proyectC\#/PcControl/PcControl.server/Components/Routes.razor]
@@ -103,6 +107,10 @@ build_metadata.AdditionalFiles.CssScope =
 [F:/proyectC\#/PcControl/PcControl.server/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-4nkq375dwl
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Layout/MobileConnect.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTW9iaWxlQ29ubmVjdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-lyp9xck2h9
 
 [F:/proyectC\#/PcControl/PcControl.server/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==

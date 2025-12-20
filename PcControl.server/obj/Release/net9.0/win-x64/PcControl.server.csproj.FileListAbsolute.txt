@@ -481,8 +481,6 @@ F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\ne
 F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\2osf18nt70-h1s4sie4z3.gz
 F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\y3evo5b0vs-4d85u1mtcx.gz
 F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\hkdr534fj3-0j3bgjxly4.gz
-F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\ajdpegiu9w-to7k01fvx0.gz
-F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\pqmou9nifo-to7k01fvx0.gz
 F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\staticwebassets.build.json
 F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\staticwebassets.development.json
 F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\staticwebassets.build.endpoints.json
@@ -502,3 +500,7 @@ F:\proyectC#\PcControl\PcControl.server\bin\Release\net9.0\win-x64\Microsoft.Asp
 F:\proyectC#\PcControl\PcControl.server\bin\Release\net9.0\win-x64\Microsoft.AspNetCore.SignalR.Client.dll
 F:\proyectC#\PcControl\PcControl.server\bin\Release\net9.0\win-x64\Microsoft.AspNetCore.SignalR.Client.Core.dll
 F:\proyectC#\PcControl\PcControl.server\bin\Release\net9.0\win-x64\System.Net.ServerSentEvents.dll
+F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\PcControl.server.sourcelink.json
+F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\scopedcss\Components\Layout\MobileConnect.razor.rz.scp.css
+F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\ajdpegiu9w-kylqsday6i.gz
+F:\proyectC#\PcControl\PcControl.server\obj\Release\net9.0\win-x64\compressed\pqmou9nifo-kylqsday6i.gz

@@ -97,6 +97,12 @@ namespace PcControl.server.Hubs
             await Clients.All.SendAsync("RecibirCaptura", nombrePc, base64Image);
         }
         
+        public async Task EnviarListaFondos(List<string> urls)
+        {
+            // Enviamos a TODOS los clientes la lista de URLs para descargar
+            await Clients.All.SendAsync("ActualizarFondos", urls);
+        }
+        
         public async Task NotificarFinStream(string nombrePc)
         {
             await Clients.All.SendAsync("StreamDetenido", nombrePc);

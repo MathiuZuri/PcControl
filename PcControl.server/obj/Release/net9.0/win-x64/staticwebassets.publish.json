@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "S3Alg4w0Phkk5nqqL1LEUPdS2zno8vgdDFpQHYoiAH4=",
+  "Hash": "K78pfvXJukZb1pztKnjHev7uJPJ+X+C3ukqy2phWxkQ=",
   "Source": "PcControl.server",
   "BasePath": "_content/PcControl.server",
   "Mode": "Default",
@@ -311,12 +311,12 @@
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-to7k01fvx0.gz",
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-kylqsday6i.gz",
       "SourceId": "PcControl.server",
       "SourceType": "Computed",
       "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\",
       "BasePath": "_content/PcControl.server",
-      "RelativePath": "PcControl.server#[.{fingerprint=to7k01fvx0}]?.styles.css.gz",
+      "RelativePath": "PcControl.server#[.{fingerprint=kylqsday6i}]?.styles.css.gz",
       "AssetKind": "All",
       "AssetMode": "CurrentProject",
       "AssetRole": "Alternative",
@@ -325,8 +325,8 @@
       "RelatedAsset": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "alihmxkl95",
-      "Integrity": "og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=",
+      "Fingerprint": "apeix08ipl",
+      "Integrity": "7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css"
@@ -752,12 +752,12 @@
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-to7k01fvx0.gz",
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-kylqsday6i.gz",
       "SourceId": "PcControl.server",
       "SourceType": "Computed",
       "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\",
       "BasePath": "_content/PcControl.server",
-      "RelativePath": "PcControl.server#[.{fingerprint=to7k01fvx0}]!.bundle.scp.css.gz",
+      "RelativePath": "PcControl.server#[.{fingerprint=kylqsday6i}]!.bundle.scp.css.gz",
       "AssetKind": "All",
       "AssetMode": "Reference",
       "AssetRole": "Alternative",
@@ -766,8 +766,8 @@
       "RelatedAsset": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "alihmxkl95",
-      "Integrity": "og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=",
+      "Fingerprint": "apeix08ipl",
+      "Integrity": "7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css"
@@ -1088,12 +1088,12 @@
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-to7k01fvx0.br",
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-kylqsday6i.br",
       "SourceId": "PcControl.server",
       "SourceType": "Computed",
       "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\",
       "BasePath": "_content/PcControl.server",
-      "RelativePath": "PcControl.server#[.{fingerprint=to7k01fvx0}]?.styles.css.br",
+      "RelativePath": "PcControl.server#[.{fingerprint=kylqsday6i}]?.styles.css.br",
       "AssetKind": "All",
       "AssetMode": "CurrentProject",
       "AssetRole": "Alternative",
@@ -1102,8 +1102,8 @@
       "RelatedAsset": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "br",
-      "Fingerprint": "7fhoymxdi1",
-      "Integrity": "MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=",
+      "Fingerprint": "sz3wx9y11m",
+      "Integrity": "OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css"
@@ -1529,12 +1529,12 @@
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-to7k01fvx0.br",
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-kylqsday6i.br",
       "SourceId": "PcControl.server",
       "SourceType": "Computed",
       "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\",
       "BasePath": "_content/PcControl.server",
-      "RelativePath": "PcControl.server#[.{fingerprint=to7k01fvx0}]!.bundle.scp.css.br",
+      "RelativePath": "PcControl.server#[.{fingerprint=kylqsday6i}]!.bundle.scp.css.br",
       "AssetKind": "All",
       "AssetMode": "Reference",
       "AssetRole": "Alternative",
@@ -1543,8 +1543,8 @@
       "RelatedAsset": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "br",
-      "Fingerprint": "7fhoymxdi1",
-      "Integrity": "MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=",
+      "Fingerprint": "sz3wx9y11m",
+      "Integrity": "OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css"
@@ -2005,8 +2005,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "to7k01fvx0",
-      "Integrity": "7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=",
+      "Fingerprint": "kylqsday6i",
+      "Integrity": "VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css"
@@ -2026,8 +2026,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "to7k01fvx0",
-      "Integrity": "7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=",
+      "Fingerprint": "kylqsday6i",
+      "Integrity": "VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css"
@@ -2073,6 +2073,111 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.png"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\2025-12-16_23-30-23_2.mp4",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/2025-12-16_23-30-23_2#[.{fingerprint}]?.mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "4losbcwwi5",
+      "Integrity": "iPlxFfvSFv2wh64+YVCXymI9K1z1/zeX0iWf78yZ7VE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\2025-12-16_23-30-23_2.mp4"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\FB_IMG_1766262365844.jpg",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/FB_IMG_1766262365844#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "igio9n6pj2",
+      "Integrity": "jocJXDMzkB+ZXX2Xb/r9ENrj2ccadbQn+Trg77iwM00=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\FB_IMG_1766262365844.jpg"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\fondo_juego.png",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/fondo_juego#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "js8x5m0127",
+      "Integrity": "PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\fondo_juego.png"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\grok_video_2025.mp4",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/grok_video_2025#[.{fingerprint}]?.mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "2qg75s1ont",
+      "Integrity": "anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\grok_video_2025.mp4"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400#[.{fingerprint}]?.gif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qms257w5zv",
+      "Integrity": "ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif"
     },
     {
       "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
@@ -3593,6 +3698,416 @@
         {
           "Name": "integrity",
           "Value": "sha256-4mWsDy3aHl36ZbGt8zByK7Pvd4kRUoNgTYzRnwmPHwg="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/2025-12-16_23-30-23_2.4losbcwwi5.mp4",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\2025-12-16_23-30-23_2.mp4",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "480265"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/mp4"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"iPlxFfvSFv2wh64+YVCXymI9K1z1/zeX0iWf78yZ7VE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:54:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4losbcwwi5"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/2025-12-16_23-30-23_2.mp4"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-iPlxFfvSFv2wh64+YVCXymI9K1z1/zeX0iWf78yZ7VE="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/2025-12-16_23-30-23_2.mp4",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\2025-12-16_23-30-23_2.mp4",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "480265"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/mp4"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"iPlxFfvSFv2wh64+YVCXymI9K1z1/zeX0iWf78yZ7VE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:54:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-iPlxFfvSFv2wh64+YVCXymI9K1z1/zeX0iWf78yZ7VE="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/FB_IMG_1766262365844.igio9n6pj2.jpg",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\FB_IMG_1766262365844.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "78901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jocJXDMzkB+ZXX2Xb/r9ENrj2ccadbQn+Trg77iwM00=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:44:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "igio9n6pj2"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/FB_IMG_1766262365844.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-jocJXDMzkB+ZXX2Xb/r9ENrj2ccadbQn+Trg77iwM00="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/FB_IMG_1766262365844.jpg",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\FB_IMG_1766262365844.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "78901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jocJXDMzkB+ZXX2Xb/r9ENrj2ccadbQn+Trg77iwM00=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:44:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-jocJXDMzkB+ZXX2Xb/r9ENrj2ccadbQn+Trg77iwM00="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/fondo_juego.js8x5m0127.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\fondo_juego.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2089170"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:41:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "js8x5m0127"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/fondo_juego.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/fondo_juego.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\fondo_juego.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2089170"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:41:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-PdjBfZbXzVvlXFBPzAWjAJTSkAwAje3rymw/xUn6Tmw="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/grok_video_2025.2qg75s1ont.mp4",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\grok_video_2025.mp4",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1488898"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/mp4"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:54:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "2qg75s1ont"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/grok_video_2025.mp4"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/grok_video_2025.mp4",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\grok_video_2025.mp4",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1488898"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/mp4"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:54:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-anXfP4NGpPgOt3Y/SWyudzOyClOHB46Rnk/XYtoNaCw="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "44545"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:42:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.qms257w5zv.gif",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "44545"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 21:42:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qms257w5zv"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/tumblr_c259e69c95537575d7cc58833c20a9d7_ae66b7aa_400.gif"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ct6UEVoM0O9o9rxAWpwv5hoRG5u8ORRVEE7EoAjM0Lc="
         }
       ]
     },
@@ -26214,12 +26729,12 @@
     },
     {
       "Route": "PcControl.server.bundle.scp.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-to7k01fvx0.gz",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-kylqsday6i.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000524383849"
+          "Quality": "0.000753012048"
         }
       ],
       "ResponseHeaders": [
@@ -26229,15 +26744,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1906"
+          "Value": "1327"
         },
         {
           "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26257,24 +26772,24 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
       "Route": "PcControl.server.bundle.scp.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-to7k01fvx0.br",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-kylqsday6i.br",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "br",
-          "Quality": "0.000626174076"
+          "Quality": "0.000914913083"
         }
       ],
       "ResponseHeaders": [
@@ -26284,15 +26799,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1092"
         },
         {
           "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26312,13 +26827,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
@@ -26333,7 +26848,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6224"
+          "Value": "4192"
         },
         {
           "Name": "Content-Type",
@@ -26341,11 +26856,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26355,13 +26870,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
       "Route": "PcControl.server.bundle.scp.css.br",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-to7k01fvx0.br",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-kylqsday6i.br",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -26370,7 +26885,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1092"
         },
         {
           "Name": "Content-Type",
@@ -26378,11 +26893,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26400,13 +26915,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74="
+          "Value": "sha256-OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo="
         }
       ]
     },
     {
       "Route": "PcControl.server.bundle.scp.css.gz",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-to7k01fvx0.gz",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-kylqsday6i.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -26415,7 +26930,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1906"
+          "Value": "1327"
         },
         {
           "Name": "Content-Type",
@@ -26423,11 +26938,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26445,18 +26960,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc="
+          "Value": "sha256-7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.styles.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-to7k01fvx0.gz",
+      "Route": "PcControl.server.kylqsday6i.bundle.scp.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-kylqsday6i.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000524383849"
+          "Quality": "0.000753012048"
         }
       ],
       "ResponseHeaders": [
@@ -26466,252 +26981,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1906"
+          "Value": "1327"
         },
         {
           "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
-        }
-      ]
-    },
-    {
-      "Route": "PcControl.server.styles.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-to7k01fvx0.br",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "br",
-          "Quality": "0.000626174076"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1596"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "br"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
-        }
-      ]
-    },
-    {
-      "Route": "PcControl.server.styles.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "6224"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
-        }
-      ]
-    },
-    {
-      "Route": "PcControl.server.styles.css.br",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-to7k01fvx0.br",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1596"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "br"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74="
-        }
-      ]
-    },
-    {
-      "Route": "PcControl.server.styles.css.gz",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-to7k01fvx0.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1906"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc="
-        }
-      ]
-    },
-    {
-      "Route": "PcControl.server.to7k01fvx0.bundle.scp.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-to7k01fvx0.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000524383849"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1906"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26731,13 +27009,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -26745,18 +27023,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.bundle.scp.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-to7k01fvx0.br",
+      "Route": "PcControl.server.kylqsday6i.bundle.scp.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-kylqsday6i.br",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "br",
-          "Quality": "0.000626174076"
+          "Quality": "0.000914913083"
         }
       ],
       "ResponseHeaders": [
@@ -26766,15 +27044,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1092"
         },
         {
           "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26794,13 +27072,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -26808,12 +27086,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.bundle.scp.css",
+      "Route": "PcControl.server.kylqsday6i.bundle.scp.css",
       "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\projectbundle\\PcControl.server.bundle.scp.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -26823,7 +27101,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6224"
+          "Value": "4192"
         },
         {
           "Name": "Content-Type",
@@ -26831,11 +27109,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26845,7 +27123,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -26853,13 +27131,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.bundle.scp.css.br",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-to7k01fvx0.br",
+      "Route": "PcControl.server.kylqsday6i.bundle.scp.css.br",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\pqmou9nifo-kylqsday6i.br",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -26868,7 +27146,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1092"
         },
         {
           "Name": "Content-Type",
@@ -26876,11 +27154,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26898,7 +27176,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -26906,13 +27184,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74="
+          "Value": "sha256-OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.bundle.scp.css.gz",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-to7k01fvx0.gz",
+      "Route": "PcControl.server.kylqsday6i.bundle.scp.css.gz",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\pqmou9nifo-kylqsday6i.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -26921,7 +27199,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1906"
+          "Value": "1327"
         },
         {
           "Name": "Content-Type",
@@ -26929,11 +27207,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -26951,7 +27229,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -26959,18 +27237,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc="
+          "Value": "sha256-7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.styles.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-to7k01fvx0.gz",
+      "Route": "PcControl.server.kylqsday6i.styles.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-kylqsday6i.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000524383849"
+          "Quality": "0.000753012048"
         }
       ],
       "ResponseHeaders": [
@@ -26980,15 +27258,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1906"
+          "Value": "1327"
         },
         {
           "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -27008,13 +27286,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -27022,18 +27300,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.styles.css",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-to7k01fvx0.br",
+      "Route": "PcControl.server.kylqsday6i.styles.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-kylqsday6i.br",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "br",
-          "Quality": "0.000626174076"
+          "Quality": "0.000914913083"
         }
       ],
       "ResponseHeaders": [
@@ -27043,15 +27321,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1092"
         },
         {
           "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -27071,13 +27349,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -27085,12 +27363,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.styles.css",
+      "Route": "PcControl.server.kylqsday6i.styles.css",
       "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -27100,7 +27378,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "6224"
+          "Value": "4192"
         },
         {
           "Name": "Content-Type",
@@ -27108,11 +27386,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE=\""
+          "Value": "\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -27122,7 +27400,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -27130,13 +27408,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7bclp7bqTGQiEMwjWWcUgD506rRwWvN8MLIc1UyBDuE="
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.styles.css.br",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-to7k01fvx0.br",
+      "Route": "PcControl.server.kylqsday6i.styles.css.br",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-kylqsday6i.br",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -27145,7 +27423,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1092"
         },
         {
           "Name": "Content-Type",
@@ -27153,11 +27431,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74=\""
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -27175,7 +27453,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -27183,13 +27461,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-MzgzkiWv3zdcSygmi5Yn9d2k7M64QJRmjYG2M11QM74="
+          "Value": "sha256-OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo="
         }
       ]
     },
     {
-      "Route": "PcControl.server.to7k01fvx0.styles.css.gz",
-      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-to7k01fvx0.gz",
+      "Route": "PcControl.server.kylqsday6i.styles.css.gz",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-kylqsday6i.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -27198,7 +27476,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1906"
+          "Value": "1327"
         },
         {
           "Name": "Content-Type",
@@ -27206,11 +27484,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc=\""
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 18 Dec 2025 15:21:28 GMT"
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -27228,7 +27506,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "to7k01fvx0"
+          "Value": "kylqsday6i"
         },
         {
           "Name": "label",
@@ -27236,7 +27514,244 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-og37qV7LOpu8kgBn3pnSMy2hIyCDIc072/NNu9MJwAc="
+          "Value": "sha256-7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ="
+        }
+      ]
+    },
+    {
+      "Route": "PcControl.server.styles.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-kylqsday6i.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000753012048"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1327"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
+        }
+      ]
+    },
+    {
+      "Route": "PcControl.server.styles.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-kylqsday6i.br",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "br",
+          "Quality": "0.000914913083"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1092"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "br"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
+        }
+      ]
+    },
+    {
+      "Route": "PcControl.server.styles.css",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\scopedcss\\bundle\\PcControl.server.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4192"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-VP57A6V2KSzN/3zJSENKxoFUhQTu/SDw1+5jDIDLUxQ="
+        }
+      ]
+    },
+    {
+      "Route": "PcControl.server.styles.css.br",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\publish\\ajdpegiu9w-kylqsday6i.br",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1092"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "br"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-OMH7Icxq98sHIgByM5zAk6robQCGwOMcMrrditsENgo="
+        }
+      ]
+    },
+    {
+      "Route": "PcControl.server.styles.css.gz",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\obj\\Release\\net9.0\\win-x64\\compressed\\ajdpegiu9w-kylqsday6i.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1327"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 20 Dec 2025 22:23:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7ttQKUSfKslXiFM2/poXUO2iIKKsxIZU7IM6nQwBHhQ="
         }
       ]
     }

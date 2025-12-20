@@ -1,0 +1,238 @@
+﻿@page "/personalizacion"
+@using System.IO
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Authorization
+@using PcControl.Server.Services
+@inject IWebHostEnvironment Environment
+@inject NavigationManager NavManager
+@inject UiRefreshService RefreshService
+@attribute [Authorize(Roles = "Admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Personalización de Clientes</PageTitle>
+
+<div class="container-fluid mt-4 mb-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-palette-fill text-primary"></i> Pantalla de Bloqueo</h2>
+        <button class="btn btn-warning fw-bold" @onclick="SincronizarClientes" disabled="@sincronizando">
+            @if (sincronizando)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span> Enviando...</span>
+            }
+            else
+            {
+                <i class="bi bi-cloud-arrow-down-fill"></i>
+                <span> ACTUALIZAR CLIENTES</span>
+            }
+        </button>
+    </div>
+
+    @* --- NOTA INFORMATIVA --- *@
+    <div class="alert alert-info border-start border-5 border-info shadow-sm">
+        <h5><i class="bi bi-info-circle-fill"></i> ¿Cómo funciona esto?</h5>
+        <p class="mb-1">
+            1. Sube imágenes (.jpg, .png, .gif) o videos (.mp4) aquí. Se guardarán en el servidor.<br/>
+            2. Elimina los que ya no quieras mostrar.<br/>
+            3. <strong>IMPORTANTE:</strong> Al finalizar, presiona el botón amarillo <strong>"ACTUALIZAR CLIENTES"</strong>.<br/>
+            4. Las PCs que estén <strong>ENCENDIDAS</strong> descargarán los nuevos archivos automáticamente y borrarán los viejos.
+        </p>
+    </div>
+
+    @* --- ZONA DE CARGA --- *@
+    <div class="card mb-4 border-dashed bg-light">
+        <div class="card-body text-center py-4">
+            <InputFile OnChange="SubirArchivos" multiple class="d-none" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.mp4,.avi" />
+            <label for="fileInput" class="btn btn-outline-primary btn-lg cursor-pointer">
+                <i class="bi bi-upload"></i> Seleccionar Imágenes o Videos
+            </label>
+            <div class="text-muted mt-2 small">Máx 100MB por archivo. Formatos: JPG, PNG, GIF, MP4.</div>
+            
+            @if (mensajeCarga != null)
+            {
+                <div class="mt-2 text-info fw-bold">@mensajeCarga</div>
+            }
+        </div>
+    </div>
+
+    @* --- GALERÍA (PREVIEW) --- *@
+    <h5 class="mb-3 text-secondary">Contenido Actual (@archivos.Count)</h5>
+
+    @if (archivos.Count == 0)
+    {
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-images fs-1"></i>
+            <p>No hay contenido multimedia. La pantalla de los clientes estará negra.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var archivo in archivos)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm position-relative group-hover">
+                        
+                        @* Botón Eliminar (Flotante) *@
+                        <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 shadow" 
+                                style="z-index: 10;"
+                                @onclick="() => EliminarArchivo(archivo)">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+
+                        <div class="ratio ratio-16x9 bg-dark rounded-top overflow-hidden">
+                            @if (EsVideo(archivo.Nombre))
+                            {
+                                <video src="@archivo.Url" controls class="w-100 h-100 object-fit-cover"></video>
+                            }
+                            else
+                            {
+                                <img src="@archivo.Url" class="w-100 h-100 object-fit-cover" alt="Fondo" />
+                            }
+                        </div>
+
+                        <div class="card-body p-2 d-flex justify-content-between align-items-center bg-white rounded-bottom">
+                            <small class="text-truncate text-muted" title="@archivo.Nombre">@archivo.Nombre</small>
+                            <span class="badge bg-secondary">@archivo.Tipo</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .border-dashed { border: 2px dashed #ccc; }
+    .object-fit-cover { object-fit: cover; }
+    .cursor-pointer { cursor: pointer; }
+</style>
+
+@code {
+    private List<ArchivoMultimedia> archivos = new();
+    private string? mensajeCarga;
+    private bool sincronizando = false;
+    private HubConnection? hubConnection;
+    
+    // Ruta física: wwwroot/fondos
+    private string RutaCarpeta => Path.Combine(Environment.WebRootPath, "fondos");
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Asegurar que la carpeta exista
+        if (!Directory.Exists(RutaCarpeta)) Directory.CreateDirectory(RutaCarpeta);
+        
+        CargarListaArchivos();
+
+        // Conexión básica a SignalR para enviar la orden
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavManager.ToAbsoluteUri("/ciberhub"))
+            .Build();
+            
+        await hubConnection.StartAsync();
+    }
+
+    private void CargarListaArchivos()
+    {
+        archivos.Clear();
+        var files = Directory.GetFiles(RutaCarpeta);
+        
+        foreach (var file in files)
+        {
+            var nombre = Path.GetFileName(file);
+            archivos.Add(new ArchivoMultimedia
+            {
+                Nombre = nombre,
+                Url = $"fondos/{nombre}", // URL relativa para el navegador
+                RutaFisica = file,
+                Tipo = EsVideo(nombre) ? "VIDEO" : "IMAGEN"
+            });
+        }
+    }
+
+    private async Task SubirArchivos(InputFileChangeEventArgs e)
+    {
+        mensajeCarga = "Subiendo archivos...";
+        var maxFileSize = 100 * 1024 * 1024L; // 100 MB límite
+
+        foreach (var file in e.GetMultipleFiles(10)) // Máximo 10 archivos a la vez
+        {
+            try
+            {
+                var rutaDestino = Path.Combine(RutaCarpeta, file.Name);
+                
+                // Sobrescribir si existe (o podrías generar nombre único)
+                await using FileStream fs = new(rutaDestino, FileMode.Create);
+                await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
+            }
+            catch (Exception ex)
+            {
+                mensajeCarga = $"Error en {file.Name}: {ex.Message}";
+            }
+        }
+
+        mensajeCarga = null;
+        CargarListaArchivos(); // Refrescar vista
+    }
+
+    private void EliminarArchivo(ArchivoMultimedia archivo)
+    {
+        try
+        {
+            if (File.Exists(archivo.RutaFisica))
+            {
+                File.Delete(archivo.RutaFisica);
+                CargarListaArchivos();
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeCarga = $"Error al eliminar: {ex.Message}";
+        }
+    }
+
+    private async Task SincronizarClientes()
+    {
+        if (hubConnection is not null)
+        {
+            sincronizando = true;
+            
+            // 1. Construir URLs absolutas (http://192.168.1.X:5249/fondos/video.mp4)
+            // Esto es crucial para que el cliente sepa de DÓNDE descargar.
+            var baseUri = NavManager.BaseUri; // Ej: http://localhost:5249/
+            var listaUrls = archivos.Select(a => $"{baseUri}{a.Url}").ToList();
+
+            // 2. Enviar señal al Hub
+            await hubConnection.InvokeAsync("EnviarListaFondos", listaUrls);
+            
+            await Task.Delay(1000); // Simulamos un poco de feedback visual
+            sincronizando = false;
+            mensajeCarga = "¡Orden enviada a todos los clientes conectados!";
+            
+            // Limpiar mensaje después de 3 seg
+            _ = Task.Delay(3000).ContinueWith(_ => InvokeAsync(() => { mensajeCarga = null; StateHasChanged(); }));
+        }
+    }
+
+    private bool EsVideo(string nombre)
+    {
+        var ext = Path.GetExtension(nombre).ToLower();
+        return ext == ".mp4" || ext == ".avi" || ext == ".mov" || ext == ".mkv";
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null) await hubConnection.DisposeAsync();
+    }
+
+    // Clase auxiliar simple
+    class ArchivoMultimedia
+    {
+        public string Nombre { get; set; } = "";
+        public string Url { get; set; } = "";
+        public string RutaFisica { get; set; } = "";
+        public string Tipo { get; set; } = "";
+    }
+}
