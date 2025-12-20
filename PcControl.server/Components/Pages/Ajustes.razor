@@ -1,0 +1,307 @@
+﻿@page "/ajustes"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using PcControl.Server.Data
+@using PcControl.Server.Services
+@using PcControl.Shared.Models
+@using System.Net
+@using System.Net.Sockets
+@attribute [Authorize(Roles = "Admin")]
+
+@inject ConfiguracionService ConfigService
+@inject AppDbContext DbContext
+@inject IServiceProvider ServiceProvider
+@inject UiRefreshService RefreshService
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+
+<PageTitle>Ajustes del Sistema</PageTitle>
+
+<div class="container mt-4 mb-5">
+    <h3>⚙️ Ajustes Avanzados</h3>
+
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white fw-bold">
+            <i class="bi bi-router"></i> Datos de Conexión para Clientes
+        </div>
+        <div class="card-body bg-light">
+            <p class="mb-2">Copia una de estas direcciones en el archivo <code>config.txt</code> de las PCs Clientes:</p>
+            
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <h6 class="text-dark fw-bold">Opción B (Por IP)</h6>
+                    <p class="small text-muted">Usa la dirección numérica. Útil si el nombre falla.</p>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">URL</span>
+                        <input type="text" class="form-control fw-bold text-center" value="http://@ipServidor:5249" readonly />
+                         <button class="btn btn-outline-secondary" @onclick='() => CopiarPortapapeles("http://" + ipServidor + ":5249")'>
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            @if (mostrarCopiado)
+            {
+                <div class="alert alert-success py-1 mt-2 text-center mb-0 fade show">
+                    <small>¡Dirección copiada al portapapeles!</small>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4 h-100">
+                <div class="card-header bg-warning text-dark fw-bold">
+                    <i class="bi bi-keyboard"></i> Atajo Consola Oculta
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">Define qué teclas deben presionar en el Cliente para abrir el panel de contraseña.</p>
+                    
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-5">
+                            <label class="form-label">Modificador</label>
+                            <select class="form-select" @bind="teclaModificador">
+                                <option value="Control">Control (Ctrl)</option>
+                                <option value="Alt">Alt</option>
+                                <option value="Shift">Shift (Mayús)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 text-center mt-4">
+                            <strong>+</strong>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Tecla</label>
+                            <select class="form-select" @bind="teclaLetra">
+                                @foreach (var key in ListaTeclas)
+                                {
+                                    <option value="@key">@key</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-warning w-100 mt-3" @onclick="GuardarTeclas">
+                        Guardar Combinación
+                    </button>
+                    @if (msjTeclas) { <span class="text-success small d-block mt-2 text-center">¡Guardado! Reinicia clientes.</span> }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4 h-100">
+                <div class="card-header bg-danger text-white">
+                    <i class="bi bi-shield-lock"></i> Contraseña de Desbloqueo
+                </div>
+                <div class="card-body">
+                    <label class="form-label">Clave para desbloquear manualmente</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" @bind="passwordAdmin" />
+                        <button class="btn btn-danger" @onclick="GuardarPassword">Guardar</button>
+                    </div>
+                    @if (msjPass) { <span class="text-success small d-block mt-2">Guardado correctamente.</span> }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4 class="mb-3">👥 Gestión de Usuarios</h4>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-primary mb-3">
+                <div class="card-header bg-primary text-white">Usuario Administrador</div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label>Usuario</label>
+                        <input class="form-control" @bind="adminUser.Username" />
+                    </div>
+                    <div class="mb-2">
+                        <label>Nueva Contraseña</label>
+                        <input class="form-control" @bind="adminUser.PasswordHash" type="password" placeholder="Escribe para cambiar" />
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm" @onclick="() => GuardarUsuario(adminUser)">Actualizar Admin</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-secondary mb-3">
+                <div class="card-header bg-secondary text-white">Usuario Empleado</div>
+                <div class="card-body">
+                    @if (empleadoUser == null)
+                    {
+                        <p>No existe usuario empleado.</p>
+                        <button class="btn btn-success btn-sm" @onclick="CrearEmpleado">Crear Empleado</button>
+                    }
+                    else
+                    {
+                        <div class="mb-2">
+                            <label>Usuario</label>
+                            <input class="form-control" @bind="empleadoUser.Username" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Nueva Contraseña</label>
+                            <input class="form-control" @bind="empleadoUser.PasswordHash" type="password" placeholder="Escribe para cambiar" />
+                        </div>
+                        <div class="mb-3">
+                             <label>Rol</label>
+                             <select class="form-select" @bind="empleadoUser.Rol">
+                                 <option value="Empleado">Empleado</option>
+                                 <option value="Admin">Admin</option>
+                             </select>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-secondary btn-sm" @onclick="() => GuardarUsuario(empleadoUser)">Actualizar Empleado</button>
+                            <button class="btn btn-danger btn-sm" @onclick="BorrarEmpleado">Borrar</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.clipboardCopy = {
+        copyText: function(text) {
+            navigator.clipboard.writeText(text).then(function () { })
+            .catch(function (error) { alert(error); });
+        }
+    };
+</script>
+
+@code {
+    // Variables Configuración
+    private string passwordAdmin = "";
+    private string teclaModificador = "Control";
+    private string teclaLetra = "Q";
+    private List<string> ListaTeclas = new() { "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12" };
+    
+    // Variables Usuarios
+    private Usuario adminUser = new();
+    private Usuario? empleadoUser;
+
+    // Variables de Red
+    private string ipServidor = "Cargando...";
+    private string nombreEquipo = "Cargando...";
+    private bool mostrarCopiado = false;
+
+    // Flags UI
+    private bool msjPass = false;
+    private bool msjTeclas = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarDatos();
+        
+        // 3. SUSCRIPCIÓN AL BOTÓN REFRESCAR
+        RefreshService.OnRefreshRequested += RecargarDatosManual;
+    }
+
+    // 4. MÉTODO CENTRALIZADO DE CARGA
+    private async Task CargarDatos()
+    {
+        // 1. Cargar Configuración
+        passwordAdmin = await ConfigService.ObtenerValorAsync("AdminPassword", "123456789a");
+        teclaModificador = await ConfigService.ObtenerValorAsync("ConsoleModifier", "Control");
+        teclaLetra = await ConfigService.ObtenerValorAsync("ConsoleKey", "Q");
+
+        // 2. Cargar Usuarios
+        // Truco para evitar tracking duplicado al recargar
+        DbContext.ChangeTracker.Clear(); 
+        
+        var usuarios = await DbContext.Usuarios.ToListAsync();
+        adminUser = usuarios.FirstOrDefault(u => u.Rol == "Admin") ?? new Usuario();
+        empleadoUser = usuarios.FirstOrDefault(u => u.Rol == "Empleado");
+
+        // 3. Obtener Datos de Red
+        ipServidor = GetLocalIPAddress();
+        nombreEquipo = Dns.GetHostName();
+    }
+
+    // 5. MÉTODO DE RECARGA PARA EL BOTÓN
+    private async Task RecargarDatosManual()
+    {
+        await CargarDatos();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // Método para copiar al portapapeles usando JS
+    private async Task CopiarPortapapeles(string texto)
+    {
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", texto);
+        mostrarCopiado = true;
+        await Task.Delay(3000);
+        mostrarCopiado = false;
+    }
+
+    private async Task GuardarPassword()
+    {
+        await ConfigService.GuardarValorAsync("AdminPassword", passwordAdmin);
+        msjPass = true;
+        await Task.Delay(2000); msjPass = false;
+    }
+
+    private async Task GuardarTeclas()
+    {
+        await ConfigService.GuardarValorAsync("ConsoleModifier", teclaModificador);
+        await ConfigService.GuardarValorAsync("ConsoleKey", teclaLetra);
+        msjTeclas = true;
+        await Task.Delay(2000); msjTeclas = false;
+    }
+
+    private async Task GuardarUsuario(Usuario u)
+    {
+        DbContext.Usuarios.Update(u);
+        await DbContext.SaveChangesAsync();
+    }
+
+    private async Task CrearEmpleado()
+    {
+        empleadoUser = new Usuario 
+        { 
+            Username = "empleado", 
+            NombreCompleto = "Empleado Turno Mañana",
+            PasswordHash = "user123", 
+            Rol = "Empleado", 
+            Activo = true 
+        };
+        DbContext.Usuarios.Add(empleadoUser);
+        await DbContext.SaveChangesAsync();
+    }
+
+    private async Task BorrarEmpleado()
+    {
+        if (empleadoUser != null)
+        {
+            DbContext.Usuarios.Remove(empleadoUser);
+            await DbContext.SaveChangesAsync();
+            empleadoUser = null;
+        }
+    }
+
+    private string GetLocalIPAddress()
+    {
+        try
+        {
+            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+            {
+                socket.Connect("8.8.8.8", 65530);
+                return (socket.LocalEndPoint as IPEndPoint)?.Address.ToString() ?? "No encontrada";
+            }
+        }
+        catch { return "127.0.0.1"; }
+    }
+
+    // 6. LIMPIEZA
+    public async ValueTask DisposeAsync()
+    {
+        RefreshService.OnRefreshRequested -= RecargarDatosManual;
+    }
+}

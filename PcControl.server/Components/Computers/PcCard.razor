@@ -1,0 +1,133 @@
+﻿@using PcControl.Shared.Models
+
+<div class="col-md-3 col-sm-6 mb-4">
+    <div class="card h-100 shadow-sm @ObtenerClaseBorde() @(!Pc.EstaOnline ? "opacity-75" : "")">
+        
+        <div class="card-header d-flex justify-content-between align-items-center @ObtenerClaseFondo()">
+            <h5 class="m-0 text-white text-truncate" title="@Pc.Nombre">
+                @Pc.Nombre 
+                @if (!string.IsNullOrEmpty(Pc.NotaAdmin))
+                {
+                    <i class="bi bi-sticky-fill text-warning ms-2" title="@Pc.NotaAdmin"></i>
+                }
+            </h5>
+            
+            @if (Pc.EstaOnline)
+            {
+                <span class="badge bg-light text-dark">@Pc.Estado</span>
+            }
+            else
+            {
+                <span class="badge bg-dark text-white border border-secondary">OFFLINE</span>
+            }
+        </div>
+
+        <div class="card-body text-center d-flex flex-column justify-content-center">
+            
+            @* --- CASO 1: PC ESTÁ OFFLINE (APAGADA O SIN RED) --- *@
+            @if (!Pc.EstaOnline)
+            {
+                <h1 class="display-4 text-secondary mb-0"><i class="bi bi-power"></i></h1>
+                
+                @* Si se apagó pero estaba alquilada, mostramos info de cobro *@
+                @if(Pc.Estado == "Ocupada")
+                {
+                    <p class="text-danger fw-bold mb-1">¡Desconectada!</p>
+                    <small class="text-muted">Sesión Activa: @Pc.TotalGeneral.ToString("C")</small>
+                }
+                else
+                {
+                    <p class="text-muted">Sin conexión / Apagada</p>
+                }
+
+                <button class="btn btn-secondary w-100 mt-auto" @onclick="AlquilarClick">
+                    <i class="bi bi-gear-wide-connected"></i> Opciones / Encender
+                </button>
+            }
+            
+            @* --- CASO 2: PC ONLINE Y DISPONIBLE --- *@
+            else if (Pc.Estado == "Disponible")
+            {
+                <h1 class="display-4 text-success"><i class="bi bi-pc-display"></i></h1>
+                <p class="text-muted">Libre para usar</p>
+                <button class="btn btn-outline-success w-100 mt-auto" @onclick="AlquilarClick">
+                    <i class="bi bi-play-fill"></i> Iniciar
+                </button>
+            }
+            
+            @* --- CASO 3: PC ONLINE Y OCUPADA --- *@
+            else
+            {
+                <h1 class="display-4 text-danger mb-0"><i class="bi bi-person-workspace"></i></h1>
+                
+                <h3 class="text-primary fw-bold my-2">@Pc.TotalGeneral.ToString("C")</h3>
+                
+                <div class="small text-muted mb-2">
+                    <div>Inicio: @Pc.HoraInicio?.ToString("hh:mm tt")</div>
+                    
+                    @if (Pc.ImporteExtra > 0)
+                    {
+                        <div class="text-danger fw-bold">
+                            (+ @Pc.ImporteExtra.ToString("C") Extras)
+                        </div>
+                    }
+                </div>
+
+                @if (Pc.TiempoLimiteMinutos > 0)
+                {
+                    <div class="mb-3">
+                        @if (Pc.InicioPausa != null)
+                        {
+                            <span class="badge bg-warning text-dark fs-6 animate-pulse">
+                                <i class="bi bi-pause-fill"></i> TIEMPO PAUSADO
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge @(Pc.MinutosRestantes < 5 ? "bg-danger" : "bg-warning text-dark") fs-6">
+                                <i class="bi bi-hourglass-split"></i> Restan: @Pc.MinutosRestantes min
+                            </span>
+                        }
+                    </div>
+                }
+
+                <div class="btn-group w-100 mt-auto">
+                    <button class="btn btn-warning" @onclick="AlquilarClick" title="Opciones y Control Remoto">
+                        <i class="bi bi-gear-fill"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="CobrarClick">
+                        Cobrar
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" @onclick="() => OnMensaje.InvokeAsync(Pc)" title="Enviar Mensaje">
+                        <i class="bi bi-chat-text-fill"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Computadora Pc { get; set; } = new();
+    
+    [Parameter] public EventCallback<Computadora> OnAlquilar { get; set; } 
+    [Parameter] public EventCallback<Computadora> OnCobrar { get; set; }
+    [Parameter] public EventCallback<Computadora> OnMensaje { get; set; }
+
+    private async Task AlquilarClick() => await OnAlquilar.InvokeAsync(Pc);
+    private async Task CobrarClick() => await OnCobrar.InvokeAsync(Pc);
+
+    // --- ESTILOS DINÁMICOS ACTUALIZADOS ---
+    private string ObtenerClaseBorde()
+    {
+        if (!Pc.EstaOnline) return "border-secondary"; // Gris si está offline
+        return Pc.Estado == "Disponible" ? "border-success" : "border-danger";
+    }
+
+    private string ObtenerClaseFondo()
+    {
+        if (!Pc.EstaOnline) return "bg-secondary"; // Gris si está offline
+        if (Pc.EstaPausada) return "bg-warning text-dark";
+        return Pc.Estado == "Disponible" ? "bg-success" : "bg-danger";
+    }
+}

@@ -1,0 +1,135 @@
+﻿@page "/login"
+@using PcControl.Server.Data
+@using PcControl.Server.Services
+@using Microsoft.EntityFrameworkCore
+@using PcControl.server.Components.Layout
+@using System.Security.Claims
+
+@layout EmptyLayout
+@rendermode InteractiveServer
+
+@inject NavigationManager Navigation
+@inject AppDbContext DbContext
+@inject AuthenticationStateProvider AuthStateProvider
+
+@if (estaVerificandoSesion)
+{
+    /* ESTADO 1: PANTALLA DE CARGA (Para evitar parpadeos) */
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100" style="background-color: #f0f2f5;">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+        <h4 class="mt-3 text-secondary">Verificando sesión...</h4>
+    </div>
+}
+else
+{
+    /* ESTADO 2: EL FORMULARIO (Solo se muestra si de verdad no hay usuario) */
+    <div class="d-flex justify-content-center align-items-center vh-100" style="background-color: #f0f2f5;">
+        <div class="card shadow p-4" style="width: 400px;">
+            <h3 class="text-center mb-4">CyberControl Admin</h3>
+            
+            @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger text-center">@mensajeError</div>
+            }
+
+            <form @onsubmit="IniciarSesion" method="post">
+                <AntiforgeryToken />
+                <div class="mb-3">
+                    <label>Usuario</label>
+                    <input @bind="username" class="form-control" placeholder="admin" autocomplete="username" />
+                </div>
+                <div class="mb-3">
+                    <label>Contraseña</label>
+                    <input @bind="password" type="password" class="form-control" placeholder="******" autocomplete="current-password" />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    @(cargando ? "Cargando..." : "Ingresar")
+                </button>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string mensajeError = "";
+    private bool cargando = false;
+    
+    // Variable para controlar qué mostramos
+    private bool estaVerificandoSesion = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            int intentos = 0;
+            while (intentos < 5) 
+            {
+                var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+                
+                if (authState.User.Identity != null && authState.User.Identity.IsAuthenticated)
+                {
+                    // CAMBIO AQUÍ: Quitamos 'forceLoad: true'
+                    // Al ponerlo en 'false' (o quitarlo), mantenemos la sesión en memoria
+                    // y el Router sabrá inmediatamente que somos Admin.
+                    Navigation.NavigateTo("/"); 
+                    return;
+                }
+                
+                await Task.Delay(200);
+                intentos++;
+            }
+
+            // Si llegamos aquí, mostramos el formulario
+            estaVerificandoSesion = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task IniciarSesion()
+    {
+        cargando = true;
+        mensajeError = "";
+        
+        try
+        {
+            string userLimpio = username.Trim();
+            string passLimpio = password.Trim();
+
+            // Buscar usuario (usando EF Core)
+            var usuarioEncontrado = await DbContext.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Username == userLimpio && u.PasswordHash == passLimpio);
+
+            if (usuarioEncontrado != null)
+            {
+                if (!usuarioEncontrado.Activo)
+                {
+                    mensajeError = "Usuario inactivo.";
+                    cargando = false;
+                    return;
+                }
+
+                // Login manual
+                if (AuthStateProvider is CustomAuthStateProvider auth)
+                {
+                    await auth.Login(usuarioEncontrado);
+                    Navigation.NavigateTo("/", forceLoad: true);
+                }
+            }
+            else
+            {
+                mensajeError = "Credenciales incorrectas.";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = "Error: " + ex.Message;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+}

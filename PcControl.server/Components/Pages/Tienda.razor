@@ -1,0 +1,355 @@
+﻿@page "/productos"
+@using PcControl.Shared.Models
+@using PcControl.Server.Services
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@attribute [Authorize] 
+@inject ProductoService ProductoService
+@inject NavigationManager NavManager
+@inject UiRefreshService RefreshService
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+
+<PageTitle>Tienda - Inventario</PageTitle>
+
+<div class="container-fluid mt-3 container-md">
+    
+    <div class="row g-2 align-items-center mb-4">
+        <div class="col-12 col-md-4">
+            <h2 class="mb-0 fs-3">🏪 Tienda</h2>
+        </div>
+        
+        <div class="col-12 col-md-5">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control border-start-0 ps-0" 
+                       placeholder="Buscar producto..." 
+                       @bind="terminoBusqueda" 
+                       @bind:event="oninput" />
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3 text-end">
+            <button class="btn btn-success w-100" @onclick="AbrirModalNuevo">
+                <i class="bi bi-plus-lg"></i> Nuevo Producto
+            </button>
+        </div>
+    </div>
+
+    @if (ProductosFiltrados == null)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Cargando inventario...</p>
+        </div>
+    }
+    else if (!ProductosFiltrados.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="bi bi-box-seam fs-1 d-block mb-2"></i>
+            No se encontraron productos.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 d-none d-md-block">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th class="text-center">Precio</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in ProductosFiltrados)
+                        {
+                            <tr>
+                                <td class="fw-bold">@p.Nombre</td>
+                                <td><span class="badge bg-secondary">@p.Categoria</span></td>
+                                <td class="text-center">@p.Precio.ToString("C")</td>
+                                <td class="text-center">
+                                    <span class="badge @(p.Stock < 5 ? "bg-danger" : "bg-success")">
+                                        @p.Stock u.
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-primary me-1" @onclick="() => Editar(p)" title="Editar">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(p)" title="Eliminar">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-md-none">
+            @foreach (var p in ProductosFiltrados)
+            {
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h5 class="card-title mb-1 fw-bold">@p.Nombre</h5>
+                                <span class="badge bg-secondary small">@p.Categoria</span>
+                            </div>
+                            <h4 class="text-primary mb-0">@p.Precio.ToString("C")</h4>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <small class="text-muted">Stock:</small>
+                                <span class="badge @(p.Stock < 5 ? "bg-danger" : "bg-success") ms-1 fs-6">
+                                    @p.Stock u.
+                                </span>
+                            </div>
+                            
+                            <div class="btn-group">
+                                <button class="btn btn-outline-primary" @onclick="() => Editar(p)">
+                                    <i class="bi bi-pencil-fill"></i> Editar
+                                </button>
+                                <button class="btn btn-outline-danger" @onclick="() => Eliminar(p)">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@* --- MODAL DE REGISTRO / EDICIÓN --- *@
+@if (mostrarModal)
+{
+    <div class="modal-backdrop-custom">
+        <div class="modal-content-custom">
+            <div class="d-flex justify-content-between mb-3 align-items-center">
+                <h4 class="mb-0">@(productoActual.Id == 0 ? "Nuevo Producto" : "Editar Producto")</h4>
+                <button class="btn-close" @onclick="CerrarModal"></button>
+            </div>
+
+            <EditForm Model="productoActual" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre</label>
+                    <InputText class="form-control" @bind-Value="productoActual.Nombre" placeholder="Ej: Coca Cola 500ml" />
+                    <ValidationMessage For="@(() => productoActual.Nombre)" />
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-6 mb-3 mb-sm-0 position-relative">
+                        <label class="form-label fw-bold">Categoría</label>
+                        
+                        <div class="input-group">
+                            <InputText class="form-control" 
+                                       @bind-Value="productoActual.Categoria" 
+                                       @oninput="FiltrarCategorias" 
+                                       @onfocusin="MostrarSugerencias"
+                                       @onfocusout="OcultarSugerenciasDelay"
+                                       placeholder="Escribe o selecciona..." 
+                                       autocomplete="off" />
+                            <button type="button" class="btn btn-outline-secondary" @onclick="ToggleSugerencias">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </div>
+                        
+                        @if (mostrarSugerencias && categoriasFiltradas.Any())
+                        {
+                            <ul class="list-group position-absolute w-100 shadow mt-1" style="z-index: 1050; max-height: 200px; overflow-y: auto;">
+                                @foreach (var cat in categoriasFiltradas)
+                                {
+                                    <li class="list-group-item list-group-item-action cursor-pointer" 
+                                        @onclick="() => SeleccionarCategoria(cat)"
+                                        style="cursor: pointer;">
+                                        @cat
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    
+                    <div class="col-6 col-sm-6">
+                        <label class="form-label fw-bold">Precio (S/)</label>
+                        <InputNumber class="form-control" @bind-Value="productoActual.Precio" step="0.10" />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Stock Inicial</label>
+                    <InputNumber class="form-control" @bind-Value="productoActual.Stock" />
+                </div>
+
+                <div class="d-grid gap-2 d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary px-4">Guardar</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Producto>? productos;
+    private Producto productoActual = new();
+    private bool mostrarModal = false;
+    private string terminoBusqueda = "";
+
+    // VARIABLES PARA CATEGORÍAS
+    private List<string> todasLasCategorias = new();
+    private List<string> categoriasFiltradas = new();
+    private bool mostrarSugerencias = false;
+    private HubConnection? hubConnection;
+    
+    // PROPIEDAD CALCULADA PARA EL FILTRO
+    private IEnumerable<Producto>? ProductosFiltrados
+    {
+        get
+        {
+            if (productos == null) return null;
+            if (string.IsNullOrWhiteSpace(terminoBusqueda)) return productos;
+
+            return productos.Where(p => 
+                p.Nombre.Contains(terminoBusqueda, StringComparison.OrdinalIgnoreCase) || 
+                p.Categoria.Contains(terminoBusqueda, StringComparison.OrdinalIgnoreCase)
+            );
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarDatos();
+
+        // 1. SIGNALR: Actualización automática desde otros clientes
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavManager.ToAbsoluteUri("/ciberhub"))
+            .Build();
+
+        hubConnection.On("RefrescarProductos", async () =>
+        {
+            await RecargarDatosManual(); // Reutilizamos el método de recarga
+        });
+
+        await hubConnection.StartAsync();
+
+        // 2. SERVICIO UI: Actualización manual desde botón amarillo
+        RefreshService.OnRefreshRequested += RecargarDatosManual;
+    }
+
+    // Método centralizado para recargar y actualizar UI
+    private async Task RecargarDatosManual()
+    {
+        await CargarDatos();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CargarDatos()
+    {
+        productos = await ProductoService.ObtenerTodosAsync();
+        todasLasCategorias = await ProductoService.ObtenerCategoriasAsync();
+    }
+
+    // --- LÓGICA DE CATEGORÍAS ---
+    private void FiltrarCategorias(ChangeEventArgs e)
+    {
+        string texto = e.Value?.ToString() ?? "";
+        productoActual.Categoria = texto; 
+        
+        if (string.IsNullOrWhiteSpace(texto))
+        {
+            categoriasFiltradas = todasLasCategorias;
+        }
+        else
+        {
+            categoriasFiltradas = todasLasCategorias
+                .Where(c => c.Contains(texto, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+        mostrarSugerencias = true;
+    }
+
+    private void SeleccionarCategoria(string cat)
+    {
+        productoActual.Categoria = cat;
+        mostrarSugerencias = false;
+    }
+
+    private void MostrarSugerencias()
+    {
+        categoriasFiltradas = todasLasCategorias; 
+        mostrarSugerencias = true;
+    }
+
+    private async Task OcultarSugerenciasDelay()
+    {
+        await Task.Delay(200);
+        mostrarSugerencias = false;
+    }
+    
+    private void ToggleSugerencias()
+    {
+        mostrarSugerencias = !mostrarSugerencias;
+        if(mostrarSugerencias) categoriasFiltradas = todasLasCategorias;
+    }
+
+    // --- CRUD ---
+    private void AbrirModalNuevo()
+    {
+        productoActual = new Producto();
+        mostrarSugerencias = false;
+        mostrarModal = true;
+    }
+
+    private void Editar(Producto p)
+    {
+        productoActual = new Producto
+        {
+            Id = p.Id,
+            Nombre = p.Nombre,
+            Categoria = p.Categoria,
+            Precio = p.Precio,
+            Stock = p.Stock
+        };
+        mostrarSugerencias = false;
+        mostrarModal = true;
+    }
+
+    private async Task Guardar()
+    {
+        await ProductoService.GuardarProductoAsync(productoActual);
+        mostrarModal = false;
+        await RecargarDatosManual(); // Usar recarga segura
+    }
+
+    private async Task Eliminar(Producto p)
+    {
+        await ProductoService.EliminarProductoAsync(p.Id);
+        await RecargarDatosManual();
+    }
+
+    private void CerrarModal()
+    {
+        mostrarModal = false;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        // 3. LIMPIEZA: Desuscribirse del botón amarillo
+        RefreshService.OnRefreshRequested -= RecargarDatosManual;
+
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}

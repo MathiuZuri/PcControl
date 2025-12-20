@@ -1,0 +1,77 @@
+﻿@using System.Net
+@using System.Net.Sockets
+@inject IJSRuntime Js
+
+<button class="btn btn-primary d-inline-flex align-items-center gap-2" 
+        @onclick="AbrirModal" 
+        title="Conectar Celular"
+        style="white-space: nowrap;">
+    
+    <i class="bi bi-qr-code"></i>
+    <span class="d-none d-sm-inline">App Móvil</span>
+</button>
+
+@if (mostrarModal)
+{
+    <div class="modal-backdrop-custom" 
+         style="z-index: 9999; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;">
+        
+        <div class="modal-content-custom text-center bg-white p-3 rounded shadow-lg" style="max-width: 350px; width: 90%;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="m-0 text-dark">📱 Conectar Celular</h5>
+                <button class="btn-close" @onclick="() => mostrarModal = false"></button>
+            </div>
+
+            <p class="small text-muted">Escanea este código para controlar el ciber desde tu móvil.</p>
+
+            <div class="d-flex justify-content-center my-3">
+                <div id="qrcode" class="p-2 bg-white border"></div>
+            </div>
+
+            <div class="alert alert-info py-1 mb-2">
+                <small class="fw-bold text-break">@urlConexion</small>
+            </div>
+            
+            <p class="small text-secondary fst-italic mb-0" style="font-size: 0.75rem;">
+                ⚠️ Tu celular debe estar conectado al Wifi del local.
+            </p>
+        </div>
+    </div>
+}
+
+@code {
+    private bool mostrarModal = false;
+    private string urlConexion = "Cargando...";
+
+    private async Task AbrirModal()
+    {
+        mostrarModal = true;
+        
+        string ip = await ObtenerIpLocal();
+        urlConexion = $"http://{ip}:5249";
+
+        await Task.Delay(100); 
+        await Js.InvokeVoidAsync("generarQr", "qrcode", urlConexion);
+    }
+
+    private async Task<string> ObtenerIpLocal()
+    {
+        try
+        {
+            var hostName = Dns.GetHostName();
+            var ips = await Dns.GetHostAddressesAsync(hostName);
+            
+            var ipLan = ips.FirstOrDefault(i => 
+                i.AddressFamily == AddressFamily.InterNetwork && 
+                !IPAddress.IsLoopback(i) && 
+                i.ToString().StartsWith("192.168.") && 
+                !i.ToString().EndsWith(".1"));
+
+            return ipLan?.ToString() ?? "127.0.0.1";
+        }
+        catch
+        {
+            return "127.0.0.1";
+        }
+    }
+}

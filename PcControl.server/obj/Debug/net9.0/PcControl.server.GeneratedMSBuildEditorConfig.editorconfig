@@ -1,0 +1,113 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = PcControl.server
+build_property.RootNamespace = PcControl.server
+build_property.ProjectDir = F:\proyectC#\PcControl\PcControl.server\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = F:\proyectC#\PcControl\PcControl.server
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Computers/PcCard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDb21wdXRlcnNcUGNDYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Layout/EmptyLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcRW1wdHlMYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/AdminPcs.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pblBjcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Ajustes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBanVzdGVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/ConfiguracionTarifa.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb25maWd1cmFjaW9uVGFyaWZhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Estadisticas.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFc3RhZGlzdGljYXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Historial.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIaXN0b3JpYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Monitor.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xNb25pdG9yLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/RedirectToLogin.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWRpcmVjdFRvTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Reportes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZXBvcnRlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Pages/Tienda.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUaWVuZGEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-4nkq375dwl
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Layout/MobileConnect.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTW9iaWxlQ29ubmVjdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-lyp9xck2h9
+
+[F:/proyectC\#/PcControl/PcControl.server/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-1rgnbc1py6

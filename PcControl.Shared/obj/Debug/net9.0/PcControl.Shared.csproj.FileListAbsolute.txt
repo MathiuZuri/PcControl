@@ -1,0 +1,12 @@
+F:\proyectC#\PcControl\PcControl.Shared\bin\Debug\net9.0\PcControl.Shared.deps.json
+F:\proyectC#\PcControl\PcControl.Shared\bin\Debug\net9.0\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\bin\Debug\net9.0\PcControl.Shared.pdb
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.GeneratedMSBuildEditorConfig.editorconfig
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.AssemblyInfoInputs.cache
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.AssemblyInfo.cs
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.csproj.CoreCompileInputs.cache
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\refint\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.pdb
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\ref\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\obj\Debug\net9.0\PcControl.Shared.csproj.AssemblyReference.cache

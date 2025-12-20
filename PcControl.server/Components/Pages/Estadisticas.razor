@@ -1,0 +1,230 @@
+﻿@page "/estadisticas"
+@using PcControl.Server.Services
+@using Microsoft.AspNetCore.SignalR.Client 
+@using PcControl.Shared.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@inject EstadisticasService StatsService
+@inject UiRefreshService RefreshService
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+
+<PageTitle>Estadísticas - Admin</PageTitle>
+
+<div class="container-fluid mt-3 container-md mb-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fs-3 mb-0"><i class="bi bi-bar-chart-line-fill text-primary"></i> Estadísticas</h2>
+    </div>
+
+    <div class="row g-4">
+        
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-pc-display"></i> Equipos Más Usados</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0 align-middle">
+                            <thead class="small text-muted">
+                                <tr>
+                                    <th>Equipo</th>
+                                    <th class="text-center">Horas</th>
+                                    <th class="text-center">Sesiones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (topPcs != null)
+                                {
+                                    @foreach (var item in topPcs)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold">@item.Etiqueta</td>
+                                            <td class="text-center">@item.Valor.ToString("N1") h</td>
+                                            <td class="text-center">@item.ValorSecundario</td>
+                                        </tr>
+                                    }
+                                }
+                                else { <tr><td colspan="3" class="text-center py-3">Cargando...</td></tr> }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-cart-check"></i> Productos Top</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0 align-middle">
+                            <thead class="small text-muted">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th class="text-center">Cant.</th>
+                                    <th class="text-end pe-3">Ingreso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (topProductos != null)
+                                {
+                                    @foreach (var item in topProductos)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold text-truncate" style="max-width: 150px;">@item.Etiqueta</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-secondary rounded-pill">@item.Valor</span>
+                                            </td>
+                                            <td class="text-end pe-3">@item.ValorMonetario.ToString("C")</td>
+                                        </tr>
+                                    }
+                                }
+                                 else { <tr><td colspan="3" class="text-center py-3">Sin ventas...</td></tr> }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-calendar-check"></i> Histórico Anual</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0 align-middle">
+                            <thead class="small text-muted">
+                                <tr>
+                                    <th>Año</th>
+                                    <th class="text-end pe-4">Ingreso Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (topAnios != null)
+                                {
+                                    @foreach (var item in topAnios)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold fs-5">@item.Etiqueta</td>
+                                            <td class="text-end pe-4 text-success fw-bold">@item.ValorMonetario.ToString("C")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-calendar-month"></i> Top Meses</h5>
+                    
+                    <select class="form-select form-select-sm w-auto border-0 shadow-none text-dark fw-bold" 
+                            style="background-color: rgba(255,255,255,0.9);"
+                            @bind="anioSeleccionado" 
+                            @bind:after="CargarMeses">
+                        @for (int i = DateTime.Now.Year; i >= 2024; i--)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0 align-middle">
+                            <thead class="small text-muted">
+                                <tr>
+                                    <th>Mes</th>
+                                    <th class="text-end pe-4">Ingreso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (topMeses != null)
+                                {
+                                    @foreach (var item in topMeses)
+                                    {
+                                        <tr>
+                                            <td class="text-capitalize fw-bold">@item.Etiqueta</td>
+                                            <td class="text-end pe-4 text-success">@item.ValorMonetario.ToString("C")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<DatoEstadistico>? topPcs;
+    private List<DatoEstadistico>? topProductos;
+    private List<DatoEstadistico>? topAnios;
+    private List<DatoEstadistico>? topMeses;
+    private int anioSeleccionado = DateTime.Now.Year;
+    
+    private HubConnection? hubConnection; // VARIABLE PARA SIGNALR
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarDatosCompletos();
+        
+        // 1. Conexión SignalR (Para actualización en vivo)
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavManager.ToAbsoluteUri("/ciberhub"))
+            .Build();
+
+        // Escuchamos cuando se vende algo (RefrescarProductos) o se acaba un turno (RefrescarDashboard)
+        hubConnection.On("RefrescarProductos", async () => await RecargarDatosManual());
+        hubConnection.On("RefrescarDashboard", async () => await RecargarDatosManual());
+
+        await hubConnection.StartAsync();
+
+        // 2. Botón Amarillo
+        RefreshService.OnRefreshRequested += RecargarDatosManual;
+    }
+
+    private async Task CargarDatosCompletos()
+    {
+        var t1 = StatsService.ObtenerTopPcsAsync();
+        var t2 = StatsService.ObtenerTopProductosAsync();
+        var t3 = StatsService.ObtenerMejoresAniosAsync();
+        var t4 = StatsService.ObtenerMejoresMesesAsync(anioSeleccionado);
+
+        await Task.WhenAll(t1, t2, t3, t4);
+
+        topPcs = await t1;
+        topProductos = await t2;
+        topAnios = await t3;
+        topMeses = await t4;
+    }
+
+    private async Task CargarMeses()
+    {
+        topMeses = await StatsService.ObtenerMejoresMesesAsync(anioSeleccionado);
+    }
+
+    private async Task RecargarDatosManual()
+    {
+        await CargarDatosCompletos();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        RefreshService.OnRefreshRequested -= RecargarDatosManual;
+        if (hubConnection is not null) await hubConnection.DisposeAsync();
+    }
+}

@@ -1,0 +1,77 @@
+/* ESTILOS BASE (Móvil Primero) */
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.top-row {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+}
+
+/* Ocultar el menú por defecto en móviles si tiene la clase collapse */
+.collapse {
+    display: none;
+}
+
+/* Estilo del menú desplegable en móvil */
+.nav-scrollable {
+    background-color: #1b1b1b;
+    padding: 1rem;
+    position: relative;
+    z-index: 1000;
+}
+
+/* Estilos de los enlaces */
+.nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+.nav-item ::deep .nav-link {
+    color: #d7d7d7;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    width: 100%;
+    padding-left: 1rem;
+}
+
+.nav-item ::deep a.active {
+    background-color: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.nav-item ::deep .nav-link:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.bi {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* --- REGLAS PARA ESCRITORIO (Pantallas grandes) --- */
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none; /* Ocultar botón hamburguesa en PC */
+    }
+
+    .collapse {
+        /* En PC, siempre mostrar el menú, aunque tenga la clase collapse */
+        display: block !important;
+    }
+
+    .nav-scrollable {
+        /* Barra lateral fija a la izquierda */
+        display: block;
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}

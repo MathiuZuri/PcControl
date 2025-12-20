@@ -1,0 +1,415 @@
+﻿@page "/reportes"
+@using PcControl.Shared.Models
+@using PcControl.Server.Services
+@using Microsoft.AspNetCore.Authorization
+@using System.Globalization
+@attribute [Authorize(Roles = "Admin")]
+@inject FinanzasService FinanzasService
+@inject IJSRuntime JsRuntime
+@inject UiRefreshService RefreshService
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+
+<PageTitle>Caja del Internet - Finanzas</PageTitle>
+
+<div class="container-fluid mt-3 container-md mb-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fs-3 mb-0">💰 Finanzas</h2>
+        
+        <div class="d-flex gap-2 align-items-center">
+            <label class="d-none d-sm-inline fw-bold">Año:</label>
+            <select class="form-select w-auto shadow-sm" @bind="anioSeleccionado" @bind:after="CargarDatosAnuales">
+                @if (listaDeAnios != null)
+                {
+                    @foreach (var anio in listaDeAnios)
+                    {
+                        <option value="@anio">@anio</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (datosAnuales != null)
+    {
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fs-6">Resumen @anioSeleccionado</h5>
+                <small class="text-white-50" style="font-size: 0.75rem;">(Toca un mes)</small>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 text-center align-middle" style="min-width: 600px;">
+                        <thead class="table-light small text-uppercase">
+                            <tr>
+                                <th class="text-start ps-3 sticky-start">Mes</th>
+                                <th class="text-success">PC</th>
+                                <th class="text-primary">Extras</th>
+                                <th class="fw-bold">Bruto</th>
+                                <th class="text-danger">Gastos</th>
+                                <th class="bg-success text-white">Neto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mes in datosAnuales.Meses)
+                            {
+                                <tr @onclick="() => CargarDetalleMensual(mes.NumeroMes)" 
+                                    class="@(mesSeleccionado == mes.NumeroMes ? "table-active border-start border-5 border-primary" : "")" 
+                                    style="cursor: pointer;">
+                                    <td class="text-start ps-3 text-capitalize fw-bold sticky-start bg-white">
+                                        @mes.NombreMes.Substring(0, 3) @if(mesSeleccionado == mes.NumeroMes) { <i class="bi bi-caret-right-fill text-primary ms-1"></i> }
+                                    </td>
+                                    <td class="small">@mes.TotalInternet.ToString("N0")</td>
+                                    <td class="small">@mes.TotalExtras.ToString("N0")</td>
+                                    <td class="fw-bold text-muted">@mes.TotalBruto.ToString("N0")</td>
+                                    <td class="text-danger small">@mes.TotalGastos.ToString("N0")</td>
+                                    <td class="fw-bold @(mes.TotalLiquido >= 0 ? "text-success" : "text-danger")">
+                                        @mes.TotalLiquido.ToString("N0")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        @if (detalleMensual != null && mesSeleccionado != null)
+        {
+            <div class="card border-primary shadow mb-4 animate-fade-in">
+                <div class="card-header bg-primary text-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <h5 class="mb-0 text-capitalize fs-6">
+                        <i class="bi bi-calendar3"></i> @detalleMensual.NombreMes
+                    </h5>
+                    <div class="d-flex gap-2 ms-auto">
+                        <button class="btn btn-sm btn-light text-primary fw-bold shadow-sm" @onclick="AbrirModalGasto">
+                            <i class="bi bi-dash-circle"></i> Nuevo Gasto
+                        </button>
+                        <button class="btn btn-sm btn-outline-light" @onclick="() => { detalleMensual = null; mesSeleccionado = null; }">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body bg-light p-0">
+                    <div class="p-3">
+                        <h6 class="text-primary fw-bold mb-3"><i class="bi bi-graph-up"></i> Flujo Diario</h6>
+                        
+                        <div class="table-responsive d-none d-md-block bg-white rounded shadow-sm border mb-4">
+                            <table class="table table-striped table-bordered mb-0 text-center align-middle">
+                                <thead class="bg-light text-secondary small">
+                                    <tr>
+                                        <th>Día</th>
+                                        <th>PC</th>
+                                        <th>Extras</th>
+                                        <th class="fw-bold">Bruto</th>
+                                        <th class="text-danger">Gastos</th>
+                                        <th class="text-success">Neto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (detalleMensual.Dias.Any()) {
+                                        @foreach (var dia in detalleMensual.Dias) {
+                                            <tr>
+                                                <td>@dia.Fecha.ToString("dddd dd")</td>
+                                                <td>@dia.IngresoInternet.ToString("N2")</td>
+                                                <td>@dia.IngresoExtras.ToString("N2")</td>
+                                                <td class="fw-bold">@dia.TotalBruto.ToString("N2")</td>
+                                                <td class="text-danger">@((dia.Gastos > 0 ? "- " : "") + dia.Gastos.ToString("N2"))</td>
+                                                <td class="fw-bold text-success">@dia.TotalLiquido.ToString("N2")</td>
+                                            </tr>
+                                        }
+                                    } else {
+                                        <tr><td colspan="6" class="p-3 text-muted">Sin movimientos</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-md-none mb-4">
+                            @if (detalleMensual.Dias.Any()) {
+                                @foreach (var dia in detalleMensual.Dias) {
+                                    <div class="card mb-2 border-0 shadow-sm">
+                                        <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                                            <div class="text-center bg-light rounded p-1 border" style="min-width: 50px;">
+                                                <div class="small text-uppercase text-muted" style="font-size: 0.65rem;">@dia.Fecha.ToString("MMM")</div>
+                                                <div class="fw-bold fs-5 lh-1">@dia.Fecha.Day</div>
+                                            </div>
+                                            <div class="flex-grow-1 px-3 small lh-sm">
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="text-muted">Ingresos:</span>
+                                                    <span class="fw-bold">@dia.TotalBruto.ToString("N2")</span>
+                                                </div>
+                                                @if(dia.Gastos > 0) {
+                                                    <div class="d-flex justify-content-between text-danger">
+                                                        <span>Gastos:</span>
+                                                        <span>- @dia.Gastos.ToString("N2")</span>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="fw-bold fs-6 @(dia.TotalLiquido >= 0 ? "text-success" : "text-danger")">
+                                                    @dia.TotalLiquido.ToString("C")
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            } else {
+                                <p class="text-center text-muted small">Sin ingresos diarios.</p>
+                            }
+                        </div>
+
+                        <div class="border-top pt-3">
+                            <h6 class="text-danger fw-bold mb-3"><i class="bi bi-receipt"></i> Desglose de Gastos</h6>
+                            
+                            @if (detalleMensual.DetalleGastos.Any())
+                            {
+                                <div class="table-responsive d-none d-md-block bg-white rounded shadow-sm border">
+                                    <table class="table table-hover mb-0 align-middle">
+                                        <thead class="bg-light text-secondary small">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Descripción</th>
+                                                <th class="text-end">Monto</th>
+                                                <th class="text-end">Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var g in detalleMensual.DetalleGastos)
+                                            {
+                                                <tr>
+                                                    <td>@g.Fecha.ToString("dd/MM/yyyy")</td>
+                                                    <td class="fw-bold text-secondary">@g.Descripcion</td>
+                                                    <td class="text-end text-danger fw-bold">- @g.Monto.ToString("C")</td>
+                                                    <td class="text-end">
+                                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => EliminarGasto(g)">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot class="table-light">
+                                            <tr>
+                                                <td colspan="2" class="text-end fw-bold">Total Egresos:</td>
+                                                <td class="text-end fw-bold text-danger">@detalleMensual.TotalGastos.ToString("C")</td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="d-md-none">
+                                    @foreach (var g in detalleMensual.DetalleGastos)
+                                    {
+                                        <div class="card mb-2 border-danger border-start border-4 shadow-sm">
+                                            <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div class="fw-bold text-dark">@g.Descripcion</div>
+                                                    <small class="text-muted">@g.Fecha.ToString("dd MMM")</small>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span class="text-danger fw-bold fs-5">-@g.Monto.ToString("N2")</span>
+                                                    <button class="btn btn-sm btn-light text-danger" @onclick="() => EliminarGasto(g)">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="text-end fw-bold text-danger mt-2 pe-2">
+                                        Total Gastos: - @detalleMensual.TotalGastos.ToString("C")
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-light text-center border text-muted">
+                                    <small>No hay gastos registrados en este mes.</small>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">GANANCIA FINAL (NETA):</span>
+                    <span class="h4 mb-0 fw-bold text-warning">@detalleMensual.TotalLiquido.ToString("C")</span>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-6">
+                <div class="card border-secondary shadow-sm">
+                    <div class="card-header bg-secondary text-white text-center py-2">
+                        <h6 class="mb-0 text-uppercase ls-1">Resumen Global @anioSeleccionado</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Ingresos PC:</span>
+                            <span class="fw-bold">@datosAnuales.AnualInternet.ToString("N2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Ingresos Extras:</span>
+                            <span class="fw-bold">@datosAnuales.AnualExtras.ToString("N2")</span>
+                        </div>
+                        <hr class="my-2">
+                        <div class="d-flex justify-content-between mb-1 h6 text-primary">
+                            <span>Total Bruto:</span>
+                            <span>@datosAnuales.AnualBruto.ToString("N2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-danger">
+                            <span>(-) Gastos:</span>
+                            <span>- @datosAnuales.AnualGastos.ToString("N2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between bg-success text-white p-2 rounded">
+                            <span class="h5 mb-0">NETO:</span>
+                            <span class="h4 mb-0">@datosAnuales.AnualLiquido.ToString("C")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (mostrarModalGasto)
+{
+    <div class="modal-backdrop-custom">
+        <div class="modal-content-custom">
+            <div class="d-flex justify-content-between mb-3 align-items-center">
+                <h5 class="mb-0">Registrar Gasto</h5>
+                <button class="btn-close" @onclick="() => mostrarModalGasto = false"></button>
+            </div>
+
+            <EditForm Model="nuevoGasto" OnValidSubmit="GuardarGasto">
+                <DataAnnotationsValidator />
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Descripción</label>
+                    <InputText class="form-control" @bind-Value="nuevoGasto.Descripcion" placeholder="Ej: Pago de Luz" />
+                    <ValidationMessage For="@(() => nuevoGasto.Descripcion)" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Monto (S/)</label>
+                    <InputNumber class="form-control form-control-lg text-end fw-bold text-danger" @bind-Value="nuevoGasto.Monto" step="0.10" />
+                    <ValidationMessage For="@(() => nuevoGasto.Monto)" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small text-muted">Fecha</label>
+                    <InputDate class="form-control" @bind-Value="nuevoGasto.Fecha" />
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-danger btn-lg">Guardar Gasto</button>
+                    <button type="button" class="btn btn-light text-muted" @onclick="() => mostrarModalGasto = false">Cancelar</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<style>
+    .sticky-start {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+@code {
+    private int anioSeleccionado = DateTime.Now.Year;
+    private ResumenAnual? datosAnuales;
+    private ResumenMensual? detalleMensual;
+    private int? mesSeleccionado;
+    private bool mostrarModalGasto = false;
+    private Gasto nuevoGasto = new();
+    private List<int> listaDeAnios = new(); 
+    
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeAnios = await FinanzasService.ObtenerAniosDisponiblesAsync();
+        await CargarDatosAnuales();
+        // 3. SUSCRIBIRSE AL BOTÓN DE RECARGA
+        RefreshService.OnRefreshRequested += RecargarDatos;
+    }
+
+    private async Task CargarDatosAnuales()
+    {
+        mesSeleccionado = null;
+        detalleMensual = null;
+        datosAnuales = await FinanzasService.ObtenerResumenAnualAsync(anioSeleccionado);
+    }
+
+    private async Task CargarDetalleMensual(int mes)
+    {
+        if (mesSeleccionado == mes)
+        {
+            mesSeleccionado = null;
+            detalleMensual = null;
+            return;
+        }
+
+        mesSeleccionado = mes;
+        detalleMensual = await FinanzasService.ObtenerDetalleMensualAsync(anioSeleccionado, mes);
+    }
+
+    private void AbrirModalGasto()
+    {
+        if (mesSeleccionado == null) return;
+        DateTime fechaPorDefecto;
+        if (anioSeleccionado == DateTime.Now.Year && mesSeleccionado == DateTime.Now.Month)
+            fechaPorDefecto = DateTime.Now;
+        else
+            fechaPorDefecto = new DateTime(anioSeleccionado, mesSeleccionado.Value, 1);
+
+        nuevoGasto = new Gasto { Fecha = fechaPorDefecto };
+        mostrarModalGasto = true;
+    }
+
+    private async Task GuardarGasto()
+    {
+        await FinanzasService.RegistrarGastoAsync(nuevoGasto);
+        mostrarModalGasto = false;
+        await RecargarDatos();
+    }
+
+    private async Task EliminarGasto(Gasto gasto)
+    {
+        bool conf = await JsRuntime.InvokeAsync<bool>("confirm", $"¿Eliminar el gasto '{gasto.Descripcion}'?");
+        if (conf)
+        {
+            await FinanzasService.EliminarGastoAsync(gasto.Id);
+            await RecargarDatos();
+        }
+    }
+
+    // 4. LÓGICA DE RECARGA SIN PERDER EL ESTADO VISUAL
+    private async Task RecargarDatos()
+    {
+        await CargarDatosAnuales(); 
+        
+        // Si hay un mes abierto, lo recargamos también
+        if (mesSeleccionado.HasValue)
+        {
+            await CargarDetalleMensual(mesSeleccionado.Value);
+        }
+        
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // 5. LIMPIEZA
+    public async ValueTask DisposeAsync()
+    {
+        RefreshService.OnRefreshRequested -= RecargarDatos;
+    }
+}

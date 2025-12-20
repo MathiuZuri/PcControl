@@ -1,0 +1,29 @@
+﻿<Window x:Class="PcControl.Client.InfoSesionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sesión" Height="80" Width="250"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        Topmost="True" 
+        ShowInTaskbar="True" 
+        ResizeMode="NoResize"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"> <Border CornerRadius="10" Background="#CC000000" BorderBrush="#00D1FF" BorderThickness="1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,0">
+                <TextBlock x:Name="txtTiempo" Text="-- min" FontSize="20" Foreground="#00FF00" FontWeight="Bold"/>
+                <TextBlock x:Name="txtMensaje" Text="Bienvenido" FontSize="10" Foreground="White"/>
+            </StackPanel>
+
+            <Button Grid.Column="1" Content="_" Width="30" Height="30" 
+                    Margin="0,0,10,0" Background="Transparent" Foreground="White" 
+                    BorderThickness="0" FontSize="16" FontWeight="Bold"
+                    Click="BtnMinimizar_Click" Cursor="Hand"/>
+        </Grid>
+    </Border>
+</Window>

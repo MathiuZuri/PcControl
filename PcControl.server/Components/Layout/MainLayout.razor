@@ -1,0 +1,70 @@
+﻿@inherits LayoutComponentBase
+@using PcControl.Server.Services
+@using PcControl.server.Components.Layout
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+@inject UiRefreshService RefreshService
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4 auth d-flex justify-content-between align-items-center">
+            
+            <span class="fw-bold fs-5 d-none d-sm-block text-primary">
+                CiberControl Pro
+            </span>
+            
+            <div class="d-flex align-items-center gap-2">
+                
+                <button class="btn btn-warning text-dark d-flex align-items-center gap-1" 
+                        @onclick="RefrescarDatosActuales" 
+                        title="Recargar datos sin salir">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <span class="d-none d-md-inline">Recargar</span>
+                </button>
+
+                <div class="vr mx-2"></div>
+
+                <MobileConnect />
+                
+                <div class="vr mx-2"></div> 
+
+                <button class="btn btn-sm btn-danger d-flex align-items-center gap-1" @onclick="CerrarSesion" title="Cerrar Sesión">
+                    <i class="bi bi-power"></i> 
+                    <span class="d-none d-md-inline">Salir</span>
+                </button>
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    Ha ocurrido un error.
+    <a href="." class="reload">Recargar</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    // MÉTODO DEL BOTÓN RECARGAR
+    private async Task RefrescarDatosActuales()
+    {
+        // Dispara la señal a la página que esté abierta actualmente
+        await RefreshService.TriggerRefreshAsync();
+    }
+
+    private async Task CerrarSesion()
+    {
+        if (AuthStateProvider is CustomAuthStateProvider auth)
+        {
+            await auth.Logout();
+            NavManager.NavigateTo("/login", true); 
+        }
+    }
+}

@@ -1,0 +1,12 @@
+F:\proyectC#\PcControl\PcControl.Shared\bin\Release\net9.0\win-x64\PcControl.Shared.deps.json
+F:\proyectC#\PcControl\PcControl.Shared\bin\Release\net9.0\win-x64\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\bin\Release\net9.0\win-x64\PcControl.Shared.pdb
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.GeneratedMSBuildEditorConfig.editorconfig
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.AssemblyInfoInputs.cache
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.AssemblyInfo.cs
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.csproj.CoreCompileInputs.cache
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\refint\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.pdb
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\ref\PcControl.Shared.dll
+F:\proyectC#\PcControl\PcControl.Shared\obj\Release\net9.0\win-x64\PcControl.Shared.csproj.AssemblyReference.cache

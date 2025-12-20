@@ -1,0 +1,201 @@
+﻿@page "/configuracionTarifa"
+@using PcControl.Shared.Models
+@using PcControl.Server.Services
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")] 
+@rendermode InteractiveServer
+@inject TarifaService TarifaService
+@inject UiRefreshService RefreshService
+@inject IJSRuntime JsRuntime
+@implements IAsyncDisposable
+
+<PageTitle>Configuración de Tarifas</PageTitle>
+
+<div class="container-fluid mt-3 container-md">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fs-3 mb-0">⚙️ Tarifas</h3>
+            <p class="text-muted small mb-0 d-none d-sm-block">Define los precios por bloques de tiempo.</p>
+        </div>
+        <button class="btn btn-success" @onclick="AbrirModalCrear">
+            <i class="bi bi-plus-lg"></i> <span class="d-none d-sm-inline">Nueva Tarifa</span>
+        </button>
+    </div>
+
+    @if (tarifas == null)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Cargando precios...</p>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0 d-none d-md-block">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Duración</th>
+                            <th>Precio</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in tarifas)
+                        {
+                            <tr>
+                                <td class="fw-bold">@t.Nombre</td>
+                                <td>@t.Minutos min</td>
+                                <td>
+                                    <span class="badge bg-success fs-6">@t.Precio.ToString("C")</span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-primary me-1" @onclick="() => Editar(t)">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(t.Id)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-md-none">
+            @foreach (var t in tarifas)
+            {
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title fw-bold mb-0 text-primary">@t.Nombre</h5>
+                            <span class="badge bg-success fs-5">@t.Precio.ToString("C")</span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center text-muted small mb-3">
+                            <i class="bi bi-clock me-2"></i> Duración: @t.Minutos minutos
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary flex-grow-1" @onclick="() => Editar(t)">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-outline-danger" @onclick="() => Eliminar(t.Id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (mostrarModal)
+{
+    <div class="modal-backdrop-custom">
+        <div class="modal-content-custom">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">@(tarifaActual.Id == 0 ? "Nueva Tarifa" : "Editar Tarifa")</h5>
+                <button class="btn-close" @onclick="() => mostrarModal = false"></button>
+            </div>
+
+            <EditForm Model="tarifaActual" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre</label>
+                    <InputText class="form-control" @bind-Value="tarifaActual.Nombre" placeholder="Ej: 1 Hora, Media Hora..." />
+                </div>
+                
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Minutos</label>
+                        <InputNumber class="form-control" @bind-Value="tarifaActual.Minutos" placeholder="60" />
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Precio (S/)</label>
+                        <InputNumber class="form-control fw-bold text-success" @bind-Value="tarifaActual.Precio" step="0.10" />
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-2">
+                    <button type="submit" class="btn btn-success btn-lg">Guardar Tarifa</button>
+                    <button type="button" class="btn btn-light text-muted" @onclick="() => mostrarModal = false">Cancelar</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Tarifa>? tarifas;
+    private Tarifa tarifaActual = new();
+    private bool mostrarModal = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Cargar();
+        // 3. SUSCRIPCIÓN AL BOTÓN AMARILLO
+        RefreshService.OnRefreshRequested += RecargarDatosManual;
+    }
+
+    // 4. MÉTODO DE RECARGA
+    private async Task RecargarDatosManual()
+    {
+        await Cargar();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Cargar()
+    {
+        tarifas = await TarifaService.ObtenerTodasAsync();
+    }
+
+    private void AbrirModalCrear()
+    {
+        tarifaActual = new Tarifa();
+        mostrarModal = true;
+    }
+
+    private void Editar(Tarifa t)
+    {
+        // Copiamos el objeto para no editar directamente en la lista
+        tarifaActual = new Tarifa 
+        { 
+            Id = t.Id, 
+            Nombre = t.Nombre, 
+            Minutos = t.Minutos, 
+            Precio = t.Precio 
+        };
+        mostrarModal = true;
+    }
+
+    private async Task Guardar()
+    {
+        await TarifaService.GuardarTarifaAsync(tarifaActual);
+        mostrarModal = false;
+        await RecargarDatosManual();
+    }
+
+    private async Task Eliminar(int id)
+    {
+        bool confirmado = await JsRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro de eliminar esta tarifa?");
+        if (confirmado)
+        {
+            await TarifaService.EliminarTarifaAsync(id);
+            await RecargarDatosManual();
+        }
+    }
+
+    // 5. LIMPIEZA
+    public async ValueTask DisposeAsync()
+    {
+        RefreshService.OnRefreshRequested -= RecargarDatosManual;
+    }
+}

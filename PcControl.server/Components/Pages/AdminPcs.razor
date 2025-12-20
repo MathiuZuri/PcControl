@@ -1,0 +1,278 @@
+﻿@page "/admin-pcs"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@using PcControl.Shared.Models
+@using PcControl.Server.Services
+@attribute [Authorize(Roles = "Admin")] 
+@inject ComputadoraService ComputerService
+@inject NavigationManager NavManager
+@inject UiRefreshService RefreshService
+@rendermode InteractiveServer
+@inject IJSRuntime JsRuntime
+@implements IAsyncDisposable
+
+<PageTitle>Gestión de Equipos</PageTitle>
+
+<div class="container-fluid mt-3 container-md">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fs-3 mb-0">🛠️ Equipos</h2>
+            <small class="text-muted d-none d-sm-block">Administra las PCs y sus direcciones.</small>
+        </div>
+        <button class="btn btn-success" @onclick="AbrirModalCrear">
+            <i class="bi bi-plus-lg"></i> <span class="d-none d-sm-inline">Agregar PC</span>
+        </button>
+    </div>
+
+    @if (listaPcs == null)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Cargando equipos...</p>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm d-none d-md-block">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>IP / MAC</th>
+                            <th>Estado Actual</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pc in listaPcs)
+                        {
+                            <tr>
+                                <td>@pc.Id</td>
+                                <td class="fw-bold">
+                                    @pc.Nombre
+                                    @if(pc.Nombre == "PC-TEST")
+                                    {
+                                        <span class="badge bg-warning text-dark ms-2">Auto</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="small"><i class="bi bi-hdd-network"></i> @(pc.IpAddress ?? "-")</div>
+                                    <div class="small text-muted" style="font-size: 0.8rem;">MAC: @(pc.MacAddress ?? "-")</div>
+                                </td>
+                                <td>
+                                    <span class="badge @(pc.Estado == "Disponible" ? "bg-success" : "bg-danger")">
+                                        @pc.Estado
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-warning me-1" @onclick="() => AbrirModalEditar(pc)" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => ConfirmarEliminar(pc)" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-md-none">
+            @foreach (var pc in listaPcs)
+            {
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title fw-bold mb-0">
+                                <i class="bi bi-pc-display-horizontal text-primary"></i> @pc.Nombre
+                            </h5>
+                            <span class="badge @(pc.Estado == "Disponible" ? "bg-success" : "bg-danger") rounded-pill">
+                                @pc.Estado
+                            </span>
+                        </div>
+                        
+                        <div class="bg-light p-2 rounded mb-3 small">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">IP:</span>
+                                <span class="fw-bold text-dark">@(pc.IpAddress ?? "Sin asignar")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="text-muted">MAC:</span>
+                                <span class="font-monospace text-dark">@(pc.MacAddress ?? "Sin asignar")</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-warning flex-grow-1" @onclick="() => AbrirModalEditar(pc)">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </button>
+                            <button class="btn btn-outline-danger" @onclick="() => ConfirmarEliminar(pc)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (mostrarModal)
+{
+    <div class="modal-backdrop-custom">
+        <div class="modal-content-custom">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">@(nuevaPc.Id == 0 ? "Nueva PC" : "Editar PC")</h4>
+                <button class="btn-close" @onclick="() => mostrarModal = false"></button>
+            </div>
+            
+            <div class="mb-3">
+                <label class="fw-bold form-label">Nombre del Equipo</label>
+                <input class="form-control" @bind="nuevaPc.Nombre" placeholder="Ej: PC-04" />
+                @if (nuevaPc.Id > 0)
+                {
+                    <div class="form-text text-danger small">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        Al guardar, el cliente físico se reiniciará con este nombre.
+                    </div>
+                }
+                else
+                {
+                    <div class="form-text text-muted small">Debe coincidir con el config.txt del cliente.</div>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dirección IP</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-hdd-network"></i></span>
+                    <input class="form-control" @bind="nuevaPc.IpAddress" placeholder="Ej: 192.168.1.50" />
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Dirección MAC</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-ethernet"></i></span>
+                    <input class="form-control" @bind="nuevaPc.MacAddress" placeholder="Ej: AA:BB:CC..." />
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-flex justify-content-end mt-4">
+                <button class="btn btn-secondary" @onclick="() => mostrarModal = false">Cancelar</button>
+                <button class="btn btn-primary px-4" @onclick="GuardarPc">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Computadora> listaPcs = new();
+    private Computadora nuevaPc = new();
+    private bool mostrarModal = false;
+    private HubConnection? hubConnection; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarLista();
+
+        // 1. SIGNALR: Actualización automática desde otros clientes
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavManager.ToAbsoluteUri("/ciberhub"))
+            .Build();
+
+        hubConnection.On("RefrescarDashboard", async () =>
+        {
+            await RecargarDatosManual(); 
+        });
+
+        await hubConnection.StartAsync();
+
+        // 2. SERVICIO UI: Actualización manual desde botón amarillo
+        RefreshService.OnRefreshRequested += RecargarDatosManual;
+    }
+
+    // Este método centraliza la recarga para el botón y para SignalR
+    private async Task RecargarDatosManual()
+    {
+        await CargarLista();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CargarLista()
+    {
+        listaPcs = await ComputerService.ObtenerTodasAsync();
+    }
+
+    private void AbrirModalCrear()
+    {
+        nuevaPc = new Computadora 
+        { 
+            TarifaPorHora = 0, 
+            Estado = "Disponible" 
+        }; 
+        mostrarModal = true;
+    }
+
+    private void AbrirModalEditar(Computadora pc)
+    {
+        nuevaPc = new Computadora 
+        { 
+            Id = pc.Id,
+            Nombre = pc.Nombre,
+            IpAddress = pc.IpAddress,
+            MacAddress = pc.MacAddress,
+            TarifaPorHora = pc.TarifaPorHora,
+            Estado = pc.Estado,
+            ImporteExtra = pc.ImporteExtra,
+            NotaAdmin = pc.NotaAdmin
+        };
+        mostrarModal = true;
+    }
+
+    private async Task GuardarPc()
+    {
+        if (string.IsNullOrWhiteSpace(nuevaPc.Nombre)) return;
+
+        if (nuevaPc.Id == 0)
+        {
+            await ComputerService.CrearPcAsync(nuevaPc);
+        }
+        else
+        {
+            await ComputerService.ActualizarPcAsync(nuevaPc);
+        }
+        
+        mostrarModal = false;
+        // La recarga se hará automática por SignalR, pero por seguridad:
+        await CargarLista(); 
+    }
+
+    private async Task ConfirmarEliminar(Computadora pc)
+    {
+        bool confirmado = await JsRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de eliminar {pc.Nombre}? Esto no se puede deshacer.");
+        if (confirmado)
+        {
+            await ComputerService.EliminarPcAsync(pc.Id);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        // 3. LIMPIEZA: Desuscribirse para evitar errores
+        RefreshService.OnRefreshRequested -= RecargarDatosManual;
+
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
