@@ -45,5 +45,34 @@ namespace PcControl.Client
             }
             catch { /* Si falla el log, no podemos hacer nada más */ }
         }
+        
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            // 1. Crear la Ventana Fantasma (Invisible)
+            Window ventanaFantasma = new Window
+            {
+                Width = 0,
+                Height = 0,
+                WindowStyle = WindowStyle.None,
+                ShowInTaskbar = false,
+                ShowActivated = false,
+                Visibility = Visibility.Hidden
+            };
+            ventanaFantasma.Show(); // Debe mostrarse para existir, pero es invisible
+
+            // 2. Crear TU ventana principal
+            MainWindow main = new MainWindow();
+            
+            // 3. HACER LA MAGIA: Tu ventana es "hija" de la fantasma
+            main.Owner = ventanaFantasma;
+            
+            // 4. Asegurar propiedades
+            main.ShowInTaskbar = false;
+            
+            // 5. Mostrarla
+            main.Show();
+        }
     }
 }

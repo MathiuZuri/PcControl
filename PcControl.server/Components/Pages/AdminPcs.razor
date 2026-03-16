@@ -184,7 +184,7 @@
     {
         await CargarLista();
 
-        // 1. SIGNALR: Actualización automática desde otros clientes
+        // SIGNALR: Actualización automática desde otros clientes
         hubConnection = new HubConnectionBuilder()
             .WithUrl(NavManager.ToAbsoluteUri("/ciberhub"))
             .Build();

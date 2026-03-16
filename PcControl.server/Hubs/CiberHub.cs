@@ -30,7 +30,7 @@ namespace PcControl.server.Hubs
             string modifier = await _configService.ObtenerValorAsync("ConsoleModifier", "Control");
             await Clients.Caller.SendAsync("RecibirConfiguracion", pass, key, modifier);
 
-            // 2. LÓGICA DE RESTAURACIÓN DE SESIÓN (NUEVO)
+            // 2. LÓGICA DE RESTAURACIÓN DE SESIÓN
             // Buscamos si esta PC debería estar ocupada
             var pc = await _context.Computadoras.FirstOrDefaultAsync(c => c.Nombre == nombrePc);
             
@@ -107,5 +107,7 @@ namespace PcControl.server.Hubs
         {
             await Clients.All.SendAsync("StreamDetenido", nombrePc);
         }
+        
+        
     }
 }

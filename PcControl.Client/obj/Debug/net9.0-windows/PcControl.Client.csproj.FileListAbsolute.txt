@@ -45,3 +45,6 @@ F:\proyectC#\PcControl\PcControl.Client\bin\Debug\net9.0-windows\Microsoft.Win32
 F:\proyectC#\PcControl\PcControl.Client\bin\Debug\net9.0-windows\System.Drawing.Common.dll
 F:\proyectC#\PcControl\PcControl.Client\bin\Debug\net9.0-windows\System.Private.Windows.Core.dll
 F:\proyectC#\PcControl\PcControl.Client\bin\Debug\net9.0-windows\runtimes\win\lib\net9.0\Microsoft.Win32.SystemEvents.dll
+F:\proyectC#\PcControl\PcControl.Client\obj\Debug\net9.0-windows\PcControl.Client_MarkupCompile.lref
+F:\proyectC#\PcControl\PcControl.Client\obj\Debug\net9.0-windows\App.baml
+F:\proyectC#\PcControl\PcControl.Client\obj\Debug\net9.0-windows\PcControl.Client.sourcelink.json

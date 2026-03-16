@@ -12,9 +12,11 @@ namespace PcControl.Client
         public MensajeWindow(string mensaje)
         {
             InitializeComponent();
-            txtContenido.Text = mensaje;
             
-            // Posicionar en el centro de la pantalla
+            // 1. APLICAR SOLUCIÓN NUCLEAR (Indestructible por 5 segundos)
+            SeguridadWin32.BlindarVentana(this);
+
+            txtContenido.Text = mensaje;
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             // Timer para cerrar en 5 segundos
@@ -24,6 +26,7 @@ namespace PcControl.Client
             _autoCloseTimer.Start();
         }
 
+        // ... (El resto de tu código sigue igual: Timer_Tick, BtnOk_Click, DragMove) ...
         private void Timer_Tick(object? sender, EventArgs e)
         {
             _segundosVida--;
@@ -43,7 +46,7 @@ namespace PcControl.Client
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove(); // Permite mover la ventana
+            this.DragMove(); 
         }
     }
 }

@@ -2,49 +2,86 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using PcControl.Shared.Models
 @using PcControl.Server.Services
+@using System.Globalization
 @inject NavigationManager NavManager
 @inject ComputadoraService ComputerService
 @rendermode InteractiveServer
 
 <PageTitle>Monitor: @NombrePc</PageTitle>
 
-<div class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center bg-dark">
+<div class="container-fluid vh-100 d-flex flex-column bg-dark p-0">
     
-    @if (conectado)
-    {
-        <div class="position-relative border border-3 border-success shadow-lg" style="max-width: 95%; max-height: 90vh;">
-            @if (!string.IsNullOrEmpty(imagenBase64))
-            {
-                <img src="data:image/jpeg;base64,@imagenBase64" class="img-fluid" style="object-fit: contain; max-height: 85vh;" />
-            }
-            else
-            {
-                <div class="text-white p-5 text-center">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-3">Esperando transmisión de @NombrePc...</p>
-                    <small class="text-muted">Asegúrate de haber dado click a "Iniciar Video" en el panel principal.</small>
-                </div>
-            }
-            
-            <div class="position-absolute top-0 start-0 m-2">
-                <span class="badge bg-danger animate-pulse">EN VIVO</span>
-            </div>
+    <div class="bg-secondary p-2 d-flex flex-wrap align-items-center justify-content-between shadow-sm z-3">
+        <div class="text-white fw-bold ms-2">
+            <i class="bi bi-pc-display"></i> @NombrePc
         </div>
-    }
-    else
-    {
-        <div class="text-white">Conectando al servidor...</div>
-    }
 
-    <div class="mt-3">
-        <button class="btn btn-outline-light btn-sm" @onclick="Cerrar">Cerrar Monitor</button>
+        <div class="d-flex align-items-center gap-3 flex-grow-1 justify-content-center">
+            <div class="d-flex align-items-center gap-2 text-white small">
+                <label title="Fotogramas por segundo" class="fw-bold">FPS: @fps</label>
+                <input type="range" class="form-range" min="1" max="15" step="1" style="width: 100px;" 
+                       @bind="fps" @bind:event="oninput" />
+            </div>
+
+            <div class="d-flex align-items-center gap-2 text-white small">
+                <label title="Calidad de compresión JPG" class="fw-bold">Calidad: @calidad%</label>
+                <input type="range" class="form-range" min="10" max="100" step="10" style="width: 100px;" 
+                       @bind="calidad" @bind:event="oninput" />
+            </div>
+
+            <div class="d-flex align-items-center gap-2 text-white small">
+                <label title="Resolución de pantalla" class="fw-bold">Escala: @(escala * 100)%</label>
+                <input type="range" class="form-range" min="0.1" max="1.0" step="0.1" style="width: 100px;" 
+                       @bind="escala" @bind:event="oninput" />
+            </div>
+
+            <button class="btn btn-success btn-sm ms-2 fw-bold" @onclick="AplicarAjustes">
+                <i class="bi bi-play-fill"></i> Aplicar / Iniciar
+            </button>
+            <button class="btn btn-danger btn-sm fw-bold" @onclick="DetenerStream">
+                <i class="bi bi-stop-fill"></i> Un para pausar/Doble click para detener
+            </button>
+        </div>
+
+        <button class="btn btn-outline-light btn-sm me-2" @onclick="Cerrar">Cerrar</button>
+    </div>
+
+    <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative overflow-hidden p-3">
+        @if (conectado)
+        {
+            <div class="position-relative border border-2 border-primary shadow-lg" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: #000;">
+                @if (!string.IsNullOrEmpty(imagenBase64))
+                {
+                    <img src="data:image/jpeg;base64,@imagenBase64" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+                }
+                else
+                {
+                    <div class="text-white p-5 text-center">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-3">Esperando transmisión de @NombrePc...</p>
+                        <small class="text-muted">Si no inicia, presiona "Aplicar / Iniciar" arriba.</small>
+                    </div>
+                }
+                
+                @if (_isStreamingLocal)
+                {
+                    <div class="position-absolute top-0 start-0 m-2">
+                        <span class="badge bg-danger animate-pulse">EN VIVO</span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-white">Conectando al servidor SignalR...</div>
+        }
     </div>
 </div>
 
 <style>
-    body { background-color: #212529; }
-    .animate-pulse { animation: pulse 1s infinite; }
-    @@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    body { background-color: #212529; overflow: hidden; }
+    .animate-pulse { animation: pulse 1.5s infinite; }
+    @@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 </style>
 
 @code {
@@ -53,6 +90,12 @@
     private HubConnection? hubConnection;
     private string? imagenBase64;
     private bool conectado = false;
+    private bool _isStreamingLocal = false;
+
+    // Valores por defecto optimizados
+    private int fps = 4;
+    private int calidad = 40;
+    private float escala = 0.5f;
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,7 +106,6 @@
 
         hubConnection.On<string, string>("RecibirCaptura", (pc, base64) =>
         {
-            // Solo actualizamos si la imagen es para ESTA pc
             if (pc == NombrePc)
             {
                 imagenBase64 = base64;
@@ -71,12 +113,12 @@
             }
         });
         
-        // 2. NUEVO: Escuchar orden de detener (LIMPIAR PANTALLA)
         hubConnection.On<string>("StreamDetenido", (pc) =>
         {
             if (pc == NombrePc)
             {
-                imagenBase64 = null; // <--- ESTO BORRA LA FOTO
+                imagenBase64 = null;
+                _isStreamingLocal = false;
                 InvokeAsync(StateHasChanged);
             }
         });
@@ -84,19 +126,44 @@
         await hubConnection.StartAsync();
         conectado = true;
         
-        // Opcional: Forzar inicio de stream al abrir la pestaña
-        // await ComputerService.EnviarComandoAsync(NombrePc, "StreamStart");
+        // Iniciar la transmisión automáticamente al abrir la ventana con los valores por defecto
+        await AplicarAjustes();
     }
 
-    private void Cerrar()
+    private async Task AplicarAjustes()
     {
-        // Opcional: Detener stream al cerrar
-        // ComputerService.EnviarComandoAsync(NombrePc, "StreamStop");
-        NavManager.NavigateTo("/"); // Volver al home o cerrar pestaña con JS
+        _isStreamingLocal = true;
+        // Construimos el parámetro: "FPS|Calidad|Escala". 
+        // Usamos InvariantCulture para asegurar que el decimal sea "0.5" y no "0,5" (lo cual rompería el parseo en C#)
+        string param = $"{fps}|{calidad}|{escala.ToString(CultureInfo.InvariantCulture)}";
+        
+        // Enviamos el comando a la PC Cliente
+        await ComputerService.EnviarComandoAsync(NombrePc, "StreamStart", param);
+    }
+
+    private async Task DetenerStream()
+    {
+        _isStreamingLocal = false;
+        imagenBase64 = null;
+        await ComputerService.EnviarComandoAsync(NombrePc, "StreamStop");
+    }
+
+    private async Task Cerrar()
+    {
+        await DetenerStream();
+        // Cierra la pestaña actual mediante JS Interop si fue abierta como popup, o navega al inicio
+        // Si no tienes JS Interop configurado para window.close(), navega al index:
+        NavManager.NavigateTo("/"); 
     }
 
     public async ValueTask DisposeAsync()
     {
+        // Buena práctica: detener el stream si el admin cierra la pestaña de golpe
+        if (_isStreamingLocal)
+        {
+            await ComputerService.EnviarComandoAsync(NombrePc, "StreamStop");
+        }
+
         if (hubConnection is not null)
         {
             await hubConnection.DisposeAsync();
