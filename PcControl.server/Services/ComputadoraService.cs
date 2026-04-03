@@ -97,13 +97,30 @@ namespace PcControl.Server.Services
                 if (nombreCambio) await _hubContext.Clients.Group(nombreViejo).SendAsync("CambiarNombreIdentity", pc.Nombre);
 
                 if (pc.Estado == "Ocupada")
-                    await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", pc.TiempoLimiteMinutos, "Bienvenido");
+                {
+                    int minutosAEnviar = pc.TiempoLimiteMinutos ?? 0;
+    
+                    if (pc.HoraInicio.HasValue && pc.TiempoLimiteMinutos > 0)
+                    {
+                        var minutosUsados = (int)(DateTime.Now - pc.HoraInicio.Value).TotalMinutes;
+                        minutosAEnviar = pc.TiempoLimiteMinutos.Value - minutosUsados;
+                    }
+                    
+                    if (minutosAEnviar <= 0 && pc.TiempoLimiteMinutos > 0) 
+                    {
+                        // Si el tiempo calculado es 0 o negativo, mandamos a BLOQUEAR directamente
+                        await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Bloquear", 0, "Tiempo Agotado");
+                    }
+                    else 
+                    {
+                        // Solo mandamos desbloquear si realmente le queda tiempo (o si es tiempo libre = 0)
+                        await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", minutosAEnviar, (pc.ImportePorTiempo + pc.ImporteExtra).ToString("C"));
+                    }
+                }
                 else
+                {
                     await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Bloquear", 0, "Tiempo Terminado");
-                
-                // AVISAR A TODOS QUE EL STOCK CAMBIÓ
-                await _hubContext.Clients.All.SendAsync("RefrescarDashboard");
-                await _hubContext.Clients.All.SendAsync("RefrescarProductos");
+                }
             }
         }
 
@@ -159,11 +176,11 @@ namespace PcControl.Server.Services
                         var usados = (int)(DateTime.Now - pc.HoraInicio.Value).TotalMinutes;
                         nuevosMinutosRestantes = pc.TiempoLimiteMinutos.Value - usados;
                     }
-                    await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", nuevosMinutosRestantes, "Tiempo Reanudado");
+                    await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", nuevosMinutosRestantes, (pc.ImportePorTiempo + pc.ImporteExtra).ToString("C"));
                 }
                 else 
                 {
-                     await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", pc.MinutosRestantes, "Desbloqueado");
+                    await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", pc.MinutosRestantes, (pc.ImportePorTiempo + pc.ImporteExtra).ToString("C"));
                 }
             }
             await _hubContext.Clients.All.SendAsync("RefrescarDashboard");
@@ -211,6 +228,36 @@ namespace PcControl.Server.Services
 
                 // 3. Notificaciones
                 await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Bloquear", 0, "Gracias por su visita");
+                await _hubContext.Clients.All.SendAsync("RefrescarDashboard");
+            }
+        }
+        
+        public async Task AnularSesionAsync(int pcId)
+        {
+            using var context = _dbFactory.CreateDbContext();
+            var pc = await context.Computadoras.FindAsync(pcId);
+
+            if (pc != null)
+            {
+                // 1. Limpiamos todos los datos de la sesión actual
+                pc.Estado = "Disponible";
+                pc.HoraInicio = null;
+                pc.HoraFin = null;
+                pc.TiempoLimiteMinutos = 0;
+                pc.ImporteExtra = 0;
+                pc.ImportePorTiempo = 0;
+                pc.NotaAdmin = "";
+                pc.InicioPausa = null;
+
+                // Limpiamos la lista de productos si los hubiera
+                if (pc.Consumos != null) pc.Consumos.Clear();
+
+                await context.SaveChangesAsync();
+
+                // 2. Intentamos enviar la orden de bloqueo por si la PC vuelve a estar online
+                await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Bloquear", 0, "Sesión Anulada por Admin");
+
+                // 3. Refrescamos el panel de control
                 await _hubContext.Clients.All.SendAsync("RefrescarDashboard");
             }
         }

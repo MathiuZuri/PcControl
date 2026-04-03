@@ -1,7 +1,8 @@
 ﻿<Window x:Class="PcControl.Client.MensajeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Mensaje del Admin" Height="150" Width="400"
+        Title="Mensaje del Admin" 
+        Height="190" Width="420"
         WindowStyle="None" 
         AllowsTransparency="True" 
         Background="Transparent"
@@ -10,7 +11,11 @@
         ResizeMode="NoResize"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Border CornerRadius="15" Background="#E6000000" BorderBrush="#00D1FF" BorderThickness="2">
+    <Window.Effect>
+        <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="4" Opacity="0.6"/>
+    </Window.Effect>
+
+    <Border Margin="10" CornerRadius="12" Background="#F215151C" BorderBrush="#00D1FF" BorderThickness="1.5">
         <Grid Margin="15">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -18,29 +23,48 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="MENSAJE DEL ADMINISTRADOR" Foreground="#00D1FF" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
+                <TextBlock Text="🔔" Foreground="#00D1FF" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <TextBlock Text="MENSAJE DEL ADMINISTRADOR" Foreground="#00D1FF" FontFamily="Segoe UI" FontWeight="Black" FontSize="13" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <Rectangle Grid.Row="0" Height="1" Fill="#3300D1FF" VerticalAlignment="Bottom" Margin="0,25,0,0"/>
 
             <TextBlock Grid.Row="1" x:Name="txtContenido" 
                        Text="..." 
-                       Foreground="White" 
+                       Foreground="#F2F2F2" 
+                       FontFamily="Segoe UI"
                        FontSize="16" 
+                       FontWeight="SemiBold"
                        TextWrapping="Wrap" 
                        VerticalAlignment="Center" 
                        HorizontalAlignment="Center" 
-                       TextAlignment="Center"/>
+                       TextAlignment="Center"
+                       Margin="10,15,10,15"/>
 
-            <Button Grid.Row="2" Content="ENTENDIDO (OK)" Click="BtnOk_Click"
-                    Background="#00D1FF" Foreground="Black" FontWeight="Bold"
-                    Height="30" Width="150" Cursor="Hand">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            
-            <TextBlock Grid.Row="2" x:Name="txtCuentaAtras" Text="5s" 
-                       Foreground="Gray" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="1" Content="ENTENDIDO (OK)" Click="BtnOk_Click"
+                        Background="#00D1FF" Foreground="#15151C" FontFamily="Segoe UI" FontWeight="Black" FontSize="13"
+                        Height="34" Width="160" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="6"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0">
+                    <TextBlock Text="Cerrando en " Foreground="#666677" FontFamily="Segoe UI" FontSize="12" FontStyle="Italic"/>
+                    <TextBlock x:Name="txtCuentaAtras" Text="5s" 
+                               Foreground="#00D1FF" FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Border>
 </Window>

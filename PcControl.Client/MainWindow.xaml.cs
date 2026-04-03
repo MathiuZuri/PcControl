@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing; // NuGet: System.Drawing.Common
+using System.Drawing; 
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -17,12 +17,12 @@ using PcControl.Client.data;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
-using System.Drawing.Imaging; // Necesario para compresión JPG
+using System.Drawing.Imaging; 
+
 namespace PcControl.Client
 {
     public partial class MainWindow : Window
     {
-        // Importamos la función para buscar ventanas del sistema
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
@@ -44,24 +44,19 @@ namespace PcControl.Client
         private DispatcherTimer? _streamTimer;
         private bool _isStreaming = false;
         private bool _inputCongelado = false;
-
-        // IMPORTANTE: Variable para saber si estamos en sesión activa
         private bool _sesionActiva = false;
-
         private bool _esApagadoDeWindows = false;
-
         private string _ipCandidata = "";
 
-        private List<string> _playlistArchivos = new List<string>(); // Rutas locales de archivos
+        private List<string> _playlistArchivos = new List<string>(); 
         private int _indicePlaylist = 0;
         private DispatcherTimer? _timerSlideshow;
         private string _carpetaCache = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CacheMedia");
 
         private const int GwlExstyle = -20;
-        private const int WsExToolwindow = 0x00000080; // Oculta de Alt-Tab y Barra Tareas
-
+        private const int WsExToolwindow = 0x00000080; 
         private const int GwlStyle = -16;
-        private const int WsSysmenu = 0x00080000; // El menú de cerrar/min/max
+        private const int WsSysmenu = 0x00080000; 
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hwnd, int index);
@@ -69,102 +64,74 @@ namespace PcControl.Client
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
         
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_FORCEMINIMIZE = 11;
+        
         private CancellationTokenSource? _streamCts;
         private byte[]? _ultimoFrameBytes;
 
         public MainWindow()
         {
-
             InitializeComponent();
             this.Loaded += MainWindow_Loaded_SystemLock;
             this.ShowInTaskbar = false;
 
+            SeguridadSistema.AsegurarAutoArranque();
+            
             if (!Directory.Exists(_carpetaCache)) Directory.CreateDirectory(_carpetaCache);
-            ConfigurarSignalR();
+            
             InicializarTimer();
 
-            // --- SEGURIDAD: WATCHDOG PERMANENTE ---
-            // Revisa cada 500ms que no abran el administrador de tareas
             DispatcherTimer watchdog = new DispatcherTimer();
             watchdog.Interval = TimeSpan.FromMilliseconds(500);
             watchdog.Tick += Watchdog_Tick;
             watchdog.Start();
 
-            // Bloquear al iniciar
             BloqueoTeclado.Bloquear();
 
-            try
-            {
-                if (File.Exists("apagar_guardian.tmp"))
-                    File.Delete("apagar_guardian.tmp");
-            }
-            catch
-            {
-            }
+            try { if (File.Exists("apagar_guardian.tmp")) File.Delete("apagar_guardian.tmp"); } catch { }
 
-            CargarConfiguracion();
-
-            SystemEvents.SessionEnding += (s, e) =>
-            {
-                _esApagadoDeWindows = true;
-                // NO creamos el archivo "apagar_guardian.tmp" 
-                // para que cuando la PC vuelva a prender, el guardián proteja de nuevo.
-            };
-
+            SystemEvents.SessionEnding += (s, e) => { _esApagadoDeWindows = true; };
             this.SourceInitialized += MainWindow_SourceInitialized;
-            BloqueoTeclado.Bloquear();
         }
 
         private void MainWindow_SourceInitialized(object? sender, EventArgs e)
         {
-            // Obtener el identificador real de la ventana (Handle)
             var helper = new WindowInteropHelper(this);
-
-            // 1. OCULTAR DE BARRA DE TAREAS Y ALT-TAB (Modo ToolWindow a nivel sistema)
             int exStyle = GetWindowLong(helper.Handle, GwlExstyle);
             SetWindowLong(helper.Handle, GwlExstyle, exStyle | WsExToolwindow);
-
-            // 2. ELIMINAR EL BOTÓN CERRAR Y MENÚ DE SISTEMA
-            // Esto hace que Alt+F4 deje de funcionar a nivel sistema y quita la "X"
             int style = GetWindowLong(helper.Handle, GwlStyle);
             SetWindowLong(helper.Handle, GwlStyle, style & ~WsSysmenu);
         }
 
-        // ESTE MÉTODO ES NUEVO: Elimina la capacidad de cerrar a nivel de Windows
         private void MainWindow_Loaded_SystemLock(object sender, RoutedEventArgs e)
         {
             var hwnd = new WindowInteropHelper(this).Handle;
             int style = GetWindowLong(hwnd, GwlStyle);
-
-            // Le quitamos el botón cerrar, minimizar y maximizar del sistema interno
             SetWindowLong(hwnd, GwlStyle, style & ~WsSysmenu);
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // 1. Cargar multimedia (Esto puede hacerse mientras esperamos)
             CargarPlaylistLocal();
             ReproducirSiguiente();
 
-            // 2. --- SEGURIDAD DE ARRANQUE INTELIGENTE ---
-            // En lugar de esperar 5 segundos fijos, esperamos a que aparezca la barra de tareas
             await EsperarCargaEscritorio();
+            
+            // 1. Esperamos a que lea el archivo de texto por completo
             await CargarConfiguracion();
             ConfigurarSignalR();
 
-            // 3. AHORA SÍ, BLOQUEAMOS
-            // Ya es seguro porque el escritorio existe
             BloqueoTeclado.Bloquear();
 
-            // BloqueoInputTotal(true); // Descomentar si usas el bloqueo total de USB
-
             ShowInTaskbar = false;
-
-            // Aseguramos que ocupe
-            WindowState = WindowState.Normal; // Truco para refrescar
+            WindowState = WindowState.Normal; 
             WindowState = WindowState.Maximized;
-
-            // Forzamos que la ventana
             this.Topmost = true;
             this.Activate();
             this.Focus();
@@ -173,28 +140,19 @@ namespace PcControl.Client
         private async Task EsperarCargaEscritorio()
         {
             int intentos = 0;
-            // Intentamos durante máximo 30 segundos (60 intentos de 0.5s)
             while (intentos < 60)
             {
-                // "Shell_TrayWnd" es el nombre técnico interno de la Barra de Tareas de Windows
                 IntPtr taskbarHandle = FindWindow("Shell_TrayWnd", null);
-
                 if (taskbarHandle != IntPtr.Zero)
                 {
-                    // ¡La encontramos! El escritorio ya cargó.
-                    // Damos 4 segundo extra de gracia para que termine de dibujar los iconos
                     await Task.Delay(4000);
                     return;
                 }
-
-                // Si no está lista, esperamos un segundo y probamos de nuevo
                 await Task.Delay(1000);
                 intentos++;
             }
-            // Si llegamos aquí, forzamos el inicio aunque no detectemos la barra (por seguridad)
         }
 
-        // LÓGICA DE REPRODUCCIÓN MULTIMEDIA (NUEVO)
         private void CargarPlaylistLocal()
         {
             try
@@ -203,8 +161,8 @@ namespace PcControl.Client
 
                 var extensionesValidas = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    ".jpg", ".jpeg", ".png", ".bmp", ".webp", // Imágenes
-                    ".mp4", ".avi", ".wmv", ".mov", ".mkv", ".gif" // Videos y GIFs
+                    ".jpg", ".jpeg", ".png", ".bmp", ".webp",
+                    ".mp4", ".avi", ".wmv", ".mov", ".mkv", ".gif" 
                 };
 
                 _playlistArchivos = Directory.GetFiles(_carpetaCache)
@@ -212,31 +170,25 @@ namespace PcControl.Client
                     .OrderBy(f => f)
                     .ToList();
             }
-            catch
-            {
-            }
+            catch { }
         }
 
         private void ReproducirSiguiente()
         {
-            // Validaciones de seguridad
             if (_playlistArchivos.Count == 0) return;
 
-            // Avanzar índice circularmente
             if (_indicePlaylist >= _playlistArchivos.Count) _indicePlaylist = 0;
             string archivo = _playlistArchivos[_indicePlaylist];
             _indicePlaylist++;
 
-            // Verificar que el archivo realmente exista antes de intentar tocarlo
             if (!File.Exists(archivo))
             {
-                ReproducirSiguiente(); // Si lo borraron, salta al siguiente
+                ReproducirSiguiente(); 
                 return;
             }
 
             string ext = Path.GetExtension(archivo).ToLower();
 
-            // TRUCO: Los GIFs los mandamos al reproductor de video para que se muevan
             if (ext == ".mp4" || ext == ".avi" || ext == ".wmv" || ext == ".mov" || ext == ".gif")
             {
                 ReproducirVideo(archivo);
@@ -249,29 +201,26 @@ namespace PcControl.Client
 
         private void ReproducirImagen(string ruta)
         {
-            // 1. Limpiar Video
             VidFondo.Stop();
             VidFondo.Source = null;
             VidFondo.Visibility = Visibility.Collapsed;
 
             try
             {
-                // 2. Cargar Imagen SIN BLOQUEAR EL ARCHIVO (CacheOption.OnLoad)
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad; // <--- CLAVE PARA EVITAR ERROR DE ACCESO
+                bitmap.CacheOption = BitmapCacheOption.OnLoad; 
                 bitmap.UriSource = new Uri(ruta);
                 bitmap.EndInit();
-                bitmap.Freeze(); // Hacerla inmutable para mejor rendimiento
+                bitmap.Freeze(); 
 
                 ImgFondo.Source = bitmap;
                 ImgFondo.Visibility = Visibility.Visible;
 
-                // 3. Configurar Timer para pasar a la siguiente
                 if (_timerSlideshow != null) _timerSlideshow.Stop();
 
                 _timerSlideshow = new DispatcherTimer();
-                _timerSlideshow.Interval = TimeSpan.FromSeconds(10); // 10 segundos por foto
+                _timerSlideshow.Interval = TimeSpan.FromSeconds(10); 
                 _timerSlideshow.Tick += (s, e) =>
                 {
                     _timerSlideshow.Stop();
@@ -281,56 +230,46 @@ namespace PcControl.Client
             }
             catch
             {
-                ReproducirSiguiente(); // Si falla, siguiente
+                ReproducirSiguiente(); 
             }
         }
 
         private void ReproducirVideo(string ruta)
         {
-            // 1. Detener Timer de imágenes
             if (_timerSlideshow != null) _timerSlideshow.Stop();
 
-            // 2. Limpiar Imagen
             ImgFondo.Source = null;
             ImgFondo.Visibility = Visibility.Collapsed;
 
-            // 3. Cargar Video
             VidFondo.Source = new Uri(ruta);
             VidFondo.Visibility = Visibility.Visible;
             VidFondo.Play();
         }
 
-        // Evento que salta al siguiente cuando el video/gif termina
         private void VidFondo_MediaEnded(object sender, RoutedEventArgs e)
         {
-            // Pequeño delay para asegurar que el motor de video se liberó
             VidFondo.Stop();
             ReproducirSiguiente();
         }
 
-        // MÉTODO PARA DESCARGAR DESDE SIGNALR
         private async Task DescargarNuevosFondos(List<string> urls)
         {
             try
             {
                 if (!Directory.Exists(_carpetaCache)) Directory.CreateDirectory(_carpetaCache);
 
-                // PASO CRÍTICO: Detener antes de tocar archivos
-                // Esto libera los "candados" sobre las imágenes y videos
                 await Dispatcher.InvokeAsync(() =>
                 {
                     if (_timerSlideshow != null) _timerSlideshow.Stop();
                     VidFondo.Stop();
                     VidFondo.Source = null;
                     ImgFondo.Source = null;
-                    // Forzar limpieza de memoria para soltar archivos
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
                 });
 
                 using (HttpClient client = new HttpClient())
                 {
-                    // 1. Descargar nuevos
                     foreach (var url in urls)
                     {
                         var nombreArchivo = Path.GetFileName(url);
@@ -338,12 +277,19 @@ namespace PcControl.Client
 
                         if (!File.Exists(rutaDestino) || new FileInfo(rutaDestino).Length == 0)
                         {
-                            var datos = await client.GetByteArrayAsync(url);
+                            string urlCompleta = url;
+                            if (!url.StartsWith("http")) 
+                            {
+                                // Tomamos el servidor base (ej. http://192.168.1.5:5249)
+                                string serverBase = _urlServidor.Replace("/ciberhub", "");
+                                urlCompleta = $"{serverBase}{url}";
+                            }
+
+                            var datos = await client.GetByteArrayAsync(urlCompleta);
                             await File.WriteAllBytesAsync(rutaDestino, datos);
                         }
                     }
 
-                    // 2. Borrar viejos
                     var nombresValidos = urls.Select(u => Path.GetFileName(u)).ToHashSet();
                     var archivosLocales = Directory.GetFiles(_carpetaCache);
 
@@ -351,19 +297,11 @@ namespace PcControl.Client
                     {
                         if (!nombresValidos.Contains(Path.GetFileName(archivoLocal)))
                         {
-                            try
-                            {
-                                File.Delete(archivoLocal);
-                            }
-                            catch
-                            {
-                                /* Ignorar si falla por ahora */
-                            }
+                            try { File.Delete(archivoLocal); } catch { }
                         }
                     }
                 }
 
-                // 3. Reiniciar Playlist
                 await Dispatcher.InvokeAsync(() =>
                 {
                     CargarPlaylistLocal();
@@ -380,53 +318,47 @@ namespace PcControl.Client
             }
         }
 
-        // --- AQUÍ ESTÁ LA SEGURIDAD ANTI-CIERRE ---
         private void Watchdog_Tick(object? sender, EventArgs e)
         {
-
-            // 2. Comportamiento según estado
             if (this.Visibility == Visibility.Visible && GridAdminConsole.Visibility == Visibility.Collapsed)
             {
                 // MODO BLOQUEADO (Pantalla Negra)
-                this.Topmost = true; // Forzar estar encima
-                this.Activate(); // Robar foco
+                IntPtr ventanaActual = GetForegroundWindow();
+                var miHandle = new WindowInteropHelper(this).Handle;
+
+                // Si alguien logra poner una ventana (un juego) por encima de nuestra pantalla negra, la aplastamos
+                if (ventanaActual != miHandle)
+                {
+                    ShowWindow(ventanaActual, SW_FORCEMINIMIZE);
+                }
+
+                if (!this.Topmost) this.Topmost = true;
+                if (!this.IsActive) this.Activate();
             }
             else
             {
-                // MODO DESBLOQUEADO (Usuario usando la PC)
-                this.Topmost = false; // Dejar que use otras ventanas encima
-
-                // Truco: Si minimizan la ventana de tiempo, la traemos de vuelta si es crítico
-                // (Opcional)
+                // MODO DESBLOQUEADO
+                if (this.Topmost) this.Topmost = false; 
             }
         }
 
-
-        // --- EVITAR CIERRE CON ALT+F4 O BOTÓN X ---
         protected override void OnClosing(CancelEventArgs e)
         {
-            // TU LÓGICA DE CIERRE SEGURA
             if (!_cierreAutorizado && !_esApagadoDeWindows)
             {
                 e.Cancel = true;
-
-                // Truco: Si intentan cerrar, volvemos a poner la ventana encima de 
                 this.Topmost = false;
                 this.Topmost = true;
                 this.Activate();
             }
-
             base.OnClosing(e);
         }
 
-        // (CargarConfiguracion, Window_KeyDown, VerificarPassword IGUALES)
-
         private async Task CargarConfiguracion()
         {
-            string path = "config.txt";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.txt");
             bool necesitaGuardar = false;
 
-            // 1. Cargar lo que existe
             if (File.Exists(path))
             {
                 var lineas = File.ReadAllLines(path);
@@ -436,28 +368,29 @@ namespace PcControl.Client
                     if (linea.StartsWith("IP="))
                     {
                         string ip = linea.Replace("IP=", "").Trim();
-
-                        // MEJORA: Aceptamos IPs (192.168...) Y Nombres de Host (MEDICHI-PC)
-                        // Solo rechazamos localhost/127.0.0.1 o vacíos
                         if (!string.IsNullOrWhiteSpace(ip) && ip != "127.0.0.1" && !ip.ToLower().Contains("localhost"))
                         {
-                            // Si es nombre de host, Windows resolverá el DNS solo.
                             _urlServidor = $"http://{ip}:5249/ciberhub";
                         }
-                        else
-                        {
-                            _urlServidor = ""; // Forzar búsqueda
-                        }
+                        else { _urlServidor = ""; }
+                    }
+                    
+                    // --- CORRECCIÓN 2: LEER SEGURIDAD DESDE EL TXT ---
+                    if (linea.StartsWith("PASS=")) _passwordAdmin = linea.Replace("PASS=", "").Trim();
+                    if (linea.StartsWith("KEY=")) 
+                    {
+                        if (Enum.TryParse(linea.Replace("KEY=", "").Trim(), true, out Key k)) _teclaConsola = k;
+                    }
+                    if (linea.StartsWith("MOD="))
+                    {
+                        if (Enum.TryParse(linea.Replace("MOD=", "").Trim(), true, out ModifierKeys m)) _modificadorConsola = m;
                     }
                 }
             }
 
-            // 2. SI NO TENEMOS IP VÁLIDA, BUSCAMOS EL SERVIDOR (MODO ROBUSTO)
             if (string.IsNullOrEmpty(_urlServidor))
             {
                 txtEstadoConexion.Text = "Buscando servidor (Escaneo Inteligente)...";
-
-                // Usamos la nueva búsqueda Híbrida (UDP + TCP)
                 string ipServidorEncontrada = await BuscarServidorRobusto();
 
                 if (!string.IsNullOrEmpty(ipServidorEncontrada))
@@ -465,25 +398,16 @@ namespace PcControl.Client
                     _urlServidor = $"http://{ipServidorEncontrada}:5249/ciberhub";
                     necesitaGuardar = true;
                 }
-                else
-                {
-                    // Fallback: Si falla todo, asumimos localhost para pruebas
-                    _urlServidor = "http://127.0.0.1:5249/ciberhub";
-                }
+                else { _urlServidor = "http://127.0.0.1:5249/ciberhub"; }
             }
 
-            // 3. SI NO TENEMOS NOMBRE, USAMOS PC-TEST
             if (_nombrePc == "DESCONOCIDO" || string.IsNullOrEmpty(_nombrePc))
             {
                 _nombrePc = "PC-TEST";
                 necesitaGuardar = true;
             }
 
-            // 4. GUARDAR CAMBIOS
-            if (necesitaGuardar)
-            {
-                GuardarConfigEnTxt(_nombrePc, _urlServidor);
-            }
+            if (necesitaGuardar) GuardarConfigEnTxt(_nombrePc, _urlServidor);
 
             this.Title = _nombrePc;
             txtEstadoConexion.Text = $"Soy: {_nombrePc}";
@@ -491,11 +415,9 @@ namespace PcControl.Client
 
         private async Task<string> BuscarServidorRobusto()
         {
-            // 1. INTENTO RÁPIDO: UDP Broadcast
             string ipPorUdp = await BuscarPorUDP();
             if (!string.IsNullOrEmpty(ipPorUdp)) return ipPorUdp;
 
-            // 2. INTENTO FUERTE: Escaneo TCP de la red local (Si el firewall bloquea UDP)
             Dispatcher.Invoke(() => txtEstadoConexion.Text = "UDP falló. Escaneando red local (TCP)...");
             string ipPorTcp = await EscanearRedLocalTCP(5249);
 
@@ -512,32 +434,20 @@ namespace PcControl.Client
                     {
                         udp.Client.Bind(new IPEndPoint(IPAddress.Any, 0));
                         udp.EnableBroadcast = true;
-
                         byte[] sendBytes = Encoding.ASCII.GetBytes("CIBER_CLIENT_HOLA");
-                        // Enviamos a Broadcast general
                         udp.Send(sendBytes, sendBytes.Length, new IPEndPoint(IPAddress.Broadcast, 8888));
-
-                        udp.Client.ReceiveTimeout = 1500; // 1.5 segundos maximo
+                        udp.Client.ReceiveTimeout = 1500; 
                         var remoteEp = new IPEndPoint(IPAddress.Any, 0);
-
                         try
                         {
                             byte[] data = udp.Receive(ref remoteEp);
                             string mensaje = Encoding.UTF8.GetString(data);
-                            if (mensaje.StartsWith("CIBER_SERVER|"))
-                            {
-                                return mensaje.Split('|')[1];
-                            }
+                            if (mensaje.StartsWith("CIBER_SERVER|")) return mensaje.Split('|')[1];
                         }
-                        catch
-                        {
-                        }
+                        catch { }
                     }
                 }
-                catch
-                {
-                }
-
+                catch { }
                 return "";
             });
         }
@@ -547,17 +457,14 @@ namespace PcControl.Client
             string miIp = ObtenerIpLocal();
             if (string.IsNullOrEmpty(miIp)) return "";
 
-            // Obtenemos la base de la red (ej: "192.168.1.")
             string baseIp = miIp.Substring(0, miIp.LastIndexOf('.') + 1);
-
             var ipsEncontradas = new ConcurrentBag<string>();
             var tareas = new List<Task>();
 
-            // Lanzamos 254 escaneos muy rápidos en paralelo
             for (int i = 1; i < 255; i++)
             {
                 string ipObjetivo = baseIp + i;
-                if (ipObjetivo == miIp) continue; // No auto-escanearse
+                if (ipObjetivo == miIp) continue; 
 
                 tareas.Add(Task.Run(async () =>
                 {
@@ -565,7 +472,6 @@ namespace PcControl.Client
                     {
                         using (var tcp = new TcpClient())
                         {
-                            // Intentamos conectar con timeout muy corto (200ms)
                             var taskConectar = tcp.ConnectAsync(ipObjetivo, puerto);
                             var taskTimeout = Task.Delay(200);
 
@@ -575,9 +481,7 @@ namespace PcControl.Client
                             }
                         }
                     }
-                    catch
-                    {
-                    }
+                    catch { }
                 }));
             }
 
@@ -594,36 +498,28 @@ namespace PcControl.Client
                 {
                     if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
                     {
-                        // Ignorar adaptadores virtuales comunes que terminan en .1
-                        if (!ip.ToString().EndsWith(".1"))
-                            return ip.ToString();
+                        if (!ip.ToString().EndsWith(".1")) return ip.ToString();
                     }
                 }
-
-                // Si todo falla, devolver cualquiera que sea IPv4
                 return host.AddressList.FirstOrDefault(i => i.AddressFamily == AddressFamily.InterNetwork)?.ToString();
             }
-            catch
-            {
-                return "";
-            }
+            catch { return ""; }
         }
 
         private void GuardarConfigEnTxt(string nombre, string url)
         {
-            // Extraer solo la IP de la URL para guardar limpio
             string ip = "127.0.0.1";
             try
             {
                 Uri u = new Uri(url);
                 ip = u.Host;
             }
-            catch
-            {
-            }
+            catch { }
 
-            string contenido = $"NOMBRE={nombre}\nIP={ip}";
-            File.WriteAllText("config.txt", contenido);
+            // --- CORRECCIÓN 2.5: GUARDAR SEGURIDAD EN EL TXT ---
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.txt");
+            string contenido = $"NOMBRE={nombre}\nIP={ip}\nPASS={_passwordAdmin}\nKEY={_teclaConsola}\nMOD={_modificadorConsola}";
+            File.WriteAllText(path, contenido);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -637,7 +533,7 @@ namespace PcControl.Client
 
             if (e.Key == Key.System && e.SystemKey == Key.F4)
             {
-                e.Handled = true; // Ignorar la tecla
+                e.Handled = true; 
             }
         }
 
@@ -647,14 +543,10 @@ namespace PcControl.Client
             {
                 _cierreAutorizado = true;
 
-                try
-                {
-                    // Creamos un archivo vacío y lo cerramos inmediatamente
-                    File.Create("apagar_guardian.tmp").Close();
-                }
-                catch
-                {
-                }
+                try { File.Create("apagar_guardian.tmp").Close(); } catch { }
+
+                SeguridadSistema.EstablecerProcesoCritico(false);
+                SeguridadSistema.BloquearAdministradorTareas(false);
 
                 BloqueoTeclado.Desbloquear();
                 Application.Current.Shutdown();
@@ -679,111 +571,30 @@ namespace PcControl.Client
             if (e.Key == Key.Enter) VerificarPassword();
         }
 
-        // --- LÓGICA SIGNALR ---
         private async void ConfigurarSignalR()
         {
-            // 1. INTENTO DE CONEXIÓN INICIAL
-            // Si ya tenemos una URL cargada del config, probamos conectar directo
+            // --- LIMPIEZA 3: Inicializa la conexión de forma limpia. Eliminada la creación de clones abajo ---
             bool conexionExitosa = await IntentarConectar(_urlServidor);
 
-            // 2. SI FALLA, EJECUTAMOS AUTODESCUBRIMIENTO DE EMERGENCIA
             if (!conexionExitosa)
             {
                 txtEstadoConexion.Text = "Servidor no responde. Buscando en red...";
                 await Task.Delay(500);
 
-                // Usamos la búsqueda robusta nuevamente
                 string nuevaIp = await BuscarServidorRobusto();
 
                 if (!string.IsNullOrEmpty(nuevaIp))
                 {
                     _urlServidor = $"http://{nuevaIp}:5249/ciberhub";
-
-                    // Guardamos la nueva IP que sí funciona para la próxima vez
                     GuardarConfigEnTxt(_nombrePc, _urlServidor);
 
-                    // Reintentamos conectar
                     conexionExitosa = await IntentarConectar(_urlServidor);
                 }
 
                 if (!conexionExitosa)
                 {
                     txtEstadoConexion.Text = "NO SE ENCONTRÓ EL SERVIDOR ❌";
-                    return; // Salir si no hay servidor
                 }
-            }
-
-            // 3. CREAR LA CONEXIÓN PRINCIPAL (SignalR)
-            _connection = new HubConnectionBuilder()
-                .WithUrl(_urlServidor)
-                .WithAutomaticReconnect() // Reintenta si se va el cable de red
-                .Build();
-
-            // --- REGISTRAR EVENTOS (Esto se mantiene igual que tu código) ---
-
-            _connection.On<string, string, string>("RecibirConfiguracion", (pass, keyStr, modStr) =>
-            {
-                _passwordAdmin = pass;
-                Dispatcher.Invoke(() =>
-                {
-                    try
-                    {
-                        if (Enum.TryParse(keyStr, true, out Key k)) _teclaConsola = k;
-                        if (Enum.TryParse(modStr, true, out ModifierKeys m)) _modificadorConsola = m;
-                    }
-                    catch
-                    {
-                    }
-                });
-            });
-
-            _connection.On<string, int?, string>("RecibirOrden",
-                (accion, tiempo, parametro) => { Dispatcher.Invoke(() => ProcesarOrden(accion, tiempo, parametro)); });
-
-            _connection.On<string>("RecibirMensaje", (mensaje) =>
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    var msgWindow = new MensajeWindow(mensaje);
-                    msgWindow.Topmost = true;
-                    msgWindow.Show();
-                    msgWindow.Activate();
-                });
-            });
-
-            _connection.On<string>("CambiarNombreIdentity", (nuevoNombre) =>
-            {
-                Dispatcher.Invoke(async () =>
-                {
-                    _nombrePc = nuevoNombre;
-                    this.Title = _nombrePc;
-                    txtEstadoConexion.Text = $"Soy: {_nombrePc} (Actualizado)";
-                    GuardarConfigEnTxt(_nombrePc, _urlServidor);
-
-                    await _connection.StopAsync();
-                    await Task.Delay(1000);
-                    await _connection.StartAsync();
-                    await _connection.InvokeAsync("RegistrarPc", _nombrePc);
-                });
-            });
-
-            _connection.On<List<string>>("ActualizarFondos",
-                (urls) => { Task.Run(() => DescargarNuevosFondos(urls)); });
-
-            _connection.Closed += async (error) =>
-                await Dispatcher.InvokeAsync(() => ProcesarOrden("Bloquear", 0, "Conexión Perdida"));
-
-            // 4. INICIAR CONEXIÓN FINAL
-            try
-            {
-                await _connection.StartAsync();
-                txtEstadoConexion.Text = $"Soy: {_nombrePc} | Conectado ✅";
-                await _connection.InvokeAsync("RegistrarPc", _nombrePc);
-                IniciarLatidos();
-            }
-            catch (Exception ex)
-            {
-                txtEstadoConexion.Text = $"Error: {ex.Message}";
             }
         }
 
@@ -795,32 +606,33 @@ namespace PcControl.Client
 
                 var nuevaConexion = new HubConnectionBuilder()
                     .WithUrl(url)
-                    .WithAutomaticReconnect() // Reintenta si se cae momentáneamente
+                    .WithAutomaticReconnect() 
                     .Build();
 
-                // DEFINIR EVENTOS (Los mismos de siempre)
+                // 1. RECIBIR CONFIGURACIÓN DE SEGURIDAD
                 nuevaConexion.On<string, string, string>("RecibirConfiguracion", (pass, keyStr, modStr) =>
                 {
-                    _passwordAdmin = pass;
                     Dispatcher.Invoke(() =>
                     {
+                        _passwordAdmin = pass;
                         try
                         {
                             if (Enum.TryParse(keyStr, true, out Key k)) _teclaConsola = k;
                             if (Enum.TryParse(modStr, true, out ModifierKeys m)) _modificadorConsola = m;
                         }
-                        catch
-                        {
-                        }
+                        catch { }
+                        
+                        GuardarConfigEnTxt(_nombrePc, _urlServidor);
                     });
                 });
 
-                nuevaConexion.On<string, int?, string>("RecibirOrden",
-                    (accion, tiempo, parametro) =>
-                    {
-                        Dispatcher.Invoke(() => ProcesarOrden(accion, tiempo, parametro));
-                    });
+                // 2. RECIBIR ORDEN DE BLOQUEO / DESBLOQUEO
+                nuevaConexion.On<string, int?, string>("RecibirOrden", (accion, tiempo, parametro) =>
+                {
+                    Dispatcher.Invoke(() => ProcesarOrden(accion, tiempo, parametro));
+                });
 
+                // 3. RECIBIR MENSAJE DEL ADMIN
                 nuevaConexion.On<string>("RecibirMensaje", (mensaje) =>
                 {
                     Dispatcher.Invoke(() =>
@@ -831,6 +643,7 @@ namespace PcControl.Client
                     });
                 });
 
+                // 4. CAMBIO DE NOMBRE DE PC
                 nuevaConexion.On<string>("CambiarNombreIdentity", (nuevoNombre) =>
                 {
                     Dispatcher.Invoke(async () =>
@@ -847,34 +660,102 @@ namespace PcControl.Client
                     });
                 });
 
-                nuevaConexion.On<string>("StreamDetenido", (pc) =>
-                {
-                    /* Cliente no hace nada con esto, pero evita error */
-                });
-                nuevaConexion.On<List<string>>("ActualizarFondos",
-                    (urls) => { Task.Run(() => DescargarNuevosFondos(urls)); });
+                nuevaConexion.On<string>("StreamDetenido", (pc) => { });
 
-                // Intentamos iniciar con un timeout corto para no congelar la app si la IP está mal
+                // 5. ACTUALIZAR FONDOS Y RECARGAR UI INMEDIATAMENTE
+                nuevaConexion.On<List<string>>("ActualizarFondos", async (urls) => 
+                {
+                    try
+                    {
+                        using var client = new System.Net.Http.HttpClient();
+                        
+                        // A. Descargar nuevos
+                        foreach (var urlImg in urls)
+                        {
+                            var nombreArchivo = System.IO.Path.GetFileName(urlImg);
+                            var rutaDestino = System.IO.Path.Combine(_carpetaCache, nombreArchivo);
+
+                            if (!System.IO.File.Exists(rutaDestino) || new System.IO.FileInfo(rutaDestino).Length == 0)
+                            {
+                                string urlCompleta = urlImg;
+                                if (!urlImg.StartsWith("http")) 
+                                {
+                                    string serverBase = _urlServidor.Replace("/ciberhub", "");
+                                    urlCompleta = $"{serverBase}{urlImg}";
+                                }
+
+                                var datos = await client.GetByteArrayAsync(urlCompleta);
+                                await System.IO.File.WriteAllBytesAsync(rutaDestino, datos);
+                            }
+                        }
+
+                        // B. Borrar huérfanos (los que el admin eliminó)
+                        var archivosLocales = System.IO.Directory.GetFiles(_carpetaCache);
+                        var nombresUrls = urls.Select(System.IO.Path.GetFileName).ToList();
+                        foreach (var local in archivosLocales)
+                        {
+                            if (!nombresUrls.Contains(System.IO.Path.GetFileName(local)))
+                            {
+                                System.IO.File.Delete(local);
+                            }
+                        }
+
+                        // C. Recargar y mostrar en pantalla al instante
+                        await Dispatcher.InvokeAsync(() =>
+                        {
+                            CargarPlaylistLocal(); 
+                            if (!_sesionActiva) 
+                            {
+                                ReproducirSiguiente(); 
+                            }
+                        });
+                    }
+                    catch { }
+                });
+
+                // --- INICIAR CONEXIÓN ---
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
                 await nuevaConexion.StartAsync(cts.Token);
 
-                // ¡ÉXITO!
                 _connection = nuevaConexion;
                 txtEstadoConexion.Text = $"Soy: {_nombrePc} | Conectado ✅";
 
-                // Nos registramos
                 await _connection.InvokeAsync("RegistrarPc", _nombrePc);
 
-                // Setup de cierre
+                // --- MANEJO DE DESCONEXIÓN (MODO OFFLINE Y RECONEXIÓN INFINITA) ---
                 _connection.Closed += async (error) =>
-                    await Dispatcher.InvokeAsync(() => ProcesarOrden("Bloquear", 0, "Conexión Perdida"));
+                {
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        if (_sesionActiva && _minutosRestantes > 0)
+                        {
+                            txtEstadoConexion.Text = "Conexión Perdida - Modo Offline";
+                            GuardarRespaldoLocal(); 
+                        }
+                        else if (!_sesionActiva)
+                        {
+                            ProcesarOrden("Bloquear", 0, "Conexión Perdida");
+                        }
+                        
+                        // INICIA EL INTENTO ETERNO DE RECONEXIÓN
+                        _ = CicloReconexionInfinita(); 
+                    });
+                };
 
+                _connection.Reconnected += async (connectionId) =>
+                {
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        txtEstadoConexion.Text = $"Soy: {_nombrePc} | Reconectado";
+                    });
+                };
+                
                 IniciarLatidos();
                 return true;
             }
             catch
             {
-                return false; // Falló la conexión
+                return false; 
             }
         }
 
@@ -893,7 +774,6 @@ namespace PcControl.Client
             _latidoTimer.Start();
         }
 
-        // --- SOLUCIÓN AL CRASH DE VIDEO (CON LOG) ---
         private async void EnviarFrameStreaming()
         {
             if (!_isStreaming || _connection.State != HubConnectionState.Connected) return;
@@ -905,15 +785,12 @@ namespace PcControl.Client
 
                 string? base64 = await Task.Run(() =>
                 {
-                    // Bloque TRY interno para capturar errores de GDI+ específicamente
                     try
                     {
                         return TomarCapturaPantalla(ancho, alto);
                     }
                     catch (Exception ex)
                     {
-                        // Si falla la captura (ej: pantalla bloqueada por UAC), devolvemos null
-                        // y escribimos en el log para saberlo
                         File.AppendAllText("crash_log.txt", $"[{DateTime.Now}] Error Captura: {ex.Message}\n");
                         return null;
                     }
@@ -924,7 +801,6 @@ namespace PcControl.Client
             }
             catch (Exception ex)
             {
-                // Error de SignalR o Task
                 File.AppendAllText("crash_log.txt", $"[{DateTime.Now}] Error Envio: {ex.Message}\n");
             }
         }
@@ -934,11 +810,18 @@ namespace PcControl.Client
             switch (accion)
             {
                 case "Desbloquear":
+                    // Solo bloqueamos por error si el tiempo es NEGATIVO. 
+                    if (tiempo < 0)
+                    {
+                        ProcesarOrden("Bloquear", 0, "Tiempo Agotado");
+                        return; 
+                    }
+
                     VidFondo.Stop();
                     if (_timerSlideshow != null) _timerSlideshow.Stop();
 
-                    this.Hide(); // Ocultamos pantalla negra
-                    _sesionActiva = true; // MARCAMOS SESIÓN ACTIVA
+                    this.Hide(); 
+                    _sesionActiva = true; 
                     BloqueoTeclado.Desbloquear();
                     _inputCongelado = false;
                     BloqueoInputTotal(false);
@@ -946,16 +829,46 @@ namespace PcControl.Client
                     _minutosRestantes = tiempo ?? 0;
                     if (_infoWindow == null) _infoWindow = new InfoSesionWindow();
                     _infoWindow.Show();
-                    _infoWindow.ActualizarDatos(_minutosRestantes > 0 ? $"{_minutosRestantes} min" : "Libre",
-                        parametro);
-                    if (_minutosRestantes > 0) _timerLocal.Start();
+                    
+                    if (_minutosRestantes > 0)
+                    {
+                        DateTime inicio = DateTime.Now;
+                        DateTime fin = inicio.AddMinutes(_minutosRestantes);
+                        
+                        string importeStr = string.IsNullOrEmpty(parametro) ? "--" : parametro;
+
+                        _infoWindow.ActualizarDashboardCompleto(
+                            $"{_minutosRestantes} min", 
+                            "Sesión Iniciada", 
+                            inicio.ToString("hh:mm tt"), 
+                            fin.ToString("hh:mm tt"), 
+                            $"{_minutosRestantes} minutos", 
+                            importeStr
+                        );
+                        _timerLocal.Start(); // Iniciamos descuento
+                    }
+                    else
+                    {
+                        // MODO USO LIBRE (Tiempo 0)
+                        string importeStr = string.IsNullOrEmpty(parametro) ? "--" : parametro;
+                        _infoWindow.ActualizarDashboardCompleto(
+                            "Libre", 
+                            "Uso Libre", 
+                            DateTime.Now.ToString("hh:mm tt"), 
+                            "--", // No hay fin estimado
+                            "--", // No hay tiempo total comprado
+                            importeStr // Mostramos el precio (ej. S/ 0.00 o si le sumas extras)
+                        );
+                        
+                        _timerLocal.Stop(); // Aseguramos que el cronómetro no descuente
+                    }
                     break;
 
                 case "Bloquear":
                     ReproducirSiguiente();
 
-                    _timerLocal.Stop();
-                    _sesionActiva = false; // FIN DE SESIÓN
+                    _timerLocal?.Stop();
+                    _sesionActiva = false; 
                     if (_infoWindow != null)
                     {
                         _infoWindow.Hide();
@@ -968,22 +881,27 @@ namespace PcControl.Client
                     txtMensaje.Text = parametro;
                     GridAdminConsole.Visibility = Visibility.Collapsed;
 
-                    this.Show(); // Mostramos pantalla negra
+                    // --- NUEVO: ATAQUE AL JUEGO EN PANTALLA COMPLETA ---
+                    IntPtr ventanaActual = GetForegroundWindow();
+                    var miHandle = new WindowInteropHelper(this).Handle;
+
+                    // Si el usuario está dentro de un juego, lo minimizamos a la fuerza
+                    if (ventanaActual != IntPtr.Zero && ventanaActual != miHandle)
+                    {
+                        ShowWindow(ventanaActual, SW_FORCEMINIMIZE);
+                    }
+
+                    this.Show(); 
+                    
+                    // Truco WPF: Cambiar el estado normal a maximizado fuerza a la tarjeta gráfica a dibujar la ventana de nuevo
+                    this.WindowState = WindowState.Normal;
                     this.WindowState = WindowState.Maximized;
                     this.Topmost = true;
                     this.Activate();
                     break;
 
                 case "Apagar":
-                    // AVISAR AL GUARDIÁN
-                    try
-                    {
-                        File.Create("apagar_guardian.tmp").Close();
-                    }
-                    catch
-                    {
-                    }
-
+                    try { File.Create("apagar_guardian.tmp").Close(); } catch { }
                     _cierreAutorizado = true;
                     BloqueoTeclado.Desbloquear();
                     Process.Start("shutdown", "/s /t 0");
@@ -991,14 +909,7 @@ namespace PcControl.Client
                     break;
 
                 case "Reiniciar":
-                    try
-                    {
-                        File.Create("apagar_guardian.tmp").Close();
-                    }
-                    catch
-                    {
-                    }
-
+                    try { File.Create("apagar_guardian.tmp").Close(); } catch { }
                     BloqueoTeclado.Desbloquear();
                     _cierreAutorizado = true;
                     Process.Start("shutdown", "/r /t 0");
@@ -1024,22 +935,19 @@ namespace PcControl.Client
                     break;
 
                 case "EjecutarCliente":
-                    // Restaura la ventana si estaba minimizada
                     if (this.WindowState == WindowState.Minimized)
                         this.WindowState = WindowState.Normal;
-
                     this.Show();
                     this.Activate();
-                    this.Topmost = true; // La subimos
-                    this.Topmost = false; // La soltamos para que no moleste
+                    this.Topmost = true; 
+                    this.Topmost = false; 
                     this.Focus();
                     break;
 
                 case "StreamStart":
-                    // 1. Extraer configuración del parámetro (Formato: "FPS|Calidad|Escala")
-                    int fps = 2; // Por defecto
-                    long calidad = 40; // Por defecto 40%
-                    float escala = 0.5f; // Por defecto resolución a la mitad
+                    int fps = 2; 
+                    long calidad = 40; 
+                    float escala = 0.5f; 
 
                     if (!string.IsNullOrEmpty(parametro) && parametro.Contains("|"))
                     {
@@ -1050,25 +958,19 @@ namespace PcControl.Client
                             float.TryParse(partes[2], System.Globalization.CultureInfo.InvariantCulture, out escala);
                     }
 
-                    // 2. Detener stream anterior si existía
                     _streamCts?.Cancel();
                     _streamCts = new CancellationTokenSource();
                     _isStreaming = true;
 
-                    // 3. OPTIMIZACIÓN C: Ejecutar en un Hilo de Fondo (Background Task)
-                    // Esto libera la interfaz de usuario de WPF para que no haya lag
                     Task.Run(() => BucleStreamingAsync(fps, calidad, escala, _streamCts.Token), _streamCts.Token);
                     break;
 
                 case "StreamStop":
                     _isStreaming = false;
-
-                    // Detenemos el hilo de fondo
                     _streamCts?.Cancel();
                     _streamCts = null;
-                    _ultimoFrameBytes = null; // Limpiamos la memoria del último frame
-
-                    GC.Collect(); // Forzamos limpieza de RAM
+                    _ultimoFrameBytes = null; 
+                    GC.Collect(); 
                     break;
             }
         }
@@ -1081,34 +983,25 @@ namespace PcControl.Client
             {
                 try
                 {
-                    // Tomamos la captura optimizada
                     byte[] frameActual = CapturarYComprimirPantalla(calidad, escala);
 
-                    // OPTIMIZACIÓN D: ¿La pantalla cambió?
-                    // Si los bytes son idénticos al frame anterior, la pantalla está estática. No enviamos nada.
                     if (_ultimoFrameBytes == null || !frameActual.SequenceEqual(_ultimoFrameBytes))
                     {
                         _ultimoFrameBytes = frameActual;
                         string base64 = Convert.ToBase64String(frameActual);
                         
-                        // Enviar al servidor (Asegúrate de cambiar esto por el método real que uses en tu _connection)
                         await _connection.InvokeAsync("EnviarCaptura", _nombrePc, base64);
                     }
                 }
-                catch { /* Ignorar errores de captura si la PC se bloquea/suspende */ }
-
-                // Esperar hasta el siguiente frame (sin bloquear el hilo)
+                catch { }
                 await Task.Delay(delayMs, token);
             }
         }
 
         private byte[] CapturarYComprimirPantalla(long calidad, float escala)
         {
-            // Obtener tamaño real de la pantalla
             int width = (int)SystemParameters.PrimaryScreenWidth;
             int height = (int)SystemParameters.PrimaryScreenHeight;
-
-            // OPTIMIZACIÓN A: Escalar (Reducir resolución)
             int newWidth = (int)(width * escala);
             int newHeight = (int)(height * escala);
 
@@ -1116,14 +1009,12 @@ namespace PcControl.Client
             {
                 using (Graphics g = Graphics.FromImage(bmpOriginal))
                 {
-                    // Tomar foto rápida
                     g.CopyFromScreen(0, 0, 0, 0, bmpOriginal.Size);
                 }
 
                 using (Bitmap bmpEscalado = new Bitmap(bmpOriginal, new (newWidth, newHeight)))
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    // OPTIMIZACIÓN B: Bajar calidad del JPG
                     EncoderParameters encoderParams = new EncoderParameters(1);
                     encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, calidad);
                     
@@ -1135,7 +1026,6 @@ namespace PcControl.Client
                     }
                     else
                     {
-                        // Fallback de seguridad
                         bmpEscalado.Save(ms, ImageFormat.Jpeg);
                     }
 
@@ -1144,7 +1034,6 @@ namespace PcControl.Client
             }
         }
         
-    // LIMPIEZA
         protected override void OnClosed(EventArgs e)
         {
             BloqueoTeclado.Desbloquear(); 
@@ -1156,19 +1045,47 @@ namespace PcControl.Client
         {
             _timerLocal = new DispatcherTimer();
             _timerLocal.Interval = TimeSpan.FromMinutes(1);
-            _timerLocal.Tick += (s, e) =>
+            _timerLocal.Tick += async (s, e) =>
             {
-                if (_minutosRestantes > 0)
+                // Solo actuar si hay una sesión activa y minutos por descontar
+                if (!_sesionActiva || _minutosRestantes <= 0) return;
+
+                _minutosRestantes--;
+                GuardarRespaldoLocal();
+
+                // 1. AVISO DE 2 MINUTOS
+                if (_minutosRestantes == 2)
                 {
-                    _minutosRestantes--;
-                    if (_minutosRestantes == 2) { var av = new MensajeWindow("2 min restantes"); av.Topmost = true; av.Show(); }
-                    if (_infoWindow != null) _infoWindow.ActualizarDatos($"{_minutosRestantes} min", "Tiempo corriendo...");
-                    if (_minutosRestantes <= 0) { _timerLocal.Stop(); ProcesarOrden("Bloquear", 0, "Tiempo Agotado"); }
+                    // Sin InvokeAsync para que sea instantáneo en el hilo visual
+                    var av = new MensajeWindow("Le quedan 2 minutos de sesión.");
+                    av.Topmost = true;
+                    av.Show();
+                    av.Activate();
+                }
+
+                // 2. ACTUALIZAR DASHBOARD
+                if (_infoWindow != null)
+                    _infoWindow.ActualizarDatos($"{_minutosRestantes} min", "Tiempo corriendo...");
+
+                // 3. BLOQUEO AUTOMÁTICO AL LLEGAR A 0
+                if (_minutosRestantes <= 0)
+                {
+                    _timerLocal.Stop();
+            
+                    // Bloqueo local inmediato
+                    ProcesarOrden("Bloquear", 0, "Tiempo Agotado");
+
+                    // Informar al servidor para que el administrador vea la PC libre
+                    if (_connection != null && _connection.State == HubConnectionState.Connected)
+                    {
+                        await _connection.InvokeAsync("NotificarTiempoAgotado", _nombrePc);
+                    }
+
+                    if (File.Exists("sesion_backup.tmp")) File.Delete("sesion_backup.tmp");
                 }
             };
         }
 
-        // --- HELPERS ---
         private string ObtenerMac()
         {
             var mac = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
@@ -1198,6 +1115,28 @@ namespace PcControl.Client
                     bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
                     return Convert.ToBase64String(ms.ToArray());
                 }
+            }
+        }
+        
+        private void GuardarRespaldoLocal()
+        {
+            try
+            {
+                string contenido = $"{_sesionActiva}|{_minutosRestantes}";
+                File.WriteAllText("sesion_backup.tmp", contenido);
+                File.SetAttributes("sesion_backup.tmp", FileAttributes.Hidden);
+            }
+            catch { }
+        }
+        
+        private async Task CicloReconexionInfinita()
+        {
+            while (_connection == null || _connection.State != HubConnectionState.Connected)
+            {
+                await Task.Delay(5000); // Espera 5 segundos
+                Dispatcher.Invoke(() => txtEstadoConexion.Text = "Reconectando...");
+                bool exito = await IntentarConectar(_urlServidor);
+                if (exito) break;
             }
         }
 

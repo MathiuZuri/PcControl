@@ -34,7 +34,7 @@
     <div class="alert alert-info border-start border-5 border-info shadow-sm">
         <h5><i class="bi bi-info-circle-fill"></i> ¿Cómo funciona esto?</h5>
         <p class="mb-1">
-            1. Sube imágenes (.jpg, .png, .gif) o videos (.mp4) aquí. Se guardarán en el servidor.<br/>
+            1. Sube imágenes (.jpg, .png, .gif) o videos (.mp4) aquí. Se guardarán en el servidor, si es posible contenido en de tamaño 1920 x 1080 o 2560 x 1440.<br/>
             2. Elimina los que ya no quieras mostrar.<br/>
             3. <strong>IMPORTANTE:</strong> Al finalizar, presiona el botón amarillo <strong>"ACTUALIZAR CLIENTES"</strong>.<br/>
             4. Las PCs que estén <strong>ENCENDIDAS</strong> descargarán los nuevos archivos automáticamente y borrarán los viejos.
@@ -44,7 +44,7 @@
     @* --- ZONA DE CARGA --- *@
     <div class="card mb-4 border-dashed bg-light">
         <div class="card-body text-center py-4">
-            <InputFile OnChange="SubirArchivos" multiple class="d-none" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.mp4,.avi" />
+            <InputFile OnChange="SubirArchivos" multiple class="d-none" id="fileInput" accept="image/*,video/*,.jpg,.jpeg,.png,.gif,.mp4,.avi" />
             <label for="fileInput" class="btn btn-outline-primary btn-lg cursor-pointer">
                 <i class="bi bi-upload"></i> Seleccionar Imágenes o Videos
             </label>
@@ -161,9 +161,17 @@
         {
             try
             {
-                var rutaDestino = Path.Combine(RutaCarpeta, file.Name);
+                var extension = Path.GetExtension(file.Name).ToLower();
+                var nombreSinExtension = Path.GetFileNameWithoutExtension(file.Name);
                 
-                // Sobrescribir si existe (o podrías generar nombre único)
+                var nombreLimpio = System.Text.RegularExpressions.Regex.Replace(nombreSinExtension, @"[^a-zA-Z0-9]", "_");
+                
+                if (string.IsNullOrWhiteSpace(nombreLimpio)) nombreLimpio = "media";
+                
+                var nombreFinalSeguro = $"{nombreLimpio}_{DateTime.Now.Ticks}{extension}";
+                
+                var rutaDestino = Path.Combine(RutaCarpeta, nombreFinalSeguro);
+                
                 await using FileStream fs = new(rutaDestino, FileMode.Create);
                 await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
             }
@@ -199,10 +207,7 @@
         {
             sincronizando = true;
             
-            // 1. Construir URLs absolutas (http://192.168.1.X:5249/fondos/video.mp4)
-            // Esto es crucial para que el cliente sepa de DÓNDE descargar.
-            var baseUri = NavManager.BaseUri; // Ej: http://localhost:5249/
-            var listaUrls = archivos.Select(a => $"{baseUri}{a.Url}").ToList();
+            var listaUrls = archivos.Select(a => $"/{a.Url}").ToList();
 
             // 2. Enviar señal al Hub
             await hubConnection.InvokeAsync("EnviarListaFondos", listaUrls);

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PcControl.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adb298f1fe5f1db164f66a02288288552cf2491a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fa6ddf27504c0cf1390d6a7947b856bd27279b3c")]
 [assembly: System.Reflection.AssemblyProductAttribute("PcControl.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PcControl.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

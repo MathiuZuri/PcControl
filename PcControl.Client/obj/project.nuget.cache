@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "yYvVIsMVWK0=",
+  "dgSpecHash": "J4yHF9Ltnm8=",
   "success": true,
   "projectFilePath": "F:\\proyectC#\\PcControl\\PcControl.Client\\PcControl.Client.csproj",
   "expectedPackageFiles": [
@@ -21,7 +21,10 @@
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.11\\microsoft.win32.systemevents.9.0.11.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\system.drawing.common\\9.0.11\\system.drawing.common.9.0.11.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\system.net.serversentevents\\9.0.11\\system.net.serversentevents.9.0.11.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\system.threading.channels\\9.0.11\\system.threading.channels.9.0.11.nupkg.sha512"
+    "C:\\Users\\PC\\.nuget\\packages\\system.threading.channels\\9.0.11\\system.threading.channels.9.0.11.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\9.0.4\\microsoft.netcore.app.runtime.win-x86.9.0.4.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\9.0.4\\microsoft.windowsdesktop.app.runtime.win-x86.9.0.4.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\9.0.4\\microsoft.aspnetcore.app.runtime.win-x86.9.0.4.nupkg.sha512"
   ],
   "logs": []
 }

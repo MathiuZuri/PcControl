@@ -12,38 +12,82 @@
 @inject AppDbContext DbContext
 @inject AuthenticationStateProvider AuthStateProvider
 
+<style>
+    /* Estilos para que el input no se ponga blanco feo al hacerle clic */
+    .cyber-input:focus {
+        background-color: transparent !important;
+        color: white !important;
+        box-shadow: 0 0 10px rgba(0, 209, 255, 0.3) !important;
+        border-color: #00D1FF !important;
+    }
+    .cyber-input::placeholder {
+        color: #495057 !important;
+    }
+</style>
+
 @if (estaVerificandoSesion)
 {
-    /* ESTADO 1: PANTALLA DE CARGA (Para evitar parpadeos) */
-    <div class="d-flex flex-column justify-content-center align-items-center vh-100" style="background-color: #f0f2f5;">
-        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-        <h4 class="mt-3 text-secondary">Verificando sesión...</h4>
+    /* ESTADO 1: PANTALLA DE CARGA (Diseño oscuro) */
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100" style="background: radial-gradient(circle at center, #151520 0%, #050508 100%);">
+        <div class="spinner-border text-info" role="status" style="width: 4rem; height: 4rem; border-width: 0.3rem;"></div>
+        <h4 class="mt-4 text-info" style="letter-spacing: 2px;">Iniciando Sistemas...</h4>
     </div>
 }
 else
 {
-    /* ESTADO 2: EL FORMULARIO (Solo se muestra si de verdad no hay usuario) */
-    <div class="d-flex justify-content-center align-items-center vh-100" style="background-color: #f0f2f5;">
-        <div class="card shadow p-4" style="width: 400px;">
-            <h3 class="text-center mb-4">CyberControl Admin</h3>
+    /* ESTADO 2: EL FORMULARIO PREMIUM */
+    <div class="d-flex justify-content-center align-items-center vh-100" style="background: radial-gradient(circle at center, #1A1A24 0%, #09090D 100%);">
+        
+        <div class="card shadow-lg p-5 border-0" style="width: 420px; background-color: #111118; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(0, 209, 255, 0.1) !important;">
+            
+            <div class="text-center mb-4">
+                <h1 class="display-4 mb-2" style="color: #00D1FF;"><i class="bi bi-shield-lock-fill"></i></h1>
+                <h3 class="fw-bold text-white mb-0" style="letter-spacing: 1px;">AegisCiber Admin</h3>
+                <p class="text-secondary small mt-1">Acceso seguro al panel principal</p>
+            </div>
             
             @if (!string.IsNullOrEmpty(mensajeError))
             {
-                <div class="alert alert-danger text-center">@mensajeError</div>
+                <div class="alert alert-danger text-center border-0 fw-bold" style="background-color: #440000; color: #ff6666;">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> @mensajeError
+                </div>
             }
 
             <form @onsubmit="IniciarSesion" method="post">
                 <AntiforgeryToken />
-                <div class="mb-3">
-                    <label>Usuario</label>
-                    <input @bind="username" class="form-control" placeholder="admin" autocomplete="username" />
+                
+                <div class="mb-4">
+                    <label class="form-label text-info small fw-bold" style="letter-spacing: 1px;">USUARIO</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-info text-info"><i class="bi bi-person-fill"></i></span>
+                        <input @bind="username" class="form-control cyber-input bg-transparent text-white border-info" placeholder="admin" autocomplete="username" />
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label>Contraseña</label>
-                    <input @bind="password" type="password" class="form-control" placeholder="******" autocomplete="current-password" />
+                
+                <div class="mb-5">
+                    <label class="form-label text-info small fw-bold" style="letter-spacing: 1px;">CONTRASEÑA</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-info text-info"><i class="bi bi-key-fill"></i></span>
+                        
+                        <input @bind="password" type="@(mostrarContrasena ? "text" : "password")" class="form-control cyber-input bg-transparent text-white border-info" placeholder="••••••" autocomplete="current-password" />
+                        
+                        <button type="button" class="btn btn-outline-info" @onclick="AlternarContrasena" tabindex="-1" title="Mostrar/Ocultar">
+                            <i class="bi @(mostrarContrasena ? "bi-eye-slash-fill" : "bi-eye-fill")"></i>
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">
-                    @(cargando ? "Cargando..." : "Ingresar")
+                
+                <button type="submit" class="btn w-100 fw-bold fs-5 py-2" style="background-color: #00D1FF; color: #111118; border-radius: 8px;">
+                    @if (cargando)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span>Verificando...</span>
+                    }
+                    else
+                    {
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        <span>INGRESAR</span>
+                    }
                 </button>
             </form>
         </div>
@@ -56,8 +100,16 @@ else
     private string mensajeError = "";
     private bool cargando = false;
     
-    // Variable para controlar qué mostramos
     private bool estaVerificandoSesion = true;
+    
+    // NUEVA VARIABLE VISUAL: Controla el ojito de la contraseña
+    private bool mostrarContrasena = false;
+
+    // NUEVO MÉTODO VISUAL: Cambia el estado del ojito
+    private void AlternarContrasena()
+    {
+        mostrarContrasena = !mostrarContrasena;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -70,9 +122,6 @@ else
                 
                 if (authState.User.Identity != null && authState.User.Identity.IsAuthenticated)
                 {
-                    // CAMBIO AQUÍ: Quitamos 'forceLoad: true'
-                    // Al ponerlo en 'false' (o quitarlo), mantenemos la sesión en memoria
-                    // y el Router sabrá inmediatamente que somos Admin.
                     Navigation.NavigateTo("/"); 
                     return;
                 }
@@ -81,7 +130,6 @@ else
                 intentos++;
             }
 
-            // Si llegamos aquí, mostramos el formulario
             estaVerificandoSesion = false;
             StateHasChanged();
         }
@@ -97,7 +145,6 @@ else
             string userLimpio = username.Trim();
             string passLimpio = password.Trim();
 
-            // Buscar usuario (usando EF Core)
             var usuarioEncontrado = await DbContext.Usuarios
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Username == userLimpio && u.PasswordHash == passLimpio);
@@ -111,7 +158,6 @@ else
                     return;
                 }
 
-                // Login manual
                 if (AuthStateProvider is CustomAuthStateProvider auth)
                 {
                     await auth.Login(usuarioEncontrado);

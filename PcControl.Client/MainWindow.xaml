@@ -8,53 +8,98 @@
         Topmost="True" 
         ResizeMode="NoResize"
         ShowInTaskbar="False"
-        Background="#1a1a1a"
+        Background="#0B0B10"
         KeyDown="Window_KeyDown"
-        Loaded="Window_Loaded"> <Grid>
-        <Grid x:Name="GridMedia">
-            <Image x:Name="ImgFondo" Stretch="UniformToFill" Visibility="Collapsed"/>
+        Loaded="Window_Loaded"> 
+    
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        
+        <Grid x:Name="GridMedia" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            
+            <Image x:Name="ImgFondo" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="Collapsed"/>
             
             <MediaElement x:Name="VidFondo" 
                           Stretch="UniformToFill" 
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Stretch"
                           LoadedBehavior="Manual" 
                           UnloadedBehavior="Stop"
                           Visibility="Collapsed"
                           MediaEnded="VidFondo_MediaEnded"/>
             
-            <Border Background="#99000000"/> 
+            <Border>
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#D9000000" Offset="0.0"/>
+                        <GradientStop Color="#66000000" Offset="0.5"/>
+                        <GradientStop Color="#D9000000" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border> 
         </Grid>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="COMPUTADORA BLOQUEADA" Foreground="Red" FontSize="48" FontWeight="Bold" HorizontalAlignment="Center">
+            
+            <TextBlock Text="🔒" FontSize="72" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="0"/>
+                    <DropShadowEffect Color="#FF0044" BlurRadius="30" ShadowDepth="0"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock Text="EQUIPO BLOQUEADO" Foreground="#FF2A44" FontSize="60" FontWeight="Black" FontFamily="Segoe UI" HorizontalAlignment="Center">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="8"/>
                 </TextBlock.Effect>
             </TextBlock>
             
-            <TextBlock x:Name="txtMensaje" Text="Diríjase a caja para activar este equipo" Foreground="White" FontSize="24" Margin="0,20,0,0" HorizontalAlignment="Center">
-                 <TextBlock.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
-                </TextBlock.Effect>
-            </TextBlock>
+            <Border Background="#40000000" CornerRadius="10" Padding="30,12" Margin="0,20,0,0" HorizontalAlignment="Center">
+                <TextBlock x:Name="txtMensaje" Text="Diríjase a caja para activar este equipo" Foreground="#EBEBEB" FontSize="26" FontFamily="Segoe UI" FontWeight="SemiBold" HorizontalAlignment="Center">
+                     <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="3"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Border>
             
-            <TextBlock x:Name="txtEstadoConexion" Text="Conectando..." Foreground="LightGray" FontSize="16" Margin="0,50,0,0" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="txtEstadoConexion" Text="Conectando..." Foreground="#00D1FF" FontSize="15" FontFamily="Segoe UI" FontWeight="SemiBold" Margin="0,80,0,0" HorizontalAlignment="Center" Opacity="0.7"/>
         </StackPanel>
 
-        <Grid x:Name="GridAdminConsole" Visibility="Collapsed" Background="#E6000000"> <Border Background="#222" BorderBrush="#00FF00" BorderThickness="2" 
-                    Width="400" Height="200" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <StackPanel Margin="20" VerticalAlignment="Center">
-                    <TextBlock Text="CONSOLA DE ADMINISTRADOR" Foreground="#00FF00" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+        <Grid x:Name="GridAdminConsole" Visibility="Collapsed">
+            
+            <Border Background="#F2050508"/> 
+            
+            <Border Background="#15151C" BorderBrush="#00D1FF" BorderThickness="1.5" 
+                    Width="400" Height="240" CornerRadius="12" VerticalAlignment="Center" HorizontalAlignment="Center">
+                
+                <Border.Effect>
+                    <DropShadowEffect Color="#00D1FF" BlurRadius="25" ShadowDepth="0" Opacity="0.4"/>
+                </Border.Effect>
+                
+                <StackPanel Margin="30" VerticalAlignment="Center">
                     
-                    <TextBlock Text="Ingrese Contraseña:" Foreground="White" FontFamily="Consolas"/>
-                    <PasswordBox x:Name="txtPasswordAdmin" 
-                                 KeyDown="txtPasswordAdmin_KeyDown"
-                                 Margin="0,5,0,20" Padding="5" Background="#333" Foreground="White" BorderBrush="#00FF00"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,25">
+                        <TextBlock Text="⚙" Foreground="#00D1FF" FontSize="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="ACCESO ADMINISTRADOR" Foreground="#00D1FF" FontFamily="Segoe UI" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                    </StackPanel>
                     
-                    <Button Content="DESBLOQUEAR / CERRAR APP" Click="BtnAdminUnlock_Click" 
-                            Background="#00FF00" Foreground="Black" FontWeight="Bold" Height="30"/>
+                    <TextBlock Text="Ingrese contraseña de seguridad:" Foreground="#888899" FontFamily="Segoe UI" FontSize="13" Margin="0,0,0,8"/>
+                    
+                    <Border Background="#0A0A0E" BorderBrush="#333344" BorderThickness="1" CornerRadius="6" Margin="0,0,0,25">
+                        <PasswordBox x:Name="txtPasswordAdmin" 
+                                     KeyDown="txtPasswordAdmin_KeyDown"
+                                     Padding="12,10" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="16" PasswordChar="•"/>
+                    </Border>
+                    
+                    <Button Content="DESBLOQUEAR EQUIPO" Click="BtnAdminUnlock_Click" 
+                            Background="#00D1FF" Foreground="#15151C" FontWeight="Black" FontFamily="Segoe UI" FontSize="14" Height="38" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                     
                     <Button Content="Cancelar" Click="BtnCancelar_Click" 
-                            Background="Transparent" Foreground="Gray" BorderThickness="0" Margin="0,10,0,0"/>
+                            Background="Transparent" Foreground="#666677" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13" BorderThickness="0" Margin="0,15,0,0" Cursor="Hand"/>
                 </StackPanel>
             </Border>
         </Grid>

@@ -13,6 +13,26 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\1000132093_639107669248363033.jpg",
+      "PackagePath": "staticwebassets\\fondos\\1000132093_639107669248363033.jpg"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\Gemini_Generated_Image_91z5od91z5od91z5 (1).png",
+      "PackagePath": "staticwebassets\\fondos\\Gemini_Generated_Image_91z5od91z5od91z5 (1).png"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\icono_aegis_639107595806600752.png",
+      "PackagePath": "staticwebassets\\fondos\\icono_aegis_639107595806600752.png"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\jeanref_639107582827431748.png",
+      "PackagePath": "staticwebassets\\fondos\\jeanref_639107582827431748.png"
+    },
+    {
+      "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\rpz31cb5thxc1_639107569610366776.gif",
+      "PackagePath": "staticwebassets\\fondos\\rpz31cb5thxc1_639107569610366776.gif"
+    },
+    {
       "Id": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },

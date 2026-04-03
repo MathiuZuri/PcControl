@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "VP8nxFY+lz5C6hghxwpKyQ8sVgwA+w8ft3viL79kbls=",
+  "Hash": "4JjRm3JuKilrDy7WUy0B/fZehhycUxEqP2bTRryF0M8=",
   "Source": "PcControl.server",
   "BasePath": "_content/PcControl.server",
   "Mode": "Default",
@@ -1086,6 +1086,111 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.png"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\1000132093_639107669248363033.jpg",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/1000132093_639107669248363033#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "j55o229p1a",
+      "Integrity": "6XUBMYT3T0aPUMICkkhWLqMKKGHks1y/EEz3hmqIvgM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\1000132093_639107669248363033.jpg"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\Gemini_Generated_Image_91z5od91z5od91z5 (1).png",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/Gemini_Generated_Image_91z5od91z5od91z5 (1)#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7tvyijh06z",
+      "Integrity": "i2Py3wkahJJlhriTBe+ju5dYjKtzmghJd4FM3wXnPPc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\Gemini_Generated_Image_91z5od91z5od91z5 (1).png"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\icono_aegis_639107595806600752.png",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/icono_aegis_639107595806600752#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7f0n5a66uk",
+      "Integrity": "484YJoBNYDMkuQ53gf53WPPdT+ula7RXLJhiphn4xAo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\icono_aegis_639107595806600752.png"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\jeanref_639107582827431748.png",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/jeanref_639107582827431748#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yjibvfk9ux",
+      "Integrity": "rs0xieXBxB4tkq4Lhp+PEnDxsKgQ96GrFJV4uc63MvU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\jeanref_639107582827431748.png"
+    },
+    {
+      "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\rpz31cb5thxc1_639107569610366776.gif",
+      "SourceId": "PcControl.server",
+      "SourceType": "Discovered",
+      "ContentRoot": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\",
+      "BasePath": "_content/PcControl.server",
+      "RelativePath": "fondos/rpz31cb5thxc1_639107569610366776#[.{fingerprint}]?.gif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "szz8uksnby",
+      "Integrity": "OJZcVl2tq0M0PelcL7C1FR4OyW0zC0sHWfd/b4HGwYc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\fondos\\rpz31cb5thxc1_639107569610366776.gif"
     },
     {
       "Identity": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
@@ -2390,6 +2495,416 @@
         {
           "Name": "integrity",
           "Value": "sha256-4mWsDy3aHl36ZbGt8zByK7Pvd4kRUoNgTYzRnwmPHwg="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/1000132093_639107669248363033.j55o229p1a.jpg",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\1000132093_639107669248363033.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52303"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6XUBMYT3T0aPUMICkkhWLqMKKGHks1y/EEz3hmqIvgM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 03:48:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "j55o229p1a"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/1000132093_639107669248363033.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6XUBMYT3T0aPUMICkkhWLqMKKGHks1y/EEz3hmqIvgM="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/1000132093_639107669248363033.jpg",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\1000132093_639107669248363033.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "52303"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6XUBMYT3T0aPUMICkkhWLqMKKGHks1y/EEz3hmqIvgM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 03:48:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6XUBMYT3T0aPUMICkkhWLqMKKGHks1y/EEz3hmqIvgM="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/Gemini_Generated_Image_91z5od91z5od91z5 (1).7tvyijh06z.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\Gemini_Generated_Image_91z5od91z5od91z5 (1).png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1599674"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"i2Py3wkahJJlhriTBe+ju5dYjKtzmghJd4FM3wXnPPc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 00:50:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7tvyijh06z"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/Gemini_Generated_Image_91z5od91z5od91z5 (1).png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-i2Py3wkahJJlhriTBe+ju5dYjKtzmghJd4FM3wXnPPc="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/Gemini_Generated_Image_91z5od91z5od91z5 (1).png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\Gemini_Generated_Image_91z5od91z5od91z5 (1).png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1599674"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"i2Py3wkahJJlhriTBe+ju5dYjKtzmghJd4FM3wXnPPc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 00:50:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-i2Py3wkahJJlhriTBe+ju5dYjKtzmghJd4FM3wXnPPc="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/icono_aegis_639107595806600752.7f0n5a66uk.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\icono_aegis_639107595806600752.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "159785"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"484YJoBNYDMkuQ53gf53WPPdT+ula7RXLJhiphn4xAo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 01:46:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7f0n5a66uk"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/icono_aegis_639107595806600752.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-484YJoBNYDMkuQ53gf53WPPdT+ula7RXLJhiphn4xAo="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/icono_aegis_639107595806600752.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\icono_aegis_639107595806600752.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "159785"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"484YJoBNYDMkuQ53gf53WPPdT+ula7RXLJhiphn4xAo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 01:46:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-484YJoBNYDMkuQ53gf53WPPdT+ula7RXLJhiphn4xAo="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/jeanref_639107582827431748.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\jeanref_639107582827431748.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "182208"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rs0xieXBxB4tkq4Lhp+PEnDxsKgQ96GrFJV4uc63MvU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 01:24:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rs0xieXBxB4tkq4Lhp+PEnDxsKgQ96GrFJV4uc63MvU="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/jeanref_639107582827431748.yjibvfk9ux.png",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\jeanref_639107582827431748.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "182208"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rs0xieXBxB4tkq4Lhp+PEnDxsKgQ96GrFJV4uc63MvU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 01:24:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yjibvfk9ux"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/jeanref_639107582827431748.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rs0xieXBxB4tkq4Lhp+PEnDxsKgQ96GrFJV4uc63MvU="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/rpz31cb5thxc1_639107569610366776.gif",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\rpz31cb5thxc1_639107569610366776.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5885089"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OJZcVl2tq0M0PelcL7C1FR4OyW0zC0sHWfd/b4HGwYc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 01:02:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-OJZcVl2tq0M0PelcL7C1FR4OyW0zC0sHWfd/b4HGwYc="
+        }
+      ]
+    },
+    {
+      "Route": "fondos/rpz31cb5thxc1_639107569610366776.szz8uksnby.gif",
+      "AssetFile": "F:\\proyectC#\\PcControl\\PcControl.server\\wwwroot\\fondos\\rpz31cb5thxc1_639107569610366776.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5885089"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OJZcVl2tq0M0PelcL7C1FR4OyW0zC0sHWfd/b4HGwYc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 03 Apr 2026 01:02:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "szz8uksnby"
+        },
+        {
+          "Name": "label",
+          "Value": "fondos/rpz31cb5thxc1_639107569610366776.gif"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-OJZcVl2tq0M0PelcL7C1FR4OyW0zC0sHWfd/b4HGwYc="
         }
       ]
     },

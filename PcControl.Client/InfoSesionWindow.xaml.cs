@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Animation; // Necesario para animaciones
+using System.Windows.Media.Animation; 
 
 namespace PcControl.Client
 {
@@ -9,30 +9,41 @@ namespace PcControl.Client
     {
         private bool _esCompacto = false;
 
-        // Dimensiones originales
-        private const double ANCHO_NORMAL = 250;
-        private const double ALTO_NORMAL = 80;
+        // --- CORRECCIÓN: Dimensiones sincronizadas con el nuevo XAML ---
+        private const double ANCHO_NORMAL = 270;
+        private const double ALTO_NORMAL = 195;
 
-        // Dimensiones compactas (tipo widget)
-        private const double ANCHO_COMPACTO = 120;
-        private const double ALTO_COMPACTO = 45;
+        // Dimensiones del modo widget flotante (Solo muestra el tiempo restante)
+        private const double ANCHO_COMPACTO = 140;
+        private const double ALTO_COMPACTO = 60;
 
         public InfoSesionWindow()
         {
             InitializeComponent();
             
-            // 1. BLINDAJE NUCLEAR (Mantén esto siempre)
+            // 1. BLINDAJE NUCLEAR
             SeguridadWin32.BlindarVentana(this);
 
-            // Posición inicial: Esquina superior derecha
             this.Left = SystemParameters.PrimaryScreenWidth - this.Width - 20;
             this.Top = 20;
         }
 
+        // Método original mantenido por seguridad y compatibilidad
         public void ActualizarDatos(string tiempo, string mensaje)
         {
             txtTiempo.Text = tiempo;
             txtMensaje.Text = mensaje;
+        }
+
+        // Usar este desde MainWindow para llenar todo el dashboard
+        public void ActualizarDashboardCompleto(string tiempoRestante, string mensaje, string horaInicio, string horaFin, string tiempoComprado, string precio)
+        {
+            txtTiempo.Text = tiempoRestante;
+            txtMensaje.Text = mensaje;
+            txtHoraInicio.Text = horaInicio;
+            txtHoraFin.Text = horaFin;
+            txtTiempoComprado.Text = tiempoComprado;
+            txtPrecio.Text = precio;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -47,47 +58,47 @@ namespace PcControl.Client
 
         private void AlternarModoCompacto()
         {
-            // Configuramos la duración de la animación (0.3 segundos)
-            Duration duracion = new Duration(TimeSpan.FromSeconds(0.3));
+            Duration duracion = new Duration(TimeSpan.FromSeconds(0.2)); 
             
-            // Animaciones de ancho y alto
-            DoubleAnimation animAncho = new DoubleAnimation();
-            DoubleAnimation animAlto = new DoubleAnimation();
-            animAncho.Duration = duracion;
-            animAlto.Duration = duracion;
-            
-            // Curva de aceleración suave (EaseInOut)
-            animAncho.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
-            animAlto.EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut };
+            DoubleAnimation animAncho = new DoubleAnimation { Duration = duracion, EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut } };
+            DoubleAnimation animAlto = new DoubleAnimation { Duration = duracion, EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut } };
 
             if (!_esCompacto)
             {
                 // --- ACTIVAR MODO COMPACTO ---
-                animAncho.To = ANCHO_COMPACTO;
-                animAlto.To = ALTO_COMPACTO;
+                animAncho.To = ANCHO_COMPACTO; 
+                animAlto.To = ALTO_COMPACTO;   
 
-                // Ocultar detalles visuales innecesarios
+                // Ocultar detalles
+                PanelDetalles.Visibility = Visibility.Collapsed;
+                Separador.Visibility = Visibility.Collapsed;
                 txtMensaje.Visibility = Visibility.Collapsed;
-                BtnToggle.Content = "❐"; // Icono de "Restaurar" (o un cuadrado)
-                BordePrincipal.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#99000000"); // Un poco más transparente en modo mini
+                
+                BtnToggle.Content = "❐"; 
+                // Fondo compacto más translúcido
+                BordePrincipal.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#99000000");
 
                 _esCompacto = true;
             }
             else
             {
                 // --- VOLVER A MODO NORMAL ---
-                animAncho.To = ANCHO_NORMAL;
-                animAlto.To = ALTO_NORMAL;
+                animAncho.To = ANCHO_NORMAL; 
+                animAlto.To = ALTO_NORMAL;  
 
                 // Mostrar detalles
+                PanelDetalles.Visibility = Visibility.Visible;
+                Separador.Visibility = Visibility.Visible;
                 txtMensaje.Visibility = Visibility.Visible;
-                BtnToggle.Content = "—"; // Icono de "Minimizar"
-                BordePrincipal.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#CC000000"); // Color original
+                
+                BtnToggle.Content = "—"; 
+                
+                // --- CORRECCIÓN: Usar el mismo fondo del nuevo XAML ---
+                BordePrincipal.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#F215151C");
 
                 _esCompacto = false;
             }
 
-            // Iniciar animaciones
             this.BeginAnimation(Window.WidthProperty, animAncho);
             this.BeginAnimation(Window.HeightProperty, animAlto);
         }

@@ -1,32 +1,70 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Threading;
+using System.Threading; // Necesario para Mutex
+using System.Diagnostics; // Necesario para Process
+using System.Reflection; // Necesario para Assembly
 
 namespace PcControl.Client
 {
     public partial class App : Application
     {
+        // 1. MUTEX: Previene que se abran dos clientes al mismo tiempo
+        private static Mutex? _mutex = null;
+
         public App()
         {
-            // 1. Capturar errores del hilo principal (UI)
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
-            
-            // 2. Capturar errores de otros hilos (Background Tasks)
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            
-            // 3. Capturar errores de tareas asíncronas perdidas
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            const string appName = "CyberControlCliente_InstanciaUnica";
+            bool createdNew;
+
+            _mutex = new Mutex(true, appName, out createdNew);
+
+            if (!createdNew)
+            {
+                // Si ya hay una copia corriendo, nos suicidamos en silencio
+                Application.Current.Shutdown();
+                return;
+            }
+
+            base.OnStartup(e);
+
+            // Crear la Ventana Fantasma (Invisible)
+            Window ventanaFantasma = new Window
+            {
+                Width = 0,
+                Height = 0,
+                WindowStyle = WindowStyle.None,
+                ShowInTaskbar = false,
+                ShowActivated = false,
+                Visibility = Visibility.Hidden
+            };
+            ventanaFantasma.Show(); 
+
+            // Crear TU ventana principal
+            MainWindow main = new MainWindow();
+            main.Owner = ventanaFantasma;
+            main.ShowInTaskbar = false;
+            main.Show();
         }
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             LogCrasheo("UI Error", e.Exception);
-            e.Handled = true; // Intentar que la app no se cierre si es posible
+            RevivirAplicacion(); // Si hay error grave, revivimos
+            e.Handled = true; 
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             LogCrasheo("Fatal Domain Error", e.ExceptionObject as Exception);
+            RevivirAplicacion();
         }
 
         private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
@@ -43,36 +81,23 @@ namespace PcControl.Client
                 string mensaje = $"[{DateTime.Now}] ({origen}): {ex?.Message}\nSTACK: {ex?.StackTrace}\n--------------------------\n";
                 File.AppendAllText(ruta, mensaje);
             }
-            catch { /* Si falla el log, no podemos hacer nada más */ }
+            catch { }
         }
-        
-        protected override void OnStartup(StartupEventArgs e)
+
+        // 2. MODO INMORTAL: Lanza un clon y mata a la instancia defectuosa
+        private void RevivirAplicacion()
         {
-            base.OnStartup(e);
-
-            // 1. Crear la Ventana Fantasma (Invisible)
-            Window ventanaFantasma = new Window
+            try
             {
-                Width = 0,
-                Height = 0,
-                WindowStyle = WindowStyle.None,
-                ShowInTaskbar = false,
-                ShowActivated = false,
-                Visibility = Visibility.Hidden
-            };
-            ventanaFantasma.Show(); // Debe mostrarse para existir, pero es invisible
-
-            // 2. Crear TU ventana principal
-            MainWindow main = new MainWindow();
-            
-            // 3. HACER LA MAGIA: Tu ventana es "hija" de la fantasma
-            main.Owner = ventanaFantasma;
-            
-            // 4. Asegurar propiedades
-            main.ShowInTaskbar = false;
-            
-            // 5. Mostrarla
-            main.Show();
+                // IMPORTANTE: Si implementas el archivo SeguridadSistema.cs de la clase anterior, 
+                // descomenta esta línea para evitar pantallazo azul (BSOD) al reiniciar:
+                // SeguridadSistema.EstablecerProcesoCritico(false);
+                
+                string miExe = Assembly.GetExecutingAssembly().Location.Replace(".dll", ".exe");
+                Process.Start(miExe);
+                Process.GetCurrentProcess().Kill();
+            }
+            catch { }
         }
     }
 }

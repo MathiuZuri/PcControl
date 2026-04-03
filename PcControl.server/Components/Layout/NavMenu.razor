@@ -2,33 +2,35 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavManager
 
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="top-row ps-3 navbar navbar-dark d-flex align-items-center" style="background-color: #111118; border-bottom: 1px solid #2A2A35;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">CiberControl Pro</a>
-        <button title="Menú" class="navbar-toggler" @onclick="ToggleNavMenu">
+        <a class="navbar-brand fw-bold" href="" style="color: #00D1FF; letter-spacing: 1.5px;">Panel Admin</a>
+        <button title="Menú" class="navbar-toggler border-0" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu" style="background-color: #151520;">
+    <nav class="flex-column py-3">
         
+        <div class="px-3 mb-2 text-uppercase fw-bold" style="font-size: 0.7rem; color: #555566; letter-spacing: 2px;">Operativo</div>
+
         <AuthorizeView Roles="Admin, Empleado">
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <i class="bi bi-house-door-fill"></i> Inicio
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="" Match="NavLinkMatch.All">
+                        <i class="bi bi-grid-1x2-fill me-3"></i> Dashboard
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="historial">
-                        <i class="bi bi-clock-history"></i> Caja Diario
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="historial">
+                        <i class="bi bi-clock-history me-3"></i> Caja y Turnos
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="productos">
-                        <i class="bi bi-shop"></i> Tienda
+                <div class="nav-item px-3 mb-4">
+                    <NavLink class="nav-link cyber-link" href="productos">
+                        <i class="bi bi-basket2-fill me-3"></i> Tienda / Snacks
                     </NavLink>
                 </div>
             </Authorized>
@@ -36,57 +38,86 @@
         
         <AuthorizeView Roles="Admin">
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="admin-pcs">
-                        <i class="bi bi-display"></i> Equipos
+                <div class="px-3 mb-2 text-uppercase fw-bold" style="font-size: 0.7rem; color: #555566; letter-spacing: 2px;">Administración</div>
+
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="admin-pcs">
+                        <i class="bi bi-pc-display-horizontal me-3"></i> Gestión PCs
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="reportes">
-                        <i class="bi bi-graph-up-arrow"></i> Finanzas
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="reportes">
+                        <i class="bi bi-wallet2 me-3"></i> Finanzas
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="estadisticas">
-                        <i class="bi bi-pie-chart-fill"></i> Estadísticas
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="estadisticas">
+                        <i class="bi bi-pie-chart-fill me-3"></i> Estadísticas
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="ajustes">
-                        <i class="bi bi-gear-fill"></i> Ajustes
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="ajustes">
+                        <i class="bi bi-sliders me-3"></i> Ajustes Generales
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="configuracionTarifa">
-                        <i class="bi bi-cash-coin"></i> Tarifas
+                <div class="nav-item px-3 mb-1">
+                    <NavLink class="nav-link cyber-link" href="configuracionTarifa">
+                        <i class="bi bi-tags-fill me-3"></i> Tarifas y Precios
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="personalizacion">
-                        <span class="bi-image" aria-hidden="true"></span> Personalizar
+                <div class="nav-item px-3 mb-4">
+                    <NavLink class="nav-link cyber-link" href="personalizacion">
+                        <i class="bi bi-palette-fill me-3"></i> Pantalla Bloqueo
                     </NavLink>
                 </div>
             </Authorized>
         </AuthorizeView>
 
-        <div class="nav-item px-3 mt-4">
-            <button class="nav-link btn btn-link text-danger w-100 text-start" @onclick="CerrarSesion">
-                <i class="bi bi-box-arrow-left"></i> Salir
+        <div class="mt-auto px-3 border-top pt-3" style="border-color: #2A2A35 !important;">
+            <button class="btn w-100 text-start fw-bold cyber-logout" @onclick="CerrarSesion">
+                <i class="bi bi-box-arrow-left me-3"></i> Cerrar Sesión
             </button>
         </div>
     </nav>
 </div>
 
+<style>
+    /* Estilos personalizados para los enlaces del menú */
+    .cyber-link {
+        color: #A0A0B0 !important;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        padding: 0.6rem 1rem;
+    }
+    .cyber-link:hover {
+        background-color: #2A2A35;
+        color: #FFF !important;
+    }
+    /* Estilo para el enlace activo (Cuando estás en esa página) */
+    .nav-item .active {
+        background-color: rgba(0, 209, 255, 0.15) !important;
+        color: #00D1FF !important;
+        font-weight: bold;
+        border-left: 4px solid #00D1FF;
+        border-radius: 0 8px 8px 0;
+    }
+    .cyber-logout {
+        color: #FF5555;
+        background: transparent;
+        transition: all 0.2s;
+        border-radius: 8px;
+    }
+    .cyber-logout:hover {
+        background-color: rgba(255, 85, 85, 0.1);
+        color: #FF2222;
+    }
+</style>
+
 @code {
     private bool collapseNavMenu = true;
-
-    // Esta propiedad cambia la clase CSS dinámicamente
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
 
     private void CerrarSesion()
     {

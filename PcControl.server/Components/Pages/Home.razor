@@ -13,6 +13,7 @@
 @inject UiRefreshService RefreshService
 @implements IAsyncDisposable
 @inject PcStatusService StatusService
+@inject IJSRuntime JS
 
 <PageTitle>Panel Principal</PageTitle>
 
@@ -277,7 +278,7 @@
                     </div>
                     <div class="col-6 text-end">
                         <small>Tiempo Transcurrido:</small><br/>
-                        <strong>@((int)(DateTime.Now - pcSeleccionada.HoraInicio!.Value).TotalMinutes) min</strong>
+                        <strong>@((pcSeleccionada?.HoraInicio != null) ? (int)(DateTime.Now - pcSeleccionada.HoraInicio.Value).TotalMinutes : 0) min</strong>
                     </div>
                 </div>
             </div>
@@ -362,11 +363,17 @@
                 </div>
             }
 
-            <div class="d-flex gap-2 justify-content-end mt-4">
-                <button class="btn btn-secondary" @onclick="CerrarModales">Cancelar</button>
-                <button class="btn btn-danger px-4" @onclick="ConfirmarCobro">
-                    <i class="bi bi-cash-coin"></i> Finalizar Cobro
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <button class="btn btn-outline-danger" @onclick="AnularSesionConfirmada">
+                    <i class="bi bi-trash"></i> Anular Tiempo
                 </button>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-secondary" @onclick="CerrarModales">Cancelar</button>
+                    <button class="btn btn-danger px-4 shadow-sm" @onclick="ConfirmarCobro">
+                        <i class="bi bi-cash-coin"></i> Finalizar Cobro
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -396,6 +403,47 @@
         </div>
     </div>
 }
+
+@* --- CONTENEDOR DE ALERTAS FLOTANTES (TOASTS) --- *@
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    @foreach (var alerta in alertasActivas)
+    {
+        <div class="toast show align-items-center text-bg-warning border-0 mb-3 shadow-lg" role="alert">
+            <div class="d-flex">
+                <div class="toast-body fw-bold fs-6">
+                    <i class="bi bi-bell-fill text-danger animate-pulse me-2"></i> 
+                    ¡Tiempo finalizado en @alerta.PcNombre!
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" @onclick="() => alertasActivas.Remove(alerta)"></button>
+            </div>
+        </div>
+    }
+</div>
+
+@* --- SINTETIZADOR DE SONIDO (NO REQUIERE ARCHIVOS MP3) --- *@
+<script>
+    window.reproducirAlertaCiber = function() {
+        try {
+            var context = new (window.AudioContext || window.webkitAudioContext)();
+            var oscillator = context.createOscillator();
+            var gainNode = context.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+            
+            // Tono agudo de alerta (Nota La)
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 880; 
+            
+            // Volumen con desvanecimiento suave
+            gainNode.gain.setValueAtTime(0.5, context.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.5);
+            
+            oscillator.start(context.currentTime);
+            oscillator.stop(context.currentTime + 0.5);
+        } catch(e) { console.log("Audio no soportado"); }
+    };
+</script>
 
 @code {
     private List<Computadora>? computadoras;
@@ -511,7 +559,7 @@
         pcSeleccionada.ImporteExtra = pcSeleccionada.Consumos.Sum(c => c.Total);
     }
     
-    protected override async Task OnInitializedAsync()
+protected override async Task OnInitializedAsync()
     {
         await CargarDatos();
         todosLosProductos = await ProductoService.ObtenerTodosAsync();
@@ -555,6 +603,29 @@
                 InvokeAsync(StateHasChanged);
             }
         });
+
+        // --- NUEVO: RECEPTOR DE LA ALERTA DE TIEMPO AGOTADO ---
+        hubConnection.On<string>("PC_TiempoAgotado_Alerta", async (nombrePc) =>
+        {
+            // Verificamos que no exista ya una alerta en pantalla para esta misma PC
+            // Esto evita que el sonido se repita en bucle si el servidor manda la alerta 2 veces
+            if (!alertasActivas.Any(a => a.PcNombre == nombrePc))
+            {
+                // 1. Añadimos la PC a la lista para que el HTML dibuje el "Toast" flotante
+                alertasActivas.Add(new AlertaTiempo { PcNombre = nombrePc });
+                
+                // 2. Disparamos la función JavaScript que reproduce el tono
+                try 
+                {
+                    await JS.InvokeVoidAsync("reproducirAlertaCiber");
+                }
+                catch { /* Ignorar silenciosamente si el navegador bloquea el audio automático */ }
+                
+                // 3. Forzamos la actualización visual para que aparezca la notificación al instante
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+        // ------------------------------------------------------
 
         await hubConnection.StartAsync();
 
@@ -756,6 +827,28 @@
         if (timer != null)
         {
             await timer.DisposeAsync();
+        }
+    }
+    
+    private List<AlertaTiempo> alertasActivas = new();
+
+    public class AlertaTiempo
+    {
+        public string PcNombre { get; set; } = "";
+        public DateTime HoraAlerta { get; set; } = DateTime.Now;
+    }
+    
+    private async Task AnularSesionConfirmada()
+    {
+        // Usamos un confirm de JavaScript simple para evitar anulaciones accidentales
+        bool confirmado = await JS.InvokeAsync<bool>("confirm", 
+            $"¿Estás seguro de ANULAR la sesión de {pcSeleccionada.Nombre}? \n\nEsto NO registrará ingresos en caja y liberará la PC.");
+
+        if (confirmado)
+        {
+            await ComputerService.AnularSesionAsync(pcSeleccionada.Id);
+            mostrarModalCobrar = false;
+            await CargarDatos(); // Recargar la lista visual
         }
     }
 }

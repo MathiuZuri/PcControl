@@ -8,13 +8,44 @@ using PcControl.Server.Services;
 using Microsoft.AspNetCore.StaticFiles; 
 using System.Net;
 using System.Net.Sockets;
+using System.Net.NetworkInformation; // NUEVO: Requerido para analizar tarjetas de red
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. CONFIGURACIÓN DE RED (Escuchar en todo)
-builder.WebHost.UseUrls("http://0.0.0.0:5249");
+// --- 1. CONFIGURACIÓN DE RED INTELIGENTE (IGNORANDO VPNs) ---
+string ipLocal = "127.0.0.1"; // Fallback por defecto
+var interfaces = NetworkInterface.GetAllNetworkInterfaces()
+    .Where(i => i.OperationalStatus == OperationalStatus.Up && 
+                (i.NetworkInterfaceType == NetworkInterfaceType.Ethernet || 
+                 i.NetworkInterfaceType == NetworkInterfaceType.Wireless80211));
 
-// 2. BASE DE DATOS (Con Factory para evitar errores de hilos)
+foreach (var adapter in interfaces)
+{
+    // Ignorar adaptadores virtuales y VPNs por su nombre
+    string desc = adapter.Description.ToLower();
+    if (desc.Contains("zerotier") || desc.Contains("radmin") || desc.Contains("virtual") || desc.Contains("pseudo"))
+        continue;
+
+    var props = adapter.GetIPProperties();
+    // Buscamos la tarjeta que tenga salida al router (Puerta de Enlace)
+    if (props.GatewayAddresses.Any())
+    {
+        var ip = props.UnicastAddresses
+            .FirstOrDefault(u => u.Address.AddressFamily == AddressFamily.InterNetwork)?.Address;
+        
+        if (ip != null)
+        {
+            ipLocal = ip.ToString();
+            break; 
+        }
+    }
+}
+
+// Obligamos a Kestrel a escuchar SOLO en localhost y en la IP real del Wi-Fi/Cable
+builder.WebHost.UseUrls($"http://localhost:5249", $"http://{ipLocal}:5249");
+
+
+// 2. BASE DE DATOS
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseSqlite(connectionString));
@@ -28,7 +59,8 @@ builder.Services.AddScoped<ConfiguracionService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddScoped<UiRefreshService>();
-builder.Services.AddSingleton<PcStatusService>(); // Vital para el estado Online/Offline
+builder.Services.AddSingleton<PcStatusService>(); 
+builder.Services.AddHostedService<MonitorTiempoService>();
 
 // Servicios de negocio
 builder.Services.AddScoped<TarifaService>();
@@ -40,7 +72,7 @@ builder.Services.AddScoped<EstadisticasService>();
 // Servicio de descubrimiento automático (UDP)
 builder.Services.AddHostedService<PcControl.Server.Services.UdpDiscoveryService>();
 
-// 4. SIGNALR (Aumentado tamaño para transferencias si fuera necesario)
+// 4. SIGNALR
 builder.Services.AddSignalR(options =>
 {
     options.MaximumReceiveMessageSize = 2 * 1024 * 1024; // 2MB
@@ -52,15 +84,15 @@ builder.Services.AddAuthentication("Cookies")
     .AddCookie("Cookies", options =>
     {
         options.LoginPath = "/login";
-        options.ExpireTimeSpan = TimeSpan.FromHours(12); // Duración de sesión
+        options.ExpireTimeSpan = TimeSpan.FromHours(12);
     });
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-builder.Services.AddScoped<ProtectedLocalStorage>(); // Persistencia de login
+builder.Services.AddScoped<ProtectedLocalStorage>(); 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 
-// 6. CORS (Permitir todo para evitar bloqueos en red local)
+// 6. CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTodo", policy =>
@@ -71,53 +103,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// --- ZONA DE REDIRECCIÓN INTELIGENTE (VERSIÓN UNIVERSAL) ---
-// =======================================================================
-app.Use(async (context, next) =>
-{
-    string ipOficial = "";
-    var hostName = Dns.GetHostName();
-    var ips = await Dns.GetHostAddressesAsync(hostName);
-    
-    // Buscamos una IP que pertenezca a CUALQUIER rango de red local estándar:
-    // - 192.168.x.x (Clásica doméstica)
-    // - 10.x.x.x    (Común en oficinas o fibra óptica moderna)
-    // - 172.x.x.x   (Común en empresas)
-    // Y mantenemos el filtro !EndsWith(".1") para evitar VirtualBox/VMware
-    
-    var ipLan = ips.FirstOrDefault(i => 
-        i.AddressFamily == AddressFamily.InterNetwork && 
-        !IPAddress.IsLoopback(i) && 
-        (
-            i.ToString().StartsWith("192.168.") || 
-            i.ToString().StartsWith("10.") || 
-            i.ToString().StartsWith("172.")
-        ) &&
-        !i.ToString().EndsWith(".1") 
-    );
-
-    // Fallback: Si no encuentra ninguna "perfecta", agarra cualquiera que no sea localhost
-    if (ipLan == null) 
-        ipLan = ips.FirstOrDefault(i => i.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(i));
-
-    if (ipLan != null) ipOficial = ipLan.ToString();
-
-    // Redirección
-    if (!string.IsNullOrEmpty(ipOficial))
-    {
-        var hostEntrante = context.Request.Host.Host;
-        
-        // Si no entran por la IP oficial (y no es localhost), redirigir.
-        if (hostEntrante != ipOficial && hostEntrante != "127.0.0.1" && hostEntrante != "localhost") 
-        {
-            string urlCorrecta = $"http://{ipOficial}:5249{context.Request.Path}{context.Request.QueryString}";
-            context.Response.Redirect(urlCorrecta);
-            return; 
-        }
-    }
-    await next();
-});
-
 // --- PIPELINE DE LA APLICACIÓN ---
 
 if (!app.Environment.IsDevelopment())
@@ -126,11 +111,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// ¡¡IMPORTANTE!! ESTA LÍNEA DEBE ESTAR COMENTADA PARA QUE FUNCIONE EN RED LOCAL SIN SSL
-// app.UseHttpsRedirection(); 
+// app.UseHttpsRedirection(); // Comentado para uso en red local sin SSL
 
 // 7. CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS (VIDEOS E IMÁGENES)
-// Esto permite que el cliente descargue .mp4, .mkv, .webp, etc.
 var provider = new FileExtensionContentTypeProvider();
 provider.Mappings[".mp4"] = "video/mp4";
 provider.Mappings[".avi"] = "video/x-msvideo";
@@ -148,19 +131,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
 
-// Mapeos
 app.MapControllers();
 app.MapHub<CiberHub>("/ciberhub");
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-// --- 8. SEMILLA DE DATOS (Crear Admin y Tarifas) ---
+// 8. SEMILLA DE DATOS
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        // context.Database.EnsureDeleted(); // Descomentar solo si quieres resetear la BD
         context.Database.EnsureCreated();
 
         if (!context.Usuarios.Any())
@@ -168,13 +149,12 @@ using (var scope = app.Services.CreateScope())
             context.Usuarios.Add(new PcControl.Shared.Models.Usuario
             {
                 Username = "admin",
-                PasswordHash = "admin123", // En producción usa Hashing real
+                PasswordHash = "admin123", 
                 NombreCompleto = "Super Administrador",
                 Rol = "Admin",
                 Activo = true
             });
             context.SaveChanges();
-            Console.WriteLine("✅ USUARIO ADMIN CREADO: admin / admin123");
         }
 
         if (!context.Tarifas.Any())
@@ -193,20 +173,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// --- 9. MOSTRAR IPs DISPONIBLES EN CONSOLA ---
-// (Esto es mejor que forzar la redirección, así sabes a dónde entrar)
+// 9. MOSTRAR IP DE CONEXIÓN EN CONSOLA
 Console.WriteLine("=================================================");
 Console.WriteLine("SERVIDOR INICIADO CORRECTAMENTE");
-Console.WriteLine("Accede desde las otras PCs usando estas IPs:");
-
-var host = Dns.GetHostEntry(Dns.GetHostName());
-foreach (var ip in host.AddressList)
-{
-    if (ip.AddressFamily == AddressFamily.InterNetwork)
-    {
-        Console.WriteLine($" -> http://{ip}:5249");
-    }
-}
+Console.WriteLine("Accede desde el celular u otras PCs usando esta IP oficial:");
+Console.WriteLine($" -> http://{ipLocal}:5249");
 Console.WriteLine("=================================================");
 
 app.Run();
