@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PcControl.server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fa6ddf27504c0cf1390d6a7947b856bd27279b3c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+271d0cf058cd10c0337fb79d34a9447432fb4f5a")]
 [assembly: System.Reflection.AssemblyProductAttribute("PcControl.server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PcControl.server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

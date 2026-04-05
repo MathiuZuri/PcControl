@@ -10,8 +10,8 @@ namespace PcControl.Client
         private bool _esCompacto = false;
 
         // --- CORRECCIÓN: Dimensiones sincronizadas con el nuevo XAML ---
-        private const double ANCHO_NORMAL = 270;
-        private const double ALTO_NORMAL = 195;
+        private const double ANCHO_NORMAL = 280;
+        private const double ALTO_NORMAL = 200;
 
         // Dimensiones del modo widget flotante (Solo muestra el tiempo restante)
         private const double ANCHO_COMPACTO = 140;

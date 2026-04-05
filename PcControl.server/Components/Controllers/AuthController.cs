@@ -19,16 +19,13 @@ namespace PcControl.server.Components.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password)
         {
-            // 1. Validar credenciales usando tu servicio existente
-            var usuario = await _authService.LoginAsync(username, password);
+            var (usuario, errorMessage) = await _authService.LoginAsync(username, password);
 
             if (usuario == null)
             {
-                // Si falla, volvemos al login con un error en la URL
-                return Redirect("/login?error=true");
+                return Redirect($"/login?error={Uri.EscapeDataString(errorMessage)}");
             }
-
-            // 2. Crear los Claims (La credencial)
+            
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, usuario.Username),
@@ -39,7 +36,7 @@ namespace PcControl.server.Components.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {
-                IsPersistent = true, // Mantener sesión abierta
+                IsPersistent = true,
                 ExpiresUtc = DateTime.UtcNow.AddHours(8)
             };
 

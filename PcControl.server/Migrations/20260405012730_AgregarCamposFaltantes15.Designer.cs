@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PcControl.Server.Data;
 
@@ -10,9 +11,11 @@ using PcControl.Server.Data;
 namespace PcControl.server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260405012730_AgregarCamposFaltantes15")]
+    partial class AgregarCamposFaltantes15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.11");
@@ -394,7 +397,7 @@ namespace PcControl.server.Migrations
                             Activo = true,
                             IntentosFallidos = 0,
                             NombreCompleto = "Super Administrador",
-                            PasswordHash = "$2a$11$J4v1fjyQQZw6GSt2TJRLTuShkxGFkItygUUMGcd0jaEbcC9uB1coC",
+                            PasswordHash = "admin123",
                             Rol = "Admin",
                             Username = "admin"
                         });

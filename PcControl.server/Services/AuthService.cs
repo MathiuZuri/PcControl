@@ -13,23 +13,53 @@ namespace PcControl.Server.Services
             _context = context;
         }
 
-        public async Task<Usuario?> LoginAsync(string username, string password)
+        public async Task<(Usuario? User, string ErrorMessage)> LoginAsync(string username, string password)
         {
-            // Busca el usuario por nombre
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Username == username);
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Username == username);
 
-            if (usuario == null) return null;
+            if (usuario == null) 
+                return (null, "Credenciales incorrectas.");
 
-            // VERIFICACIÓN DE PASSWORD
-            // NOTA: Aquí estamos comparando texto plano porque en el Seed Data pusimos "admin123".
-            // Más adelante, cambiaremos esto para usar un verificador de Hash real (BCrypt).
-            if (usuario.PasswordHash == password && usuario.Activo)
+            if (!usuario.Activo)
+                return (null, "Usuario inactivo.");
+
+            // 1. VERIFICAR SI ESTÁ BLOQUEADO TEMPORALMENTE
+            if (usuario.BloqueadoHasta.HasValue && usuario.BloqueadoHasta > DateTime.Now)
             {
-                return usuario;
+                var tiempoRestante = (int)(usuario.BloqueadoHasta.Value - DateTime.Now).TotalMinutes;
+                // Si falta menos de 1 minuto, mostramos 1 para no decir "0 minutos"
+                tiempoRestante = tiempoRestante == 0 ? 1 : tiempoRestante; 
+                return (null, $"Cuenta bloqueada por seguridad. Intente en {tiempoRestante} min.");
             }
 
-            return null;
+            // 2. VERIFICACIÓN DE HASH CRIPTOGRÁFICO CON BCRYPT
+            bool passwordValido = BCrypt.Net.BCrypt.Verify(password, usuario.PasswordHash);
+
+            if (!passwordValido)
+            {
+                // 3. REGISTRAR INTENTO FALLIDO
+                usuario.IntentosFallidos++;
+                string mensajeError;
+
+                if (usuario.IntentosFallidos >= 6)
+                {
+                    usuario.BloqueadoHasta = DateTime.Now.AddMinutes(3); // Bloqueo de media hora
+                    mensajeError = "Límite de intentos superado. Cuenta bloqueada por 3 minutos.";
+                }
+                else
+                {
+                    mensajeError = $"Credenciales incorrectas. Intento {usuario.IntentosFallidos} de 5.";
+                }
+
+                await _context.SaveChangesAsync();
+                return (null, mensajeError);
+            }
+            
+            usuario.IntentosFallidos = 0;
+            usuario.BloqueadoHasta = null;
+            await _context.SaveChangesAsync();
+
+            return (usuario, string.Empty);
         }
     }
 }

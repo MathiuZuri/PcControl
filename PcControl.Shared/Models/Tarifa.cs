@@ -7,11 +7,11 @@ public class Tarifa
     public int Id { get; set; }
 
     [Required]
-    public string Nombre { get; set; } = ""; // Ej: "1 Hora", "Media Hora"
+    public string Nombre { get; set; } = "";
 
     [Range(1, 1440)]
-    public int Minutos { get; set; } // Ej: 60, 30, 15
+    public int Minutos { get; set; } 
 
     [Range(0, 999)]
-    public decimal Precio { get; set; } // Ej: 1.00, 0.50
+    public decimal Precio { get; set; }
 }

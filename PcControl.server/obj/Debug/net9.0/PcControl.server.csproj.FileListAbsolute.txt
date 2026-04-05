@@ -215,3 +215,4 @@ F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\scopedcss\Components\La
 F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\compressed\ajdpegiu9w-kylqsday6i.gz
 F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\compressed\pqmou9nifo-kylqsday6i.gz
 F:\proyectC#\PcControl\PcControl.server\obj\Debug\net9.0\PcControl.server.sourcelink.json
+F:\proyectC#\PcControl\PcControl.server\bin\Debug\net9.0\BCrypt.Net-Next.dll

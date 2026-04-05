@@ -4,8 +4,8 @@ namespace PcControl.Shared.Models;
 
 public enum TipoMovimiento
 {
-    Ingreso,  // Ej: Iniciar caja con cambio
-    Egreso    // Ej: Pagar delivery de comida, comprar hojas
+    Ingreso,
+    Egreso 
 }
 
 public class MovimientoCaja
@@ -14,10 +14,8 @@ public class MovimientoCaja
     public DateTime Fecha { get; set; }
     public TipoMovimiento Tipo { get; set; }
         
-    public string Descripcion { get; set; } = string.Empty; // "Compra de gaseosas"
-        
+    public string Descripcion { get; set; } = string.Empty; 
     [Column(TypeName = "decimal(18,2)")]
     public decimal Monto { get; set; }
-        
-    public int UsuarioId { get; set; } // Quién hizo el movimiento
+    public int UsuarioId { get; set; } 
 }

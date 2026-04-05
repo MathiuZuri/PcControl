@@ -19,7 +19,6 @@ namespace PcControl.Server.Services
             _hubContext = hubContext;
         }
 
-        // --- MÉTODOS DE LECTURA ---
         public async Task<List<Computadora>> ObtenerTodasAsync()
         {
             using var context = _dbFactory.CreateDbContext();
@@ -36,7 +35,6 @@ namespace PcControl.Server.Services
             }
         }
 
-        // --- MÉTODOS DE ESCRITURA ---
         public async Task ActualizarPcAsync(Computadora pc)
         {
             using var context = _dbFactory.CreateDbContext();
@@ -47,7 +45,6 @@ namespace PcControl.Server.Services
                 bool nombreCambio = pcEnDb.Nombre != pc.Nombre;
                 string nombreViejo = pcEnDb.Nombre;
                 
-                // 1. Actualizar datos básicos
                 pcEnDb.Nombre = pc.Nombre;
                 pcEnDb.IpAddress = pc.IpAddress;   
                 pcEnDb.MacAddress = pc.MacAddress; 
@@ -57,27 +54,22 @@ namespace PcControl.Server.Services
                 pcEnDb.ImporteExtra = pc.ImporteExtra;
                 pcEnDb.NotaAdmin = pc.NotaAdmin;
 
-                // Si hay productos nuevos en la lista temporal, los procesamos AHORA.
                 if (pc.Consumos != null && pc.Consumos.Any())
                 {
                     var inventario = await context.Productos.ToListAsync();
 
                     foreach (var consumo in pc.Consumos)
                     {
-                        // Buscamos el producto en la BD
                         var productoReal = inventario.FirstOrDefault(p => 
                             p.Nombre.Trim().Equals(consumo.Nombre.Trim(), StringComparison.OrdinalIgnoreCase));
                         
-                        // Si existe (y no es el item fantasma "Acumulado Anterior"), procesamos
                         if (productoReal != null)
                         {
                             Console.WriteLine($"[VENTA] Descontando: {productoReal.Nombre} - Cant: {consumo.Cantidad}");
 
-                            // A. Descontar Stock
                             productoReal.Stock -= consumo.Cantidad;
                             context.Entry(productoReal).State = EntityState.Modified;
 
-                            // B. Registrar en Estadísticas (VentasRegistradas)
                             var venta = new VentaRegistrada
                             {
                                 NombreProducto = consumo.Nombre,
@@ -90,10 +82,8 @@ namespace PcControl.Server.Services
                     }
                 }
 
-                // 3. Guardar(PC actualizada + Stock descontado + Ventas registradas)
                 await context.SaveChangesAsync();
                 
-                // 4. Notificaciones
                 if (nombreCambio) await _hubContext.Clients.Group(nombreViejo).SendAsync("CambiarNombreIdentity", pc.Nombre);
 
                 if (pc.Estado == "Ocupada")
@@ -108,12 +98,10 @@ namespace PcControl.Server.Services
                     
                     if (minutosAEnviar <= 0 && pc.TiempoLimiteMinutos > 0) 
                     {
-                        // Si el tiempo calculado es 0 o negativo, mandamos a BLOQUEAR directamente
                         await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Bloquear", 0, "Tiempo Agotado");
                     }
                     else 
                     {
-                        // Solo mandamos desbloquear si realmente le queda tiempo (o si es tiempo libre = 0)
                         await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Desbloquear", minutosAEnviar, (pc.ImportePorTiempo + pc.ImporteExtra).ToString("C"));
                     }
                 }
@@ -185,8 +173,7 @@ namespace PcControl.Server.Services
             }
             await _hubContext.Clients.All.SendAsync("RefrescarDashboard");
         }
-
-        // --- AQUÍ ESTÁ LA CORRECCIÓN CRÍTICA ---
+        
         public async Task CobrarYFinalizarAsync(Computadora pc, decimal totalCobrado, string metodoPago)
         {
             using var context = _dbFactory.CreateDbContext();
@@ -197,7 +184,7 @@ namespace PcControl.Server.Services
                 var fechaInicioReal = pcDb.HoraInicio ?? DateTime.Now;
                 var fechaFinReal = DateTime.Now;
 
-                // 1. Guardar en Caja (Historial)
+                // Guardar en Caja (Historial)
                 var historial = new HistorialSesion
                 {
                     PcNombre = pcDb.Nombre,
@@ -210,9 +197,7 @@ namespace PcControl.Server.Services
                 };
                 context.HistorialSesiones.Add(historial);
 
-                // (Ya no procesamos productos aquí para evitar duplicados o listas vacías)
-
-                // 2. Limpiar PC
+                // Limpiar PC
                 pcDb.Estado = "Disponible";
                 pcDb.HoraInicio = null;
                 pcDb.HoraFin = null;
@@ -239,7 +224,6 @@ namespace PcControl.Server.Services
 
             if (pc != null)
             {
-                // 1. Limpiamos todos los datos de la sesión actual
                 pc.Estado = "Disponible";
                 pc.HoraInicio = null;
                 pc.HoraFin = null;
@@ -248,21 +232,17 @@ namespace PcControl.Server.Services
                 pc.ImportePorTiempo = 0;
                 pc.NotaAdmin = "";
                 pc.InicioPausa = null;
-
-                // Limpiamos la lista de productos si los hubiera
+                
                 if (pc.Consumos != null) pc.Consumos.Clear();
 
                 await context.SaveChangesAsync();
 
-                // 2. Intentamos enviar la orden de bloqueo por si la PC vuelve a estar online
+                // Intentamos enviar la orden de bloqueo por si la PC vuelve a estar online
                 await _hubContext.Clients.Group(pc.Nombre).SendAsync("RecibirOrden", "Bloquear", 0, "Sesión Anulada por Admin");
-
-                // 3. Refrescamos el panel de control
                 await _hubContext.Clients.All.SendAsync("RefrescarDashboard");
             }
         }
-
-        // --- MÉTODOS AUXILIARES ---
+        
 
         public async Task EnviarComandoAsync(string nombrePc, string comando, string parametro = "")
         {

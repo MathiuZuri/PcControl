@@ -131,7 +131,7 @@ namespace PcControl.Client {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PcControl.Client;component/infosesionwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PcControl.Client;V1.0.0.0;component/infosesionwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\InfoSesionWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -9,7 +9,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager Navigation
-@inject AppDbContext DbContext
+@inject AuthService AuthService
 @inject AuthenticationStateProvider AuthStateProvider
 
 <style>
@@ -101,11 +101,8 @@ else
     private bool cargando = false;
     
     private bool estaVerificandoSesion = true;
-    
-    // NUEVA VARIABLE VISUAL: Controla el ojito de la contraseña
     private bool mostrarContrasena = false;
 
-    // NUEVO MÉTODO VISUAL: Cambia el estado del ojito
     private void AlternarContrasena()
     {
         mostrarContrasena = !mostrarContrasena;
@@ -145,19 +142,12 @@ else
             string userLimpio = username.Trim();
             string passLimpio = password.Trim();
 
-            var usuarioEncontrado = await DbContext.Usuarios
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Username == userLimpio && u.PasswordHash == passLimpio);
+            // Pasamos la responsabilidad total al AuthService
+            var (usuarioEncontrado, error) = await AuthService.LoginAsync(userLimpio, passLimpio);
 
             if (usuarioEncontrado != null)
             {
-                if (!usuarioEncontrado.Activo)
-                {
-                    mensajeError = "Usuario inactivo.";
-                    cargando = false;
-                    return;
-                }
-
+                // Login Exitoso
                 if (AuthStateProvider is CustomAuthStateProvider auth)
                 {
                     await auth.Login(usuarioEncontrado);
@@ -166,12 +156,14 @@ else
             }
             else
             {
-                mensajeError = "Credenciales incorrectas.";
+                // Mostramos el mensaje dinámico que viene del AuthService
+                mensajeError = error;
             }
         }
         catch (Exception ex)
         {
-            mensajeError = "Error: " + ex.Message;
+            mensajeError = "Error interno del servidor.";
+            Console.WriteLine(ex.Message); // Ocultamos el error real al usuario final
         }
         finally
         {

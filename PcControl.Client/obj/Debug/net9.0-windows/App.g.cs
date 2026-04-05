@@ -52,7 +52,7 @@ namespace PcControl.Client {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PcControl.Client;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PcControl.Client;V1.0.0.0;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

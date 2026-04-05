@@ -7,7 +7,7 @@ public class Gasto
     public int Id { get; set; }
 
     [Required(ErrorMessage = "La descripción es obligatoria")]
-    public string Descripcion { get; set; } = ""; // Ej: "Pago Luz del Sur", "Internet Claro"
+    public string Descripcion { get; set; } = "";
 
     [Required]
     [Range(0.1, 99999, ErrorMessage = "El monto debe ser mayor a 0")]

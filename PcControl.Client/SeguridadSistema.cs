@@ -8,9 +8,7 @@ namespace PcControl.Client
 {
     public static class SeguridadSistema
     {
-        // 1. IMPORTAR LIBRERÍA SECRETA DE WINDOWS PARA PANTALLAZO AZUL
-        // Esta función no está documentada oficialmente por Microsoft, pero es la que usa 
-        // Windows para proteger procesos como csrss.exe o wininit.exe
+ 
         [DllImport("ntdll.dll", SetLastError = true)]
         private static extern void RtlSetProcessIsCritical(UInt32 v1, ref UInt32 v2, UInt32 v3);
         

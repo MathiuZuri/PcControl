@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "CHI5pfGnKXQ=",
+  "dgSpecHash": "eo/B6SwP6bA=",
   "success": true,
   "projectFilePath": "F:\\proyectC#\\PcControl\\PcControl.server\\PcControl.server.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\9.0.11\\microsoft.aspnetcore.connections.abstractions.9.0.11.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.http.connections.client\\9.0.11\\microsoft.aspnetcore.http.connections.client.9.0.11.nupkg.sha512",
@@ -60,10 +61,7 @@
     "C:\\Users\\PC\\.nuget\\packages\\system.reflection.metadata\\7.0.0\\system.reflection.metadata.7.0.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\system.text.json\\9.0.11\\system.text.json.9.0.11.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\system.threading.channels\\9.0.11\\system.threading.channels.9.0.11.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\9.0.4\\microsoft.netcore.app.runtime.win-x86.9.0.4.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\9.0.4\\microsoft.windowsdesktop.app.runtime.win-x86.9.0.4.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\9.0.4\\microsoft.aspnetcore.app.runtime.win-x86.9.0.4.nupkg.sha512"
+    "C:\\Users\\PC\\.nuget\\packages\\system.threading.channels\\9.0.11\\system.threading.channels.9.0.11.nupkg.sha512"
   ],
   "logs": []
 }

@@ -19,10 +19,7 @@ namespace PcControl.Client
 
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        /// <summary>
-        /// Aplica el "Modo Nuclear": Sin barra de tareas, sin Alt+Tab, sin Alt+F4.
-        /// </summary>
+        
         public static void BlindarVentana(Window window)
         {
             // Nos aseguramos de que la ventana tenga un Handle (esté inicializada)

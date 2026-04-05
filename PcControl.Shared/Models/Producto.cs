@@ -10,7 +10,7 @@ public class Producto
     public string Nombre { get; set; } = "";
 
     [Required(ErrorMessage = "La categoría es obligatoria")]
-    public string Categoria { get; set; } = "General"; // Ej: Bebidas, Snacks, Servicios
+    public string Categoria { get; set; } = "General";
 
     [Range(0.1, 999, ErrorMessage = "El precio debe ser mayor a 0")]
     public decimal Precio { get; set; }

@@ -55,18 +55,18 @@ namespace PcControl.Server.Data
                 new Configuracion { Clave = "NombreCiber", Valor = "Mi Ciber Lan" }
             );
 
-            // 4. USUARIO ADMINISTRADOR POR DEFECTO
-            // IMPORTANTE: En un sistema real, la contraseña "admin123" debería estar Hasheada.
-            // Por ahora la ponemos simple para que puedas entrar, pero luego implementaremos el Hash.
+            // 4. USUARIO ADMINISTRADOR POR DEFECTO CON BCRYPT
             modelBuilder.Entity<Usuario>().HasData(
                 new Usuario 
                 { 
                     Id = 1, 
                     Username = "admin", 
                     NombreCompleto = "Super Administrador",
-                    PasswordHash = "admin123", // Contraseña temporal
+                    // BCrypt genera el Hash y la "Sal" automáticamente
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"), 
                     Rol = "Admin",
-                    Activo = true
+                    Activo = true,
+                    IntentosFallidos = 0
                 }
             );
         }
